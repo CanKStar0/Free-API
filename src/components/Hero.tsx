@@ -49,7 +49,7 @@ export function Hero() {
             ease: 'linear',
           }}
         />
-        
+
         {/* Grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(14,165,233,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(14,165,233,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
       </div>
@@ -64,9 +64,35 @@ export function Hero() {
         >
           <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
           <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-            200+ Ücretsiz API Servisi
+            500+ Ücretsiz API Servisi
           </span>
           <Sparkles className="w-4 h-4 text-yellow-500" />
+        </motion.div>
+
+        {/* Update announcement badge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 text-sm font-semibold"
+          style={{
+            background: 'linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(14,165,233,0.15) 100%)',
+            border: '1px solid rgba(16,185,129,0.4)',
+            color: 'inherit'
+          }}
+        >
+          <motion.span
+            animate={{ rotate: [0, 15, -15, 0] }}
+            transition={{ duration: 0.6, delay: 1, repeat: Infinity, repeatDelay: 4 }}
+          >
+            🎉
+          </motion.span>
+          <span className="text-emerald-600 dark:text-emerald-400">
+            Güncelleme v2.0 — 10 yeni kategori eklendi!
+          </span>
+          <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
+            YENİ
+          </span>
         </motion.div>
 
         {/* Title */}
@@ -88,8 +114,8 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10"
         >
-          Hava durumundan kripto paraya, oyunlardan uzaya kadar 37 kategoride 
-          en popüler ücretsiz API&apos;leri keşfedin. Projelerinizi güçlendirin!
+          Hava durumundan kripto paraya, siber güvenlikten yapay zekaya kadar <strong>47 kategoride</strong>{' '}
+          500+ ücretsiz API&apos;yi keşfedin. Projelerinizi güçlendirin!
         </motion.p>
 
         {/* Stats */}
@@ -102,14 +128,14 @@ export function Hero() {
           <div className="glass rounded-2xl p-4 md:p-6">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Globe className="w-5 h-5 text-primary-500" />
-              <span className="text-2xl md:text-3xl font-bold gradient-text">200+</span>
+              <span className="text-2xl md:text-3xl font-bold gradient-text">500+</span>
             </div>
             <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">API Servisi</p>
           </div>
           <div className="glass rounded-2xl p-4 md:p-6">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Zap className="w-5 h-5 text-yellow-500" />
-              <span className="text-2xl md:text-3xl font-bold gradient-text">37</span>
+              <span className="text-2xl md:text-3xl font-bold gradient-text">47</span>
             </div>
             <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">Kategori</p>
           </div>

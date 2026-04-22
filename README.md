@@ -7,7 +7,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=for-the-badge&logo=tailwind-css)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-**A curated collection of 200+ free APIs across 37 categories for developers**
+**A curated collection of 500+ free APIs across 47 categories for developers**
 
 [🌐 Live Demo](https://api-showcase-app-production.up.railway.app) • [Features](#features) • [Installation](#installation) • [Categories](#categories) • [Contributing](#contributing)
 
@@ -21,14 +21,15 @@ API Showcase is a modern web application that helps developers discover free API
 
 ## ✨ Features
 
-- 🎯 **200+ Free APIs** - Carefully curated and organized
-- 📂 **37 Categories** - From Weather to Gaming, Crypto to Space
+- 🎯 **500+ Free APIs** - Carefully curated and organized
+- 📂 **47 Categories** - From Weather to Cyber Security, Crypto to AI
 - 🌙 **Dark/Light Mode** - Easy on the eyes
 - 📱 **Responsive Design** - Works on all devices
 - ⚡ **Fast & Modern** - Built with Next.js 15
 - 🎨 **Beautiful UI** - Glass morphism effects & smooth animations
 - ⭐ **Recommended APIs** - Highlighted picks for each category
 - 🔍 **Rate Limits** - Know the limits before you start
+- 🎉 **v2.0 Update Banner** - Always stay informed about new additions
 
 ## 🖥️ Demo
 
@@ -69,11 +70,12 @@ api-showcase/
 │   │   ├── Header.tsx          # Navigation header
 │   │   ├── Hero.tsx            # Landing hero section
 │   │   ├── CategoryGrid.tsx    # Category cards grid
+│   │   ├── UpdateBanner.tsx    # v2.0 sticky update banner
 │   │   ├── ThemeProvider.tsx   # Theme context provider
 │   │   └── ThemeToggle.tsx     # Dark/Light mode toggle
 │   │
 │   └── data/
-│       └── apis.ts             # All API data (200+ APIs)
+│       └── apis.ts             # All API data (529+ APIs)
 │
 ├── package.json
 ├── tailwind.config.js
@@ -132,7 +134,11 @@ npm start
 | 💵 Finance | 15+ | Stock prices, exchange rates |
 | 🚀 Space | 10+ | NASA data, astronomy, satellites |
 | 🐾 Animals | 10+ | Pet photos, animal facts |
-| ...and 27 more! | | |
+| 🔒 Security | 19 | Cyber security, malware analysis, threat intel |
+| 🔑 Auth | 8 | Passwordless login, OAuth, access control |
+| 🤖 AI & ML | 11 | Computer vision, AI models, image recognition |
+| 🛒 E-Commerce | 10 | Shopping platforms, mock products, store data |
+| ...and 33 more! | | |
 
 ## 🤝 Contributing
 
