@@ -42,11 +42,11 @@ export function UpdateBanner() {
         document.documentElement.style.setProperty('--banner-height', `${height}px`);
       }
     };
-    
+
     // Allow initial render/animation to start before measuring
     const timeoutId = setTimeout(updateHeight, 50);
     window.addEventListener('resize', updateHeight);
-    
+
     return () => {
       clearTimeout(timeoutId);
       window.removeEventListener('resize', updateHeight);
@@ -106,7 +106,7 @@ export function UpdateBanner() {
               🎉 <span className="text-emerald-400">Güncelleme v2.0</span>
               <span className="text-slate-300 font-normal mx-2">—</span>
               <span className="text-sky-300">10 yeni kategori</span> ve{' '}
-              <span className="text-violet-300">529+ API</span> eklendi!
+              <span className="text-violet-300">500+ API</span> eklendi!
             </span>
 
             {/* Rotating category pill */}
