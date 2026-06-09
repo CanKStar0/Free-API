@@ -75,7 +75,7 @@ api-showcase/
 │   │   └── ThemeToggle.tsx     # Dark/Light mode toggle
 │   │
 │   └── data/
-│       └── apis.ts             # All API data (529+ APIs)
+│       └── apis.ts             # All API data (500+ APIs)
 │
 ├── package.json
 ├── tailwind.config.js
