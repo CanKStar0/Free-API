@@ -1,4 +1,4 @@
-﻿export type Language = 'tr' | 'en';
+export type Language = 'tr' | 'en';
 
 export interface TranslationDictionary {
   nav: {
@@ -58,7 +58,31 @@ export interface TranslationDictionary {
     removeFromBookmarks: string;
     unlimited: string;
   };
+  submitModal: {
+    triggerBtn: string;
+    modalTitle: string;
+    modalSubtitle: string;
+    nameLabel: string;
+    namePlaceholder: string;
+    urlLabel: string;
+    urlPlaceholder: string;
+    categoryLabel: string;
+    selectCategory: string;
+    descriptionLabel: string;
+    descriptionPlaceholder: string;
+    rateLimitLabel: string;
+    rateLimitPlaceholder: string;
+    noAuthCheckbox: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    submitBtn: string;
+    submitting: string;
+    successTitle: string;
+    successDesc: string;
+    closeBtn: string;
+  };
   categoryPage: {
+
     backToCategories: string;
     searchInCategory: string;
     categoryNumber: string;
@@ -134,7 +158,31 @@ export const translations: Record<Language, TranslationDictionary> = {
       removeFromBookmarks: 'Favorilerden Çıkar',
       unlimited: 'Sınırsız',
     },
+    submitModal: {
+      triggerBtn: 'API Öner',
+      modalTitle: 'Yeni Bir REST API Öner',
+      modalSubtitle: 'Topluluğa faydalı olacağını düşündüğünüz ücretsiz veya açık bir API servisini ekleyin.',
+      nameLabel: 'API Adı',
+      namePlaceholder: 'Örn: OpenWeather, CoinGecko...',
+      urlLabel: 'Dokümantasyon veya Endpoint URL',
+      urlPlaceholder: 'https://...',
+      categoryLabel: 'Kategori',
+      selectCategory: 'Bir kategori seçin...',
+      descriptionLabel: 'Kısa Açıklama (Ne İşe Yarar?)',
+      descriptionPlaceholder: 'Servisin sunduğu veriler, özellikler ve kullanım alanı...',
+      rateLimitLabel: 'Rate Limit (İstek Limiti)',
+      rateLimitPlaceholder: 'Örn: Sınırsız, 1000 çağrı/gün...',
+      noAuthCheckbox: 'Bu API kayıt/key gerektirmeden çalışıyor (Zero-Auth)',
+      emailLabel: 'İletişim E-postanız (Opsiyonel)',
+      emailPlaceholder: 'ornek@domain.com',
+      submitBtn: 'API Önerisini Gönder',
+      submitting: 'Gönderiliyor...',
+      successTitle: 'Öneriniz Başarıyla Alındı!',
+      successDesc: 'Eklediğiniz API incelendikten sonra kataloğa dahil edilecektir. Katkınız için teşekkürler!',
+      closeBtn: 'Kapat',
+    },
     categoryPage: {
+
       backToCategories: 'Tüm Kategorilere Dön',
       searchInCategory: 'Bu kategoride ara...',
       categoryNumber: 'KATEGORİ',
@@ -255,7 +303,31 @@ export const translations: Record<Language, TranslationDictionary> = {
       removeFromBookmarks: 'Remove from Bookmarks',
       unlimited: 'Unlimited',
     },
+    submitModal: {
+      triggerBtn: 'Submit API',
+      modalTitle: 'Submit a Public REST API',
+      modalSubtitle: 'Share a free or open developer API endpoint to be indexed in the global catalog.',
+      nameLabel: 'API Name',
+      namePlaceholder: 'e.g. OpenWeather, CoinGecko...',
+      urlLabel: 'Docs or Endpoint URL',
+      urlPlaceholder: 'https://...',
+      categoryLabel: 'Category',
+      selectCategory: 'Select a category...',
+      descriptionLabel: 'Description (What does it do?)',
+      descriptionPlaceholder: 'What endpoints, datasets and functionality does it provide...',
+      rateLimitLabel: 'Rate Limit',
+      rateLimitPlaceholder: 'e.g. Unlimited, 1000 req/day...',
+      noAuthCheckbox: 'Zero-Auth (Works with zero API key / no registration)',
+      emailLabel: 'Contact Email (Optional)',
+      emailPlaceholder: 'you@domain.com',
+      submitBtn: 'Submit API for Review',
+      submitting: 'Submitting...',
+      successTitle: 'Submission Received!',
+      successDesc: 'Thank you! Your proposed API has been queued for verification and directory indexing.',
+      closeBtn: 'Close',
+    },
     categoryPage: {
+
       backToCategories: 'Back to All Categories',
       searchInCategory: 'Search in this category...',
       categoryNumber: 'CATEGORY',
