@@ -8,6 +8,8 @@ import { useLanguage } from '@/context/LanguageContext';
 import { useSearch } from '@/context/SearchContext';
 import { ApiCard } from './ApiCard';
 import { CategoryIcon } from './CategoryIcon';
+import { translateDescription } from '@/lib/api-translator';
+
 
 import {
   Search,
@@ -99,9 +101,11 @@ export function CategoryGrid() {
         const catTitle = (t.categoryTitles[category.id]?.title || category.title).toLowerCase();
         const matchesName = api.name.toLowerCase().includes(q);
         const matchesDesc = api.description.toLowerCase().includes(q);
+        const matchesDescEn = translateDescription(api, 'en').toLowerCase().includes(q);
         const matchesCat = catTitle.includes(q);
-        return matchesName || matchesDesc || matchesCat;
+        return matchesName || matchesDesc || matchesDescEn || matchesCat;
       }
+
 
       return true;
     });

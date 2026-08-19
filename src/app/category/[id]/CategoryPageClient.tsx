@@ -6,6 +6,7 @@ import { Category } from '@/data/apis';
 import { useLanguage } from '@/context/LanguageContext';
 import { ApiCard } from '@/components/ApiCard';
 import { CategoryIcon } from '@/components/CategoryIcon';
+import { translateDescription } from '@/lib/api-translator';
 import { ArrowLeft, Search, Layers, X } from 'lucide-react';
 
 interface CategoryPageClientProps {
@@ -155,5 +156,6 @@ export default function CategoryPageClient({ category }: CategoryPageClientProps
     </div>
   );
 }
+
 
 
