@@ -12,10 +12,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     <NextThemesProvider
       attribute="class"
       defaultTheme="dark"
-      enableSystem
-      disableTransitionOnChange={false}
+      enableSystem={false}
+      disableTransitionOnChange
     >
       {children}
     </NextThemesProvider>
+
   );
 }
