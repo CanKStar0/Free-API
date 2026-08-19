@@ -286,8 +286,9 @@ export function CategoryGrid() {
               <Link
                 key={category.id}
                 href={`/category/${category.id}`}
-                className="glass-card rounded-2xl p-6 flex flex-col justify-between border border-stone-200 dark:border-zinc-800/80 bg-white/90 dark:bg-zinc-900/60 group hover:border-brand-700/50 dark:hover:border-brand-500/50 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-15px_rgba(225,29,72,0.18)] transition-all duration-300"
+                className="glass-card rounded-2xl p-6 flex flex-col justify-between group"
               >
+
 
                 <div>
                   <div className="flex items-start justify-between mb-4">
