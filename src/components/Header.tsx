@@ -3,129 +3,150 @@
 import Link from 'next/link';
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { ThemeToggle } from './ThemeToggle';
-import { Sparkles, Menu, X } from 'lucide-react';
+import { LanguageToggle } from './LanguageToggle';
+import { useLanguage } from '@/context/LanguageContext';
+import { Layers, Menu, X, ArrowLeft, Github } from 'lucide-react';
 import { useState } from 'react';
 
 export function Header() {
+  const { t } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [hidden, setHidden] = useState(true); // Navbar is hidden initially
+  const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    // Show navbar when scrolled more than 100px down
-    if (latest > 100) {
-      setHidden(false);
+    if (latest > 40) {
+      setScrolled(true);
     } else {
-      setHidden(true);
-      if (isMenuOpen) setIsMenuOpen(false); // Close menu when hidden
+      setScrolled(false);
     }
   });
 
   return (
-    <motion.header
-      variants={{
-        visible: { y: 0, opacity: 1 },
-        hidden: { y: -100, opacity: 0 }
-      }}
-      initial="hidden"
-      animate={hidden ? "hidden" : "visible"}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className="fixed left-0 right-0 z-50 px-4 py-4 transition-all duration-300"
-      style={{ top: 'var(--banner-height, 0px)' }}
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 py-3 transition-all duration-300">
       <div className="max-w-7xl mx-auto">
-        <div className="glass rounded-2xl px-6 py-3 flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <motion.div
-              className="relative"
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
-            </motion.div>
-            <div>
-              <h1 className="text-xl font-bold gradient-text">API Showcase</h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400">500+ Ücretsiz API</p>
-            </div>
-          </Link>
+        <div
+          className={`relative rounded-2xl px-5 py-3 flex items-center justify-between transition-all duration-300 ${
+            scrolled
+              ? 'glass shadow-lg shadow-black/5 dark:shadow-black/40 border border-stone-200/80 dark:border-zinc-800/80'
+              : 'bg-white/60 dark:bg-zinc-950/60 backdrop-blur-md border border-stone-200/40 dark:border-zinc-800/40'
+          }`}
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-6">
+        >
+          {/* Left: Ecosystem Bridge & Brand Logo */}
+          <div className="flex items-center gap-4">
+            {/* Ecosystem Bridge */}
+            <a
+              href="https://canpolatkaya.com"
+              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono font-medium text-stone-600 dark:text-zinc-400 hover:text-brand-700 dark:hover:text-brand-400 hover:bg-stone-100 dark:hover:bg-zinc-800/80 transition-colors border border-transparent hover:border-stone-200 dark:hover:border-zinc-700"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>{t.nav.backToMain}</span>
+            </a>
+
+            <div className="hidden sm:block w-px h-4 bg-stone-300 dark:bg-zinc-800" />
+
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <div className="w-8 h-8 rounded-xl bg-brand-700 dark:bg-brand-600 flex items-center justify-center text-white shadow-[0_0_12px_rgba(225,29,72,0.35)] group-hover:scale-105 transition-all">
+                <Layers className="w-4 h-4" />
+              </div>
+              <div className="flex items-baseline gap-1 font-jakarta">
+                <span className="text-base font-extrabold tracking-tight text-stone-900 dark:text-zinc-100">
+                  Free<span className="text-brand-700 dark:text-brand-500">API</span>
+                </span>
+                <span className="text-[11px] font-mono text-stone-400 dark:text-zinc-500 font-normal">.dev</span>
+              </div>
+            </Link>
+          </div>
+
+
+          {/* Desktop Nav (Precisely Centered via Absolute Translation) */}
+          <nav className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2 pointer-events-auto">
             <Link
               href="/"
-              className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+              className="text-xs font-semibold text-stone-600 dark:text-zinc-300 hover:text-brand-700 dark:hover:text-brand-400 transition-colors"
             >
-              Ana Sayfa
+              {t.nav.home}
             </Link>
             <Link
-              href="#categories"
-              className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+              href="#explorer"
+              className="text-xs font-semibold text-stone-600 dark:text-zinc-300 hover:text-brand-700 dark:hover:text-brand-400 transition-colors"
             >
-              Kategoriler
+              {t.nav.explorer}
             </Link>
             <a
-              href="https://github.com/CanKStar0/API-SHOWCASE-APP"
+              href="https://github.com/CanKStar0/Free-API"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors"
+              className="text-xs font-semibold text-stone-600 dark:text-zinc-300 hover:text-brand-700 dark:hover:text-brand-400 transition-colors flex items-center gap-1.5"
             >
-              GitHub
+              <Github className="w-3.5 h-3.5" />
+              <span>{t.nav.github}</span>
             </a>
           </nav>
 
+
           {/* Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <LanguageToggle />
             <ThemeToggle />
 
             {/* Mobile menu button */}
             <button
+              type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden w-10 h-10 rounded-full glass flex items-center justify-center"
+              className="md:hidden w-9 h-9 rounded-xl glass flex items-center justify-center text-stone-700 dark:text-zinc-300 hover:text-stone-900 dark:hover:text-white"
+              aria-label="Menüyü aç/kapat"
             >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Nav */}
+        {/* Mobile Nav Drawer */}
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden glass rounded-2xl mt-2 p-4"
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden glass rounded-2xl mt-2 p-4 border border-stone-200 dark:border-zinc-800 shadow-xl"
           >
-            <nav className="flex flex-col gap-3">
+            <nav className="flex flex-col gap-2">
+              <a
+                href="https://canpolatkaya.com"
+                className="text-xs font-mono text-stone-600 dark:text-zinc-400 hover:text-brand-700 dark:hover:text-brand-400 flex items-center gap-1.5 py-2 px-3 rounded-lg bg-stone-100/60 dark:bg-zinc-900/60"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                {t.nav.backToMain}
+              </a>
               <Link
                 href="/"
-                className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-colors py-2"
+                className="text-sm font-medium text-stone-800 dark:text-zinc-200 hover:text-brand-700 dark:hover:text-brand-400 py-2 px-3 rounded-lg"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Ana Sayfa
+                {t.nav.home}
               </Link>
               <Link
-                href="#categories"
-                className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-colors py-2"
+                href="#explorer"
+                className="text-sm font-medium text-stone-800 dark:text-zinc-200 hover:text-brand-700 dark:hover:text-brand-400 py-2 px-3 rounded-lg"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Kategoriler
+                {t.nav.explorer}
               </Link>
               <a
-                href="https://github.com/CanKStar0/API-SHOWCASE-APP"
+                href="https://github.com/CanKStar0/Free-API"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary-500 transition-colors py-2"
+                className="text-sm font-medium text-stone-800 dark:text-zinc-200 hover:text-brand-700 dark:hover:text-brand-400 py-2 px-3 rounded-lg flex items-center gap-2"
               >
-                GitHub
+                <Github className="w-4 h-4" />
+                {t.nav.github}
               </a>
             </nav>
           </motion.div>
         )}
       </div>
-    </motion.header>
+    </header>
   );
 }
