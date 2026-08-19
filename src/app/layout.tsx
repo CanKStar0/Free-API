@@ -101,8 +101,31 @@ export default function RootLayout({
         <ThemeProvider>
           <LanguageProvider>
             <SearchProvider>
+              {/* Invisible Honeypot Trap for Automated Scrapers */}
+              <a
+                href="/api/trap/v1/dump-all-apis"
+                style={{
+                  position: 'absolute',
+                  width: '1px',
+                  height: '1px',
+                  padding: 0,
+                  margin: '-1px',
+                  overflow: 'hidden',
+                  clip: 'rect(0, 0, 0, 0)',
+                  whiteSpace: 'nowrap',
+                  border: 0,
+                  opacity: 0,
+                  pointerEvents: 'none',
+                }}
+                tabIndex={-1}
+                aria-hidden="true"
+                rel="nofollow"
+              >
+                REST API Full Dump JSON
+              </a>
               <Header />
               <main className="min-h-screen">
+
 
                 {children}
               </main>
