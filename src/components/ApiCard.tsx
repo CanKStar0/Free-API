@@ -54,7 +54,7 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.25 }}
-      className="glass-card rounded-2xl p-5 flex flex-col justify-between relative group border border-stone-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/60 shadow-sm"
+      className="glass-card rounded-2xl p-5 flex flex-col justify-between relative group border border-stone-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/60 shadow-sm hover:-translate-y-1.5 hover:shadow-[0_20px_40px_-15px_rgba(225,29,72,0.18)] hover:border-brand-700/50 dark:hover:border-brand-500/40 transition-all duration-300"
     >
       <div>
         {/* Top Header */}
