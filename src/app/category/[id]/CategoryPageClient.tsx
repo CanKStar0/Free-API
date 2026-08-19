@@ -1,292 +1,159 @@
-'use client';
+﻿'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getCategoryById, getRecommendedApis, getOtherApis, ApiService, Category } from '@/data/apis';
-import { ArrowLeft, Star, ExternalLink, Zap, Clock, Sparkles } from 'lucide-react';
-
-const categoryGradients: Record<string, string> = {
-  weather: 'from-blue-500 to-cyan-400',
-  crypto: 'from-yellow-500 to-orange-500',
-  gaming: 'from-purple-500 to-pink-500',
-  maps: 'from-green-500 to-emerald-400',
-  social: 'from-blue-600 to-indigo-500',
-  movies: 'from-red-500 to-rose-400',
-  music: 'from-green-500 to-teal-400',
-  news: 'from-gray-600 to-slate-500',
-  finance: 'from-emerald-500 to-green-400',
-  developer: 'from-slate-600 to-gray-500',
-  education: 'from-blue-500 to-sky-400',
-  health: 'from-red-400 to-pink-400',
-  food: 'from-orange-500 to-amber-400',
-  space: 'from-indigo-600 to-purple-500',
-  sports: 'from-green-600 to-lime-500',
-  random: 'from-fuchsia-500 to-pink-500',
-  animals: 'from-amber-500 to-yellow-400',
-  anime: 'from-pink-500 to-rose-400',
-  art: 'from-violet-500 to-purple-400',
-  books: 'from-amber-600 to-orange-500',
-  calendar: 'from-blue-500 to-indigo-400',
-  chat: 'from-indigo-500 to-blue-400',
-  cloud: 'from-sky-500 to-blue-400',
-  email: 'from-red-500 to-orange-400',
-  environment: 'from-green-600 to-emerald-500',
-  government: 'from-slate-700 to-gray-600',
-  iot: 'from-teal-500 to-cyan-400',
-  network: 'from-blue-600 to-cyan-500',
-  jobs: 'from-indigo-600 to-purple-500',
-  math: 'from-orange-500 to-red-400',
-  payment: 'from-green-500 to-emerald-400',
-  photos: 'from-pink-500 to-rose-400',
-  fun: 'from-yellow-500 to-amber-400',
-  transport: 'from-blue-500 to-indigo-400',
-  url: 'from-purple-500 to-violet-400',
-  video: 'from-red-500 to-pink-500',
-};
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.05,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      type: 'spring',
-      stiffness: 100,
-      damping: 15,
-    },
-  },
-};
-
-interface ApiCardProps {
-  api: ApiService;
-  isRecommended?: boolean;
-  gradient: string;
-  index: number;
-}
-
-function ApiCard({ api, isRecommended, gradient, index }: ApiCardProps) {
-  return (
-    <motion.a
-      href={api.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      variants={cardVariants}
-      whileHover={{ y: -5, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className={`group relative block h-full ${isRecommended ? 'md:col-span-2 lg:col-span-1' : ''}`}
-    >
-      <div className={`relative h-full glass rounded-2xl overflow-hidden ${isRecommended ? 'border-2 border-primary-500/30' : ''}`}>
-        {/* Recommended glow */}
-        {isRecommended && (
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 to-accent-500/10" />
-        )}
-        
-        {/* Hover gradient */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-        
-        {/* Shimmer */}
-        <div className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100" />
-        
-        <div className="relative p-5">
-          {/* Header */}
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg`}>
-                <span className="text-white font-bold text-sm">{api.name.charAt(0)}</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-primary-500 transition-colors">
-                  {api.name}
-                </h3>
-                {api.isNew && (
-                  <span className="inline-flex items-center gap-1 text-xs font-medium text-accent-500">
-                    <Sparkles className="w-3 h-3" />
-                    Yeni
-                  </span>
-                )}
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              {isRecommended && (
-                <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-yellow-500/10 text-yellow-500">
-                  <Star className="w-3 h-3 fill-yellow-500" />
-                  <span className="text-xs font-medium">Önerilen</span>
-                </div>
-              )}
-              <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-primary-500 transition-colors" />
-            </div>
-          </div>
-          
-          {/* Description */}
-          <p className="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">
-            {api.description}
-          </p>
-          
-          {/* Rate limit */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-xs">
-              <Zap className="w-4 h-4 text-primary-500" />
-              <span className="text-slate-600 dark:text-slate-300 font-medium">{api.rateLimit}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </motion.a>
-  );
-}
+import { Category } from '@/data/apis';
+import { useLanguage } from '@/context/LanguageContext';
+import { ApiCard } from '@/components/ApiCard';
+import { CategoryIcon } from '@/components/CategoryIcon';
+import { ArrowLeft, Search, Layers, X } from 'lucide-react';
 
 interface CategoryPageClientProps {
   category: Category;
 }
 
 export default function CategoryPageClient({ category }: CategoryPageClientProps) {
-  const gradient = categoryGradients[category.id] || 'from-primary-500 to-accent-500';
-  const recommendedApis = getRecommendedApis(category);
-  const otherApis = getOtherApis(category);
+  const { t } = useLanguage();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [bookmarks, setBookmarks] = useState<string[]>([]);
+
+  const catTitle = t.categoryTitles[category.id]?.title || category.title;
+  const catDesc = t.categoryTitles[category.id]?.description || category.description;
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('api_showcase_bookmarks');
+      if (saved) {
+        setBookmarks(JSON.parse(saved));
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const handleToggleBookmark = (apiName: string) => {
+    setBookmarks((prev) => {
+      const next = prev.includes(apiName)
+        ? prev.filter((name) => name !== apiName)
+        : [...prev, apiName];
+      try {
+        localStorage.setItem('api_showcase_bookmarks', JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
+  const filteredApis = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return category.apis;
+
+    return category.apis.filter((api) => {
+      const matchesName = api.name.toLowerCase().includes(q);
+      const matchesDesc = api.description.toLowerCase().includes(q);
+      return matchesName || matchesDesc;
+    });
+  }, [category.apis, searchQuery]);
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4">
-      <div className="max-w-7xl mx-auto">
-        {/* Back button */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4 }}
+    <div className="min-h-screen pt-28 pb-20 px-4 max-w-7xl mx-auto">
+      {/* Back to Home Link */}
+      <div className="mb-8">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-xs font-mono font-semibold px-3 py-1.5 rounded-xl glass text-stone-600 dark:text-zinc-400 hover:text-brand-700 dark:hover:text-brand-400 hover:border-brand-700/40 transition-colors"
         >
-          <Link
-            href="/#categories"
-            className="inline-flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors mb-8"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Kategorilere Dön
-          </Link>
-        </motion.div>
+          <ArrowLeft className="w-4 h-4" />
+          <span>{t.categoryPage.backToCategories}</span>
+        </Link>
+      </div>
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5, type: 'spring' }}
-            className={`inline-flex w-24 h-24 rounded-3xl bg-gradient-to-br ${gradient} items-center justify-center text-5xl shadow-2xl mb-6`}
-          >
-            {category.emoji}
-          </motion.div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4">
-            {category.title}
-          </h1>
-          
-          <p className="text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto mb-6">
-            {category.description}
-          </p>
-          
-          <div className="flex items-center justify-center gap-4 flex-wrap">
-            <div className="flex items-center gap-2 px-4 py-2 glass rounded-full">
-              <Zap className="w-4 h-4 text-primary-500" />
-              <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                {category.apis.length} API
-              </span>
-            </div>
-            {category.recommendedApi && (
-              <div className="flex items-center gap-2 px-4 py-2 glass rounded-full">
-                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                  Önerilen: {category.recommendedApi}
+      {/* Category Header Banner */}
+      <div className="glass-card rounded-3xl p-8 mb-10 border border-stone-200 dark:border-zinc-800 bg-white/90 dark:bg-zinc-900/80 shadow-md relative overflow-hidden">
+        {/* Subtle Crimson Glow */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-700/10 dark:bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+          <div className="flex items-start gap-4">
+            <CategoryIcon categoryId={category.id} size={28} className="w-16 h-16 rounded-3xl shrink-0" />
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs font-mono uppercase tracking-wider text-brand-700 dark:text-brand-400 font-bold">
+                  {t.categoryPage.categoryNumber} #{category.number}
+                </span>
+                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-stone-100 dark:bg-zinc-800 text-stone-700 dark:text-zinc-300 border border-stone-200 dark:border-zinc-700">
+                  {category.apis.length} API
                 </span>
               </div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 dark:text-zinc-50 mb-2">
+                {catTitle}
+              </h1>
+              <p className="text-sm text-stone-600 dark:text-zinc-400 max-w-xl">
+                {catDesc}
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Search within Category */}
+          <div className="w-full md:w-72 relative">
+            <Search className="w-4 h-4 text-stone-400 dark:text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={t.categoryPage.searchInCategory}
+              className="w-full pl-10 pr-9 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-950 border border-stone-200 dark:border-zinc-800 text-stone-900 dark:text-zinc-100 placeholder-stone-400 text-xs focus:outline-none focus:ring-2 focus:ring-brand-700 font-sans"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
             )}
           </div>
-        </motion.div>
-
-        {/* Recommended APIs */}
-        {recommendedApis.length > 0 && (
-          <div className="mb-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex items-center gap-3 mb-6"
-            >
-              <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-full border border-yellow-500/20">
-                <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
-                <span className="font-semibold text-slate-900 dark:text-white">Önerilen API&apos;ler</span>
-              </div>
-              <div className="flex-1 h-px bg-gradient-to-r from-yellow-500/20 to-transparent" />
-            </motion.div>
-            
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-            >
-              {recommendedApis.map((api, index) => (
-                <ApiCard
-                  key={api.name}
-                  api={api}
-                  isRecommended={true}
-                  gradient={gradient}
-                  index={index}
-                />
-              ))}
-            </motion.div>
-          </div>
-        )}
-
-        {/* Other APIs */}
-        {otherApis.length > 0 && (
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="flex items-center gap-3 mb-6"
-            >
-              <div className="flex items-center gap-2 px-4 py-2 glass rounded-full">
-                <Clock className="w-5 h-5 text-slate-500" />
-                <span className="font-semibold text-slate-900 dark:text-white">Diğer API&apos;ler</span>
-              </div>
-              <div className="flex-1 h-px bg-gradient-to-r from-slate-500/20 to-transparent" />
-            </motion.div>
-            
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-            >
-              {otherApis.map((api, index) => (
-                <ApiCard
-                  key={api.name}
-                  api={api}
-                  isRecommended={false}
-                  gradient={gradient}
-                  index={index}
-                />
-              ))}
-            </motion.div>
-          </div>
-        )}
+        </div>
       </div>
+
+      {/* API Cards Grid */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-lg font-bold text-stone-900 dark:text-zinc-100 flex items-center gap-2">
+          <Layers className="w-4 h-4 text-brand-700 dark:text-brand-400" />
+          <span>{t.categoryPage.availableServices} ({filteredApis.length})</span>
+        </h2>
+      </div>
+
+      {filteredApis.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {filteredApis.map((api) => (
+            <ApiCard
+              key={api.name}
+              api={api}
+              categoryTitle={catTitle}
+              isBookmarked={bookmarks.includes(api.name)}
+              onToggleBookmark={handleToggleBookmark}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-16 glass-card rounded-3xl p-8 border border-stone-200 dark:border-zinc-800">
+          <p className="text-stone-600 dark:text-zinc-400 mb-4">
+            {t.categoryPage.noResults}
+          </p>
+          <button
+            type="button"
+            onClick={() => setSearchQuery('')}
+            className="px-4 py-2 rounded-xl bg-brand-700 text-white text-xs font-semibold"
+          >
+            {t.categoryPage.clearSearch}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
+
+
