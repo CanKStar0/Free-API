@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -177,18 +177,11 @@ export function Hero() {
 
   return (
     <section className="relative w-full select-none">
-      {/* Dynamic Background Mesh & Glowing Orbs */}
+      {/* Clean Subtle Ambient Cyber Grid */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Massive Crimson Ambient Glow Center */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[550px] bg-brand-700/15 dark:bg-brand-500/20 rounded-full blur-[140px] transition-opacity" />
-        
-        {/* Top Left & Right Secondary Orbs */}
-        <div className="absolute top-10 -left-20 w-96 h-96 bg-rose-900/10 dark:bg-rose-600/15 rounded-full blur-[120px]" />
-        <div className="absolute top-1/2 -right-20 w-96 h-96 bg-brand-800/10 dark:bg-brand-500/15 rounded-full blur-[120px]" />
-        
-        {/* Subtle Ambient Cyber Grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8881_1px,transparent_1px),linear-gradient(to_bottom,#8881_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_35%,#000_60%,transparent_100%)] opacity-15 dark:opacity-10" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#8881_1px,transparent_1px),linear-gradient(to_bottom,#8881_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_70%_60%_at_50%_35%,#000_60%,transparent_100%)] opacity-10 dark:opacity-5" />
       </div>
+
 
       {/* Screen 1: Vertically Centered Hero Viewport */}
       <div className="relative z-10 min-h-[85vh] flex flex-col items-center justify-center text-center px-4 pt-32 pb-16 max-w-6xl mx-auto">

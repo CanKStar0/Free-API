@@ -41,8 +41,9 @@ body {
 }
 
 .dark body {
-  background: radial-gradient(ellipse at 50% 0%, rgba(158, 10, 43, 0.15) 0%, #09090b 70%);
+  background-color: #09090b;
 }
+
 
 
 

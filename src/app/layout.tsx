@@ -5,7 +5,7 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { SearchProvider } from '@/context/SearchContext';
 import { Header } from '@/components/Header';
-import { UpdateBanner } from '@/components/UpdateBanner';
+
 
 const inter = Inter({
   subsets: ['latin'],
@@ -101,9 +101,9 @@ export default function RootLayout({
         <ThemeProvider>
           <LanguageProvider>
             <SearchProvider>
-              <UpdateBanner />
               <Header />
               <main className="min-h-screen">
+
                 {children}
               </main>
             </SearchProvider>
