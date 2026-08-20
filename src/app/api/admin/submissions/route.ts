@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { autoTranslate } from '@/lib/auto-translator';
 
 interface ApiSubmission {
   id: string;
@@ -8,6 +9,8 @@ interface ApiSubmission {
   url: string;
   categoryId: string;
   description: string;
+  description_tr?: string;
+  description_en?: string;
   rateLimit: string;
   isNoAuth: boolean;
   email?: string;
@@ -77,7 +80,7 @@ export async function GET(req: NextRequest) {
     submissions[subIndex] = sub;
     fs.writeFileSync(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2), 'utf8');
 
-    // If approved, update custom-apis.json
+    // If approved, update custom-apis.json with bilingual descriptions
     if (isApprove) {
       let customApis: any[] = [];
       if (fs.existsSync(CUSTOM_APIS_FILE)) {
@@ -87,13 +90,23 @@ export async function GET(req: NextRequest) {
           customApis = [];
         }
       }
+
+      let descTr = sub.description_tr || sub.description;
+      let descEn = sub.description_en || sub.description;
+
+      if (!sub.description_en && sub.description) {
+        descEn = await autoTranslate(sub.description, 'en');
+      }
+
       const existingIdx = customApis.findIndex((a) => a.id === sub.id || (a.name === sub.name && a.url === sub.url));
       const customApiEntry = {
         id: sub.id,
         name: sub.name,
         url: sub.url,
         categoryId: sub.categoryId,
-        description: sub.description,
+        description: descTr,
+        description_tr: descTr,
+        description_en: descEn,
         rateLimit: sub.rateLimit,
         isRecommended: true,
         isNew: true,
