@@ -122,14 +122,20 @@ export function translateRateLimit(rateLimit: string, language: Language): strin
 
 // Smart Description Translator
 export function translateDescription(api: ApiService, language: Language): string {
-  if (language === 'tr') return api.description;
+  // 1. Direct bilingual fields from community submissions or database
+  if (language === 'en' && api.description_en) {
+    return api.description_en;
+  }
+  if (language === 'tr') {
+    return api.description_tr || api.description;
+  }
 
-  // 1. Check exact dictionary
+  // 2. Check exact dictionary
   if (EXACT_API_TRANSLATIONS_EN[api.name]) {
     return EXACT_API_TRANSLATIONS_EN[api.name].description;
   }
 
-  // 2. Automated Smart Phrase Translation
+  // 3. Automated Smart Phrase Translation
   let desc = api.description;
 
   const phraseReplacements: [RegExp, string][] = [

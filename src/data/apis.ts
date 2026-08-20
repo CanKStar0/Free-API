@@ -2,6 +2,8 @@ export interface ApiService {
   name: string;
   url: string;
   description: string;
+  description_tr?: string;
+  description_en?: string;
   rateLimit: string;
   isRecommended: boolean;
   isNew?: boolean;

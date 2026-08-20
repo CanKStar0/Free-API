@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Automated Neural Translation Helper (Zero-API Key, Ultra-fast)
  * Supports translating between Turkish and English automatically.
  */
@@ -7,17 +7,16 @@ export async function autoTranslate(text: string, targetLang: 'tr' | 'en' = 'en'
 
   try {
     const cleanText = text.trim();
-    const url = https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=&dt=t&q=;
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(cleanText)}`;
 
     const res = await fetch(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
       },
-      next: { revalidate: 86400 },
     });
 
     if (!res.ok) {
-      throw new Error(Translate status: );
+      throw new Error(`Translate status: ${res.status}`);
     }
 
     const data = await res.json();
