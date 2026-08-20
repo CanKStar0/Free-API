@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { categories } from '@/data/apis';
@@ -27,6 +27,7 @@ import {
   ChevronDown,
   Search,
   Check,
+  Gauge,
 } from 'lucide-react';
 import { getCategoryIconComponent } from '@/components/CategoryIcon';
 
@@ -114,6 +115,17 @@ export function SubmitApiModal({ isOpen, onClose }: SubmitApiModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  // Lock background body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
 
   const filteredCategories = categories.filter((c) => {
     const title = t.categoryTitles[c.id]?.title || c.title;
@@ -634,6 +646,7 @@ export function SubmitApiModal({ isOpen, onClose }: SubmitApiModalProps) {
                             : 'bg-white dark:bg-zinc-900/90 text-stone-700 dark:text-zinc-300 border-stone-200 dark:border-white/[0.08] hover:border-brand-700/40'
                         }`}
                       >
+                        <Gauge className="w-3.5 h-3.5" />
                         <span>{t.submitModal.rateLimitVariable}</span>
                       </button>
                     </div>
@@ -651,14 +664,17 @@ export function SubmitApiModal({ isOpen, onClose }: SubmitApiModalProps) {
                             {t.submitModal.rateLimitValueLabel}
                           </label>
                           <input
-                            type="number"
-                            min={1}
-                            max={100000000}
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
                             required={rateLimitMode === 'custom'}
                             value={rateLimitCount}
-                            onChange={(e) => setRateLimitCount(e.target.value)}
+                            onChange={(e) => {
+                              const cleaned = e.target.value.replace(/[^0-9]/g, '');
+                              setRateLimitCount(cleaned);
+                            }}
                             placeholder="1000"
-                            className="w-full px-3 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-white/[0.08] text-stone-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-2 focus:ring-brand-700"
+                            className="w-full px-3 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-white/[0.08] text-stone-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-2 focus:ring-brand-700 font-mono"
                           />
                         </div>
 
@@ -666,17 +682,20 @@ export function SubmitApiModal({ isOpen, onClose }: SubmitApiModalProps) {
                           <label className="block text-[11px] font-medium text-stone-600 dark:text-zinc-400 mb-1">
                             {t.submitModal.rateLimitUnitLabel}
                           </label>
-                          <select
-                            value={rateLimitUnit}
-                            onChange={(e) => setRateLimitUnit(e.target.value as RateLimitUnit)}
-                            className="w-full px-3 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-white/[0.08] text-stone-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-2 focus:ring-brand-700 cursor-pointer"
-                          >
-                            <option value="sec">{t.submitModal.unitSec}</option>
-                            <option value="min">{t.submitModal.unitMin}</option>
-                            <option value="hour">{t.submitModal.unitHour}</option>
-                            <option value="day">{t.submitModal.unitDay}</option>
-                            <option value="month">{t.submitModal.unitMonth}</option>
-                          </select>
+                          <div className="relative">
+                            <select
+                              value={rateLimitUnit}
+                              onChange={(e) => setRateLimitUnit(e.target.value as RateLimitUnit)}
+                              className="w-full px-3 py-2 pr-8 rounded-xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-white/[0.08] text-stone-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-2 focus:ring-brand-700 cursor-pointer appearance-none"
+                            >
+                              <option value="sec">{t.submitModal.unitSec}</option>
+                              <option value="min">{t.submitModal.unitMin}</option>
+                              <option value="hour">{t.submitModal.unitHour}</option>
+                              <option value="day">{t.submitModal.unitDay}</option>
+                              <option value="month">{t.submitModal.unitMonth}</option>
+                            </select>
+                            <ChevronDown className="w-3.5 h-3.5 text-stone-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                          </div>
                         </div>
                       </motion.div>
                     )}
