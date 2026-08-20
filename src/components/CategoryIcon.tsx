@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React from 'react';
 import {
@@ -34,10 +34,25 @@ import {
   CreditCard,
   Camera,
   Layers,
+  Dices,
+  Smile,
+  Calculator,
+  Bus,
+  Link2,
+  Video,
+  KeyRound,
+  FileText,
+  Brain,
+  CheckCheck,
+  ShoppingBag,
+  GitBranch,
+  Award,
+  Package,
+  Smartphone,
   LucideIcon,
 } from 'lucide-react';
 
-const ICON_MAP: Record<string, LucideIcon> = {
+export const ICON_MAP: Record<string, LucideIcon> = {
   weather: CloudSun,
   crypto: Coins,
   gaming: Gamepad2,
@@ -53,6 +68,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
   food: Utensils,
   space: Rocket,
   sports: Trophy,
+  random: Dices,
   animals: PawPrint,
   anime: Sparkles,
   art: Palette,
@@ -67,9 +83,27 @@ const ICON_MAP: Record<string, LucideIcon> = {
   iot: Cpu,
   network: Network,
   jobs: Briefcase,
+  math: Calculator,
   payment: CreditCard,
   photos: Camera,
+  fun: Smile,
+  transport: Bus,
+  url: Link2,
+  video: Video,
+  auth: KeyRound,
+  nlp: FileText,
+  ml: Brain,
+  validation: CheckCheck,
+  ecommerce: ShoppingBag,
+  cicd: GitBranch,
+  patents: Award,
+  shipping: Package,
+  phone: Smartphone,
 };
+
+export function getCategoryIconComponent(categoryId: string): LucideIcon {
+  return ICON_MAP[categoryId.toLowerCase()] || Layers;
+}
 
 interface CategoryIconProps {
   categoryId: string;
@@ -78,7 +112,7 @@ interface CategoryIconProps {
 }
 
 export function CategoryIcon({ categoryId, className = '', size = 20 }: CategoryIconProps) {
-  const IconComponent = ICON_MAP[categoryId.toLowerCase()] || Layers;
+  const IconComponent = getCategoryIconComponent(categoryId);
 
   return (
     <div
@@ -88,3 +122,4 @@ export function CategoryIcon({ categoryId, className = '', size = 20 }: Category
     </div>
   );
 }
+

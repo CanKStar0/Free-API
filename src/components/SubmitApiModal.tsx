@@ -24,7 +24,11 @@ import {
   Zap,
   ShieldCheck,
   Globe,
+  ChevronDown,
+  Search,
+  Check,
 } from 'lucide-react';
+import { getCategoryIconComponent } from '@/components/CategoryIcon';
 
 interface SubmitApiModalProps {
   isOpen: boolean;
@@ -94,6 +98,9 @@ export function SubmitApiModal({ isOpen, onClose }: SubmitApiModalProps) {
   const [rateLimitCount, setRateLimitCount] = useState<string>('1000');
   const [rateLimitUnit, setRateLimitUnit] = useState<RateLimitUnit>('day');
 
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
+  const [categorySearch, setCategorySearch] = useState('');
+
   const [formData, setFormData] = useState({
     name: '',
     url: '',
@@ -107,6 +114,11 @@ export function SubmitApiModal({ isOpen, onClose }: SubmitApiModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const filteredCategories = categories.filter((c) => {
+    const title = t.categoryTitles[c.id]?.title || c.title;
+    return title.toLowerCase().includes(categorySearch.toLowerCase());
+  });
 
   // Markdown helper to insert syntax around selection
   const insertMarkdown = (prefix: string, suffix: string = prefix, placeholder: string = 'metin') => {
@@ -327,29 +339,117 @@ export function SubmitApiModal({ isOpen, onClose }: SubmitApiModalProps) {
                     </div>
                   </div>
 
-                  {/* Category Selection */}
-                  <div>
+                  {/* Custom Lucide Category Dropdown */}
+                  <div className="relative">
                     <label className="block text-xs font-semibold text-stone-700 dark:text-zinc-300 mb-1.5">
                       {t.submitModal.categoryLabel} <span className="text-rose-500">*</span>
                     </label>
-                    <div className="relative">
-                      <Layers className="w-3.5 h-3.5 text-stone-400 dark:text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                      <select
-                        value={formData.categoryId}
-                        onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                        className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900/80 border border-stone-200 dark:border-white/[0.08] text-stone-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-2 focus:ring-brand-700 cursor-pointer appearance-none"
-                      >
-                        {categories.map((c) => (
-                          <option
-                            key={c.id}
-                            value={c.id}
-                            className="bg-white dark:bg-zinc-900 text-stone-900 dark:text-zinc-100"
+
+                    {/* Trigger Button */}
+                    <button
+                      type="button"
+                      onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900/80 border border-stone-200 dark:border-white/[0.08] text-stone-900 dark:text-zinc-100 text-xs flex items-center justify-between gap-2 focus:outline-none focus:ring-2 focus:ring-brand-700 transition-colors cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2.5 truncate">
+                        <div className="w-6 h-6 rounded-lg bg-rose-500/10 dark:bg-rose-500/20 text-brand-700 dark:text-brand-400 flex items-center justify-center shrink-0">
+                          {(() => {
+                            const ActiveIcon = getCategoryIconComponent(formData.categoryId);
+                            return <ActiveIcon className="w-3.5 h-3.5" />;
+                          })()}
+                        </div>
+                        <span className="font-medium truncate">
+                          {t.categoryTitles[formData.categoryId]?.title || selectedCategory?.title || 'Kategori Seçin'}
+                        </span>
+                      </div>
+                      <ChevronDown
+                        className={`w-4 h-4 text-stone-400 transition-transform duration-200 shrink-0 ${
+                          isCategoryDropdownOpen ? 'rotate-180 text-brand-700' : ''
+                        }`}
+                      />
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    <AnimatePresence>
+                      {isCategoryDropdownOpen && (
+                        <>
+                          {/* Click outside overlay */}
+                          <div
+                            className="fixed inset-0 z-20"
+                            onClick={() => setIsCategoryDropdownOpen(false)}
+                          />
+
+                          <motion.div
+                            initial={{ opacity: 0, y: 5, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 5, scale: 0.98 }}
+                            transition={{ duration: 0.15 }}
+                            className="absolute left-0 right-0 top-full mt-1.5 z-30 max-h-60 overflow-hidden rounded-2xl bg-white dark:bg-[#18181b] border border-stone-200 dark:border-white/[0.1] shadow-2xl flex flex-col"
                           >
-                            {c.emoji} {t.categoryTitles[c.id]?.title || c.title}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                            {/* Search Filter Inside Dropdown */}
+                            <div className="p-2 border-b border-stone-100 dark:border-zinc-800 bg-stone-50/70 dark:bg-zinc-900/60 sticky top-0 z-10">
+                              <div className="relative">
+                                <Search className="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                                <input
+                                  type="text"
+                                  value={categorySearch}
+                                  onChange={(e) => setCategorySearch(e.target.value)}
+                                  placeholder="Kategori ara..."
+                                  className="w-full pl-8 pr-2.5 py-1.5 rounded-lg bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700/60 text-stone-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-1 focus:ring-brand-700"
+                                />
+                              </div>
+                            </div>
+
+                            {/* Options List */}
+                            <div className="overflow-y-auto p-1.5 space-y-0.5 max-h-48 custom-scrollbar">
+                              {filteredCategories.length > 0 ? (
+                                filteredCategories.map((c) => {
+                                  const IconComponent = getCategoryIconComponent(c.id);
+                                  const isSelected = formData.categoryId === c.id;
+                                  const categoryName = t.categoryTitles[c.id]?.title || c.title;
+
+                                  return (
+                                    <button
+                                      key={c.id}
+                                      type="button"
+                                      onClick={() => {
+                                        setFormData({ ...formData, categoryId: c.id });
+                                        setIsCategoryDropdownOpen(false);
+                                        setCategorySearch('');
+                                      }}
+                                      className={`w-full px-2.5 py-2 rounded-xl text-left text-xs flex items-center justify-between gap-2 transition-all cursor-pointer ${
+                                        isSelected
+                                          ? 'bg-brand-700 text-white font-semibold shadow-sm'
+                                          : 'hover:bg-stone-100 dark:hover:bg-zinc-800/80 text-stone-800 dark:text-zinc-200'
+                                      }`}
+                                    >
+                                      <div className="flex items-center gap-2.5 truncate">
+                                        <div
+                                          className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
+                                            isSelected
+                                              ? 'bg-white/20 text-white'
+                                              : 'bg-rose-500/10 dark:bg-rose-500/15 text-brand-700 dark:text-brand-400'
+                                          }`}
+                                        >
+                                          <IconComponent className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span className="truncate">{categoryName}</span>
+                                      </div>
+
+                                      {isSelected && <Check className="w-3.5 h-3.5 shrink-0 text-white" />}
+                                    </button>
+                                  );
+                                })
+                              ) : (
+                                <div className="py-4 text-center text-xs text-stone-400 dark:text-zinc-500">
+                                  Kategori bulunamadı.
+                                </div>
+                              )}
+                            </div>
+                          </motion.div>
+                        </>
+                      )}
+                    </AnimatePresence>
                   </div>
 
                   {/* Description Section with Markdown Toolbar & Preview Tabs */}
@@ -449,8 +549,12 @@ export function SubmitApiModal({ isOpen, onClose }: SubmitApiModalProps) {
                           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-brand-700 dark:text-brand-400">
                             {t.submitModal.previewBadge}
                           </span>
-                          <span className="text-[11px] px-2 py-0.5 rounded-md bg-stone-100 dark:bg-zinc-800 text-stone-600 dark:text-zinc-400 font-medium">
-                            {selectedCategory?.emoji} {selectedCategory?.title}
+                          <span className="text-[11px] px-2.5 py-1 rounded-lg bg-stone-100 dark:bg-zinc-800 text-stone-700 dark:text-zinc-300 font-medium flex items-center gap-1.5 border border-stone-200 dark:border-zinc-700/60">
+                            {(() => {
+                              const CategoryLucide = getCategoryIconComponent(formData.categoryId);
+                              return <CategoryLucide className="w-3.5 h-3.5 text-brand-700 dark:text-brand-400" />;
+                            })()}
+                            <span>{t.categoryTitles[formData.categoryId]?.title || selectedCategory?.title}</span>
                           </span>
                         </div>
 
