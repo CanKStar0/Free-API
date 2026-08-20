@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { autoTranslate } from '@/lib/auto-translator';
+import { getCategoryTitle } from '@/data/apis';
 
 interface ApiSubmission {
   id: string;
@@ -134,11 +135,12 @@ export async function GET(req: NextRequest) {
     }
 
     // Telegram Confirmation Dispatch
+    const categoryTitleFull = getCategoryTitle(sub.categoryId);
     const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
     const telegramChatId = process.env.TELEGRAM_CHAT_ID;
     if (telegramBotToken && telegramChatId) {
       const tgMsg = isApprove
-        ? `🎉 <b>API Başarıyla Onaylandı ve Canlıya Eklendi!</b>\n\n📌 <b>${sub.name}</b>\n📂 Kategori: <code>${sub.categoryId}</code>\n🔗 <a href="${sub.url}">API Sayfasını Gör</a>`
+        ? `🎉 <b>API Başarıyla Onaylandı ve Canlıya Eklendi!</b>\n\n📌 <b>${sub.name}</b>\n📂 Kategori: <b>${categoryTitleFull}</b> (<code>${sub.categoryId}</code>)\n🔗 <a href="${sub.url}">API Sayfasını Gör</a>`
         : `❌ <b>API Önerisi Reddedildi!</b>\n\n📌 <b>${sub.name}</b> kuyruktan kaldırıldı.`;
 
       fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
@@ -232,7 +234,7 @@ export async function GET(req: NextRequest) {
           <p>${statusText}</p>
           <div class="details">
             <div style="margin-bottom: 0.35rem;"><b>API:</b> ${sub.name}</div>
-            <div style="margin-bottom: 0.35rem;"><b>Kategori:</b> ${sub.categoryId}</div>
+            <div style="margin-bottom: 0.35rem;"><b>Kategori:</b> ${categoryTitleFull} (${sub.categoryId})</div>
             <div><b>Limit:</b> ${sub.rateLimit}</div>
           </div>
           <a href="/" class="btn">🏠 Kataloğa Dön</a>

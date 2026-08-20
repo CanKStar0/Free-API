@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { autoTranslate } from '@/lib/auto-translator';
+import { getCategoryTitle } from '@/data/apis';
 
 interface ApiSubmission {
   id: string;
@@ -122,6 +123,9 @@ export async function POST(req: NextRequest) {
       console.warn('Submissions file storage warning:', fsErr);
     }
 
+    // Category full readable name
+    const categoryTitleFull = getCategoryTitle(newSubmission.categoryId);
+
     // 1. Discord Webhook Notification
     const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
     if (discordWebhook) {
@@ -136,7 +140,7 @@ export async function POST(req: NextRequest) {
                 color: 0xe11d48, // Brand Crimson
                 fields: [
                   { name: '🌐 URL', value: newSubmission.url, inline: false },
-                  { name: '📂 Kategori', value: newSubmission.categoryId, inline: true },
+                  { name: '📂 Kategori', value: `${categoryTitleFull} (${newSubmission.categoryId})`, inline: true },
                   { name: '⚡ Rate Limit', value: newSubmission.rateLimit, inline: true },
                   { name: '🔑 Zero-Auth', value: newSubmission.isNoAuth ? 'Evet ✅' : 'Hayır 🔑', inline: true },
                   { name: '🇹🇷 Açıklama (TR)', value: newSubmission.description_tr || newSubmission.description, inline: false },
@@ -165,7 +169,7 @@ export async function POST(req: NextRequest) {
         const tgMessage = `🚀 <b>Yeni API Önerisi Alındı!</b>\n\n` +
           `📌 <b>İsim:</b> ${escapeHtml(newSubmission.name)}\n` +
           `🔗 <b>URL:</b> ${escapeHtml(newSubmission.url)}\n` +
-          `📂 <b>Kategori:</b> <code>${escapeHtml(newSubmission.categoryId)}</code>\n` +
+          `📂 <b>Kategori:</b> <b>${escapeHtml(categoryTitleFull)}</b> (<code>${escapeHtml(newSubmission.categoryId)}</code>)\n` +
           `⚡ <b>Rate Limit:</b> ${escapeHtml(newSubmission.rateLimit)}\n` +
           `🔑 <b>Zero-Auth:</b> ${newSubmission.isNoAuth ? 'Evet ✅' : 'Hayır 🔑'}\n\n` +
           `🇹🇷 <b>Açıklama (TR):</b>\n<i>${escapeHtml(newSubmission.description_tr || newSubmission.description)}</i>\n\n` +

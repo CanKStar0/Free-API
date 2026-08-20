@@ -1013,6 +1013,11 @@ export const getCategoryById = (id: string): Category | undefined => {
   return categories.find(cat => cat.id === id);
 };
 
+export const getCategoryTitle = (id: string): string => {
+  const cat = categories.find((c) => c.id === id);
+  return cat ? cat.title : id;
+};
+
 export const getRecommendedApis = (category: Category): ApiService[] => {
   return category.apis.filter(api => api.isRecommended);
 };
