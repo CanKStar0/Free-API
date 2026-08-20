@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { autoTranslate } from '@/lib/auto-translator';
-import { getCategoryTitle } from '@/data/apis';
+import { getCategoryTitle, getCategoryTitleEn } from '@/data/apis';
 
 interface ApiSubmission {
   id: string;
@@ -123,8 +123,8 @@ export async function POST(req: NextRequest) {
       console.warn('Submissions file storage warning:', fsErr);
     }
 
-    // Category full readable name
-    const categoryTitleFull = getCategoryTitle(newSubmission.categoryId);
+    // Category full readable English name
+    const categoryTitleEn = getCategoryTitleEn(newSubmission.categoryId);
 
     // 1. Discord Webhook Notification
     const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
@@ -136,16 +136,16 @@ export async function POST(req: NextRequest) {
           body: JSON.stringify({
             embeds: [
               {
-                title: `🔥 Yeni API Önerisi: ${newSubmission.name}`,
+                title: `🔥 New API Submission: ${newSubmission.name}`,
                 color: 0xe11d48, // Brand Crimson
                 fields: [
                   { name: '🌐 URL', value: newSubmission.url, inline: false },
-                  { name: '📂 Kategori', value: `${categoryTitleFull} (${newSubmission.categoryId})`, inline: true },
+                  { name: '📂 Category', value: categoryTitleEn, inline: true },
                   { name: '⚡ Rate Limit', value: newSubmission.rateLimit, inline: true },
-                  { name: '🔑 Zero-Auth', value: newSubmission.isNoAuth ? 'Evet ✅' : 'Hayır 🔑', inline: true },
-                  { name: '🇹🇷 Açıklama (TR)', value: newSubmission.description_tr || newSubmission.description, inline: false },
-                  { name: '🇬🇧 Çeviri (EN)', value: newSubmission.description_en || 'N/A', inline: false },
-                  { name: '📧 Gönderen', value: newSubmission.email || 'Belirtilmedi', inline: false },
+                  { name: '🔑 Zero-Auth', value: newSubmission.isNoAuth ? 'Yes ✅' : 'No 🔑', inline: true },
+                  { name: '🇬🇧 Description (EN)', value: newSubmission.description_en || 'N/A', inline: false },
+                  { name: '🇹🇷 Description (TR)', value: newSubmission.description_tr || newSubmission.description, inline: false },
+                  { name: '📧 Submitter', value: newSubmission.email || 'Not specified', inline: false },
                 ],
                 footer: { text: `FreeAPI Directory • ${newSubmission.id}` },
                 timestamp: new Date().toISOString(),
@@ -166,15 +166,15 @@ export async function POST(req: NextRequest) {
         const escapeHtml = (str: string) =>
           str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-        const tgMessage = `🚀 <b>Yeni API Önerisi Alındı!</b>\n\n` +
-          `📌 <b>İsim:</b> ${escapeHtml(newSubmission.name)}\n` +
+        const tgMessage = `🚀 <b>New API Submission Received!</b>\n\n` +
+          `📌 <b>Name:</b> ${escapeHtml(newSubmission.name)}\n` +
           `🔗 <b>URL:</b> ${escapeHtml(newSubmission.url)}\n` +
-          `📂 <b>Kategori:</b> <b>${escapeHtml(categoryTitleFull)}</b>\n` +
+          `📂 <b>Category:</b> <b>${escapeHtml(categoryTitleEn)}</b>\n` +
           `⚡ <b>Rate Limit:</b> ${escapeHtml(newSubmission.rateLimit)}\n` +
-          `🔑 <b>Zero-Auth:</b> ${newSubmission.isNoAuth ? 'Evet ✅' : 'Hayır 🔑'}\n\n` +
-          `🇹🇷 <b>Açıklama (TR):</b>\n<i>${escapeHtml(newSubmission.description_tr || newSubmission.description)}</i>\n\n` +
-          `🇬🇧 <b>Çeviri (EN):</b>\n<i>${escapeHtml(newSubmission.description_en || newSubmission.description)}</i>\n\n` +
-          `📧 <b>E-posta:</b> ${escapeHtml(newSubmission.email || 'Belirtilmedi')}\n` +
+          `🔑 <b>Zero-Auth:</b> ${newSubmission.isNoAuth ? 'Yes ✅' : 'No 🔑'}\n\n` +
+          `🇬🇧 <b>Description (EN):</b>\n<i>${escapeHtml(newSubmission.description_en || newSubmission.description)}</i>\n\n` +
+          `🇹🇷 <b>Description (TR):</b>\n<i>${escapeHtml(newSubmission.description_tr || newSubmission.description)}</i>\n\n` +
+          `📧 <b>Submitter:</b> ${escapeHtml(newSubmission.email || 'Not specified')}\n` +
           `🆔 <code>${newSubmission.id}</code>`;
 
         const host = req.headers.get('host') || 'api.canpolatkaya.com';
@@ -189,11 +189,11 @@ export async function POST(req: NextRequest) {
         const replyMarkup = {
           inline_keyboard: [
             [
-              { text: '✅ Onayla & Canlıya Ekle', url: approveUrl },
-              { text: '❌ Reddet', url: rejectUrl },
+              { text: '✅ Approve & Publish', url: approveUrl },
+              { text: '❌ Reject / Delete', url: rejectUrl },
             ],
             [
-              { text: '🌐 API Sitesine Git (Önizle)', url: newSubmission.url },
+              { text: '🌐 Preview API Website', url: newSubmission.url },
             ],
           ],
         };

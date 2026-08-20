@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { autoTranslate } from '@/lib/auto-translator';
-import { getCategoryTitle } from '@/data/apis';
+import { getCategoryTitle, getCategoryTitleEn } from '@/data/apis';
 
 interface ApiSubmission {
   id: string;
@@ -33,12 +33,12 @@ export async function GET(req: NextRequest) {
   if (!token || token !== validSecret) {
     return new NextResponse(
       `<!DOCTYPE html>
-      <html lang="tr">
-      <head><meta charset="utf-8"/><title>Yetkisiz Erişim</title><meta name="viewport" content="width=device-width, initial-scale=1"/></head>
+      <html lang="en">
+      <head><meta charset="utf-8"/><title>Unauthorized Access</title><meta name="viewport" content="width=device-width, initial-scale=1"/></head>
       <body style="font-family: sans-serif; background: #0f0f12; color: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center;">
         <div style="background: #1a1a20; padding: 2.5rem; border-radius: 1.5rem; border: 1px solid rgba(239,68,68,0.3); max-width: 400px;">
-          <h2 style="color: #ef4444; margin-top: 0;">🚫 Yetkisiz Erişim</h2>
-          <p style="color: #aaa; font-size: 0.9rem;">Geçersiz veya süresi dolmuş işlem anahtarı.</p>
+          <h2 style="color: #ef4444; margin-top: 0;">🚫 Unauthorized Access</h2>
+          <p style="color: #aaa; font-size: 0.9rem;">Invalid or expired admin action key.</p>
         </div>
       </body>
       </html>`,
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
   }
 
   if (!id || !action || !['approve', 'reject'].includes(action)) {
-    return new NextResponse('Geçersiz istek parametreleri.', { status: 400 });
+    return new NextResponse('Invalid request parameters.', { status: 400 });
   }
 
   try {
@@ -60,12 +60,12 @@ export async function GET(req: NextRequest) {
     if (subIndex === -1) {
       return new NextResponse(
         `<!DOCTYPE html>
-        <html lang="tr">
-        <head><meta charset="utf-8"/><title>Öneri Bulunamadı</title><meta name="viewport" content="width=device-width, initial-scale=1"/></head>
+        <html lang="en">
+        <head><meta charset="utf-8"/><title>Submission Not Found</title><meta name="viewport" content="width=device-width, initial-scale=1"/></head>
         <body style="font-family: sans-serif; background: #0f0f12; color: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center;">
           <div style="background: #1a1a20; padding: 2.5rem; border-radius: 1.5rem; border: 1px solid #333; max-width: 400px;">
-            <h2>⚠️ Öneri Bulunamadı</h2>
-            <p style="color: #888; font-size: 0.9rem;">Bu ID ile kayıtlı bir API önerisi bulunamadı veya daha önce silinmiş.</p>
+            <h2>⚠️ Submission Not Found</h2>
+            <p style="color: #888; font-size: 0.9rem;">No API submission found with this ID or it was already deleted.</p>
           </div>
         </body>
         </html>`,
@@ -134,14 +134,14 @@ export async function GET(req: NextRequest) {
       }
     }
 
-    // Telegram Confirmation Dispatch
-    const categoryTitleFull = getCategoryTitle(sub.categoryId);
+    // Telegram Confirmation Dispatch in English
+    const categoryTitleEn = getCategoryTitleEn(sub.categoryId);
     const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
     const telegramChatId = process.env.TELEGRAM_CHAT_ID;
     if (telegramBotToken && telegramChatId) {
       const tgMsg = isApprove
-        ? `🎉 <b>API Başarıyla Onaylandı ve Canlıya Eklendi!</b>\n\n📌 <b>${sub.name}</b>\n📂 Kategori: <b>${categoryTitleFull}</b>\n🔗 <a href="${sub.url}">API Sayfasını Gör</a>`
-        : `❌ <b>API Önerisi Reddedildi!</b>\n\n📌 <b>${sub.name}</b> kuyruktan kaldırıldı.`;
+        ? `🎉 <b>API Successfully Approved & Published Live!</b>\n\n📌 <b>${sub.name}</b>\n📂 Category: <b>${categoryTitleEn}</b>\n🔗 <a href="${sub.url}">View API Website</a>`
+        : `❌ <b>API Submission Rejected!</b>\n\n📌 <b>${sub.name}</b> has been discarded from queue.`;
 
       fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
         method: 'POST',
@@ -154,16 +154,16 @@ export async function GET(req: NextRequest) {
       }).catch((e) => console.warn('Telegram confirm dispatch warning:', e));
     }
 
-    // Render HTML response page
-    const title = isApprove ? 'API Onaylandı & Yayına Alındı! 🚀' : 'API Önerisi Reddedildi ❌';
+    // Render HTML response page in English
+    const title = isApprove ? 'API Approved & Published! 🚀' : 'API Submission Rejected ❌';
     const accentColor = isApprove ? '#10b981' : '#f43f5e';
     const statusText = isApprove
-      ? `<b>${sub.name}</b> başarıyla kataloğa eklendi ve sitede canlı yayına alındı.`
-      : `<b>${sub.name}</b> önerisi reddedildi ve yayına alınmadı.`;
+      ? `<b>${sub.name}</b> has been successfully added to catalog and published live on the website.`
+      : `<b>${sub.name}</b> submission has been rejected and will not be published.`;
 
     return new NextResponse(
       `<!DOCTYPE html>
-      <html lang="tr">
+      <html lang="en">
       <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -234,10 +234,10 @@ export async function GET(req: NextRequest) {
           <p>${statusText}</p>
           <div class="details">
             <div style="margin-bottom: 0.35rem;"><b>API:</b> ${sub.name}</div>
-            <div style="margin-bottom: 0.35rem;"><b>Kategori:</b> ${categoryTitleFull} (${sub.categoryId})</div>
-            <div><b>Limit:</b> ${sub.rateLimit}</div>
+            <div style="margin-bottom: 0.35rem;"><b>Category:</b> ${categoryTitleEn}</div>
+            <div><b>Rate Limit:</b> ${sub.rateLimit}</div>
           </div>
-          <a href="/" class="btn">🏠 Kataloğa Dön</a>
+          <a href="/" class="btn">🏠 Return to Directory</a>
         </div>
       </body>
       </html>`,
@@ -245,6 +245,6 @@ export async function GET(req: NextRequest) {
     );
   } catch (error) {
     console.error('Admin submission action error:', error);
-    return new NextResponse('Sunucu hatası oluştu.', { status: 500 });
+    return new NextResponse('Server error occurred.', { status: 500 });
   }
 }

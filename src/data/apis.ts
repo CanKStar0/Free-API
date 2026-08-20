@@ -1036,6 +1036,75 @@ export const getCategoryTitle = (id: string): string => {
   return id;
 };
 
+export const getCategoryTitleEn = (id: string): string => {
+  if (!id) return 'General';
+  const cleanId = id.toLowerCase().trim();
+
+  const enCategoryTitles: Record<string, { title: string }> = {
+    weather: { title: 'Weather & Climate' },
+    crypto: { title: 'Cryptocurrency & Web3' },
+    gaming: { title: 'Gaming & Entertainment' },
+    maps: { title: 'Maps & Geolocation' },
+    social: { title: 'Social & Communication' },
+    movies: { title: 'Movies & Media' },
+    music: { title: 'Music & Audio' },
+    news: { title: 'News & RSS Feeds' },
+    finance: { title: 'Finance & Stock Market' },
+    developer: { title: 'Developer Tools' },
+    education: { title: 'Education & Science' },
+    health: { title: 'Healthcare & Medicine' },
+    food: { title: 'Food & Recipes' },
+    space: { title: 'Space & Astronomy' },
+    sports: { title: 'Sports & Live Scores' },
+    random: { title: 'Random & Fun Data' },
+    animals: { title: 'Animals & Wildlife' },
+    anime: { title: 'Anime & Manga' },
+    art: { title: 'Art & Design' },
+    books: { title: 'Books & Literature' },
+    calendar: { title: 'Calendar & Holidays' },
+    chat: { title: 'Chat & Bot Frameworks' },
+    cloud: { title: 'Cloud & Infrastructure' },
+    email: { title: 'Email Services' },
+    environment: { title: 'Environment & Earth' },
+    government: { title: 'Government & Open Data' },
+    iot: { title: 'Internet of Things (IoT)' },
+    network: { title: 'Networking & Protocols' },
+    jobs: { title: 'Jobs & Careers' },
+    math: { title: 'Mathematics & Compute' },
+    payment: { title: 'Payments & Fintech' },
+    photos: { title: 'Photography & Stock Media' },
+    fun: { title: 'Humor & Pop Culture' },
+    transport: { title: 'Transportation & Transit' },
+    url: { title: 'URL & Link Shorteners' },
+    video: { title: 'Video & Live Streaming' },
+    security: { title: 'Cybersecurity & Threat Intel' },
+    auth: { title: 'Authentication & IAM' },
+    nlp: { title: 'Natural Language Processing (NLP)' },
+    ml: { title: 'Machine Learning & AI' },
+    validation: { title: 'Data Validation & Sanitization' },
+    ecommerce: { title: 'E-Commerce & Retail' },
+    cicd: { title: 'CI/CD & DevOps Automation' },
+    patents: { title: 'Patents & Intellectual Property' },
+    shipping: { title: 'Shipping & Parcel Logistics' },
+    phone: { title: 'Telephony & SMS Services' },
+  };
+
+  if (enCategoryTitles[cleanId]) return enCategoryTitles[cleanId].title;
+
+  const aliasMap: Record<string, string> = {
+    ip: 'Networking & Protocols',
+    ai: 'Machine Learning & AI',
+    bot: 'Chat & Bot Frameworks',
+    tools: 'Developer Tools',
+    dev: 'Developer Tools',
+    sec: 'Cybersecurity & Threat Intel',
+    auth: 'Authentication & IAM',
+  };
+
+  if (aliasMap[cleanId]) return aliasMap[cleanId];
+  return getCategoryTitle(cleanId);
+};
+
 export const getRecommendedApis = (category: Category): ApiService[] => {
   return category.apis.filter(api => api.isRecommended);
 };
