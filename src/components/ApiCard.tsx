@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ApiService } from '@/data/apis';
 import { useLanguage } from '@/context/LanguageContext';
 import { translateDescription, translateRateLimit, getDirectEndpoint } from '@/lib/api-translator';
-import { ExternalLink, Star, Code2, Check, Copy, ShieldCheck, Zap } from 'lucide-react';
-
+import { ExternalLink, Star, Code2, Check, Copy, ShieldCheck, Zap, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { slugify } from '@/lib/slugify';
 
@@ -20,6 +20,7 @@ interface ApiCardProps {
 type CodeTab = 'curl' | 'js' | 'python';
 
 export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBookmark }: ApiCardProps) {
+  const router = useRouter();
   const { t, language } = useLanguage();
 
   const [showCode, setShowCode] = useState(false);
@@ -28,6 +29,7 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
 
   const endpoint = getDirectEndpoint(api);
   const apiSlug = slugify(api.name);
+  const serviceUrl = language === 'en' ? `/en/service/${apiSlug}` : `/service/${apiSlug}`;
 
   const getCodeSnippet = (tab: CodeTab): string => {
     switch (tab) {
@@ -50,6 +52,21 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    // Don't navigate if clicking on buttons, links, inputs, or code blocks
+    if (
+      target.closest('button') ||
+      target.closest('a') ||
+      target.closest('input') ||
+      target.closest('pre') ||
+      target.closest('code')
+    ) {
+      return;
+    }
+    router.push(serviceUrl);
+  };
+
   return (
     <motion.div
       layout
@@ -57,7 +74,8 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.25 }}
-      className="glass-card rounded-2xl p-5 flex flex-col justify-between relative group"
+      onClick={handleCardClick}
+      className="glass-card rounded-2xl p-5 flex flex-col justify-between relative group cursor-pointer border border-stone-200/80 dark:border-white/[0.08] hover:border-brand-700/50 dark:hover:border-brand-500/40 hover:shadow-xl transition-all duration-300"
     >
       <div>
         {/* Top Header */}
@@ -68,8 +86,12 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
                 {categoryTitle}
               </span>
             )}
-            <Link href={`/service/${apiSlug}`} className="hover:underline">
-              <h3 className="text-lg font-bold text-stone-900 dark:text-zinc-100 group-hover:text-brand-700 dark:group-hover:text-brand-500 transition-colors">
+            <Link
+              href={serviceUrl}
+              onClick={(e) => e.stopPropagation()}
+              className="hover:underline inline-block"
+            >
+              <h3 className="text-lg font-bold text-stone-900 dark:text-zinc-100 group-hover:text-brand-700 dark:group-hover:text-brand-400 transition-colors">
                 {api.name}
               </h3>
             </Link>
@@ -80,7 +102,10 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
             {onToggleBookmark && (
               <button
                 type="button"
-                onClick={() => onToggleBookmark(api.name)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleBookmark(api.name);
+                }}
                 aria-label={isBookmarked ? t.card.removeFromBookmarks : t.card.addToBookmarks}
                 className={`p-2 rounded-xl transition-colors ${
                   isBookmarked
@@ -97,6 +122,7 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
               href={api.url}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
               className="p-2 rounded-xl text-stone-400 dark:text-zinc-500 hover:text-stone-900 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-zinc-800 transition-colors"
               aria-label={`${api.name} documentation`}
             >
@@ -127,7 +153,6 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
             {translateRateLimit(api.rateLimit, language)}
           </span>
 
-
           {/* HTTPS Badge */}
           <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg font-mono text-[11px] bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
             <ShieldCheck className="w-3 h-3" />
@@ -139,7 +164,10 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
         <div className="pt-3 border-t border-stone-100 dark:border-zinc-800/80 flex items-center justify-between gap-2">
           <button
             type="button"
-            onClick={() => setShowCode(!showCode)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowCode(!showCode);
+            }}
             className={`text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
               showCode
                 ? 'bg-brand-700 dark:bg-brand-500 text-white shadow-sm'
@@ -150,15 +178,16 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
             {showCode ? t.card.closeCode : t.card.codeSnippet}
           </button>
 
-          <a
-            href={api.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs font-semibold text-brand-700 dark:text-brand-500 hover:underline flex items-center gap-1"
-          >
-            {t.card.details}
-            <ExternalLink className="w-3 h-3" />
-          </a>
+          <div className="flex items-center gap-2">
+            <Link
+              href={serviceUrl}
+              onClick={(e) => e.stopPropagation()}
+              className="text-xs font-semibold text-brand-700 dark:text-brand-400 hover:underline flex items-center gap-1 group-hover:translate-x-0.5 transition-transform"
+            >
+              <span>{language === 'tr' ? 'Detaylar' : 'Details'}</span>
+              <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
         </div>
 
         {/* Code Drawer Accordion */}
@@ -169,23 +198,27 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
               className="overflow-hidden mt-3 pt-3 border-t border-stone-100 dark:border-zinc-800"
             >
               {/* Tab Selector */}
               <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-1 bg-stone-100 dark:bg-zinc-950 p-0.5 rounded-lg border border-stone-200 dark:border-zinc-800 text-[11px] font-mono">
+                <div className="flex items-center gap-1 bg-stone-100 dark:bg-zinc-800/80 p-1 rounded-lg">
                   {(['curl', 'js', 'python'] as CodeTab[]).map((tab) => (
                     <button
                       key={tab}
                       type="button"
-                      onClick={() => setActiveTab(tab)}
-                      className={`px-2 py-0.5 rounded-md transition-colors ${
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveTab(tab);
+                      }}
+                      className={`px-2 py-1 rounded text-[11px] font-mono font-medium transition-all ${
                         activeTab === tab
-                          ? 'bg-brand-700 dark:bg-brand-500 text-white font-bold'
+                          ? 'bg-brand-700 text-white shadow-xs'
                           : 'text-stone-600 dark:text-zinc-400 hover:text-stone-900 dark:hover:text-white'
                       }`}
                     >
-                      {tab === 'curl' ? 'cURL' : tab === 'js' ? 'Fetch' : 'Python'}
+                      {tab === 'curl' ? 'cURL' : tab === 'js' ? 'JS' : 'Python'}
                     </button>
                   ))}
                 </div>
@@ -193,16 +226,16 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="flex items-center gap-1 text-[11px] font-mono px-2 py-1 rounded-md bg-stone-100 dark:bg-zinc-800 text-stone-700 dark:text-zinc-300 hover:bg-brand-50 dark:hover:bg-brand-900/30 hover:text-brand-700 dark:hover:text-brand-400 transition-colors"
+                  className="flex items-center gap-1 text-[11px] font-medium text-stone-500 dark:text-zinc-400 hover:text-stone-800 dark:hover:text-zinc-200 transition-colors"
                 >
                   {copied ? (
                     <>
-                      <Check className="w-3 h-3 text-emerald-500" />
-                      <span className="text-emerald-600 dark:text-emerald-400">{t.card.copied}</span>
+                      <Check className="w-3.5 h-3.5 text-emerald-500" />
+                      <span className="text-emerald-500 font-semibold">{t.card.copied}</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3 h-3" />
+                      <Copy className="w-3.5 h-3.5" />
                       <span>{t.card.copy}</span>
                     </>
                   )}
@@ -210,9 +243,9 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
               </div>
 
               {/* Code Snippet Box */}
-              <pre className="p-2.5 rounded-xl bg-stone-900 dark:bg-black text-stone-100 font-mono text-[11px] overflow-x-auto border border-stone-800 leading-relaxed scrollbar-none">
-                <code>{getCodeSnippet(activeTab)}</code>
-              </pre>
+              <div className="relative rounded-xl bg-zinc-950 p-3 text-[11px] font-mono text-zinc-300 overflow-x-auto border border-zinc-800">
+                <pre className="leading-relaxed whitespace-pre-wrap">{getCodeSnippet(activeTab)}</pre>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
