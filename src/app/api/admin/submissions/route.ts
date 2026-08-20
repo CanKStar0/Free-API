@@ -51,13 +51,36 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    const dParam = searchParams.get('d');
     let submissions: ApiSubmission[] = [];
     if (fs.existsSync(SUBMISSIONS_FILE)) {
       submissions = JSON.parse(fs.readFileSync(SUBMISSIONS_FILE, 'utf8'));
     }
 
+    let sub: ApiSubmission | undefined;
     const subIndex = submissions.findIndex((s) => s.id === id);
-    if (subIndex === -1) {
+    const isApprove = action === 'approve';
+
+    if (subIndex !== -1) {
+      sub = submissions[subIndex];
+      sub.status = isApprove ? 'approved' : 'rejected';
+      submissions[subIndex] = sub;
+      fs.writeFileSync(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2), 'utf8');
+    } else if (dParam) {
+      try {
+        const decodedStr = Buffer.from(dParam, 'base64url').toString('utf8');
+        sub = JSON.parse(decodedStr);
+        if (sub) {
+          sub.status = isApprove ? 'approved' : 'rejected';
+          submissions.unshift(sub);
+          fs.writeFileSync(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2), 'utf8');
+        }
+      } catch {
+        sub = undefined;
+      }
+    }
+
+    if (!sub) {
       return new NextResponse(
         `<!DOCTYPE html>
         <html lang="en">
@@ -72,14 +95,6 @@ export async function GET(req: NextRequest) {
         { status: 404, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
       );
     }
-
-    const sub = submissions[subIndex];
-    const isApprove = action === 'approve';
-
-    // Update status
-    sub.status = isApprove ? 'approved' : 'rejected';
-    submissions[subIndex] = sub;
-    fs.writeFileSync(SUBMISSIONS_FILE, JSON.stringify(submissions, null, 2), 'utf8');
 
     // If approved, update custom-apis.json with bilingual descriptions
     if (isApprove) {

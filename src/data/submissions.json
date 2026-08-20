@@ -1,5 +1,19 @@
 [
   {
+    "id": "sub_1787249900313_414dw",
+    "name": "DummyJSON API",
+    "url": "https://dummyjson.com",
+    "categoryId": "developer",
+    "description": "Frontend prototipleme ve testler için sahte REST API verileri (ürünler, kullanıcılar, gönderiler).",
+    "description_tr": "Frontend prototipleme ve testler için sahte REST API verileri (ürünler, kullanıcılar, gönderiler).",
+    "description_en": "Mock REST API data (products, users, posts) for frontend prototyping and testing.",
+    "rateLimit": "Sınırsız",
+    "isNoAuth": true,
+    "email": "can@canpolatkaya.com",
+    "createdAt": "2026-08-20T18:18:20.313Z",
+    "status": "pending"
+  },
+  {
     "id": "sub_1787246947647_oyfjy",
     "name": "Email Validator Pro",
     "url": "https://disify.com",

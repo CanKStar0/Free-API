@@ -247,8 +247,9 @@ export async function POST(req: NextRequest) {
           : `https://${host}`;
         const adminSecret = process.env.ADMIN_ACTION_SECRET || 'freeapi_admin_sec_2026_super';
 
-        const approveUrl = `${siteOrigin}/api/admin/submissions?action=approve&id=${newSubmission.id}&token=${adminSecret}`;
-        const rejectUrl = `${siteOrigin}/api/admin/submissions?action=reject&id=${newSubmission.id}&token=${adminSecret}`;
+        const dataPayload = Buffer.from(JSON.stringify(newSubmission)).toString('base64url');
+        const approveUrl = `${siteOrigin}/api/admin/submissions?action=approve&id=${newSubmission.id}&d=${dataPayload}&token=${adminSecret}`;
+        const rejectUrl = `${siteOrigin}/api/admin/submissions?action=reject&id=${newSubmission.id}&d=${dataPayload}&token=${adminSecret}`;
 
         const replyMarkup = {
           inline_keyboard: [
