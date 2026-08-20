@@ -169,7 +169,7 @@ export async function POST(req: NextRequest) {
         const tgMessage = `🚀 <b>Yeni API Önerisi Alındı!</b>\n\n` +
           `📌 <b>İsim:</b> ${escapeHtml(newSubmission.name)}\n` +
           `🔗 <b>URL:</b> ${escapeHtml(newSubmission.url)}\n` +
-          `📂 <b>Kategori:</b> <b>${escapeHtml(categoryTitleFull)}</b> (<code>${escapeHtml(newSubmission.categoryId)}</code>)\n` +
+          `📂 <b>Kategori:</b> <b>${escapeHtml(categoryTitleFull)}</b>\n` +
           `⚡ <b>Rate Limit:</b> ${escapeHtml(newSubmission.rateLimit)}\n` +
           `🔑 <b>Zero-Auth:</b> ${newSubmission.isNoAuth ? 'Evet ✅' : 'Hayır 🔑'}\n\n` +
           `🇹🇷 <b>Açıklama (TR):</b>\n<i>${escapeHtml(newSubmission.description_tr || newSubmission.description)}</i>\n\n` +

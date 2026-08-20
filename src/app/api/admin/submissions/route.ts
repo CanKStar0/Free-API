@@ -140,7 +140,7 @@ export async function GET(req: NextRequest) {
     const telegramChatId = process.env.TELEGRAM_CHAT_ID;
     if (telegramBotToken && telegramChatId) {
       const tgMsg = isApprove
-        ? `🎉 <b>API Başarıyla Onaylandı ve Canlıya Eklendi!</b>\n\n📌 <b>${sub.name}</b>\n📂 Kategori: <b>${categoryTitleFull}</b> (<code>${sub.categoryId}</code>)\n🔗 <a href="${sub.url}">API Sayfasını Gör</a>`
+        ? `🎉 <b>API Başarıyla Onaylandı ve Canlıya Eklendi!</b>\n\n📌 <b>${sub.name}</b>\n📂 Kategori: <b>${categoryTitleFull}</b>\n🔗 <a href="${sub.url}">API Sayfasını Gör</a>`
         : `❌ <b>API Önerisi Reddedildi!</b>\n\n📌 <b>${sub.name}</b> kuyruktan kaldırıldı.`;
 
       fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {

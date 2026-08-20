@@ -1014,8 +1014,26 @@ export const getCategoryById = (id: string): Category | undefined => {
 };
 
 export const getCategoryTitle = (id: string): string => {
-  const cat = categories.find((c) => c.id === id);
-  return cat ? cat.title : id;
+  if (!id) return 'Genel';
+  const cleanId = id.toLowerCase().trim();
+
+  // Direct match
+  const cat = categories.find((c) => c.id === cleanId);
+  if (cat) return cat.title;
+
+  // Common aliases
+  const aliasMap: Record<string, string> = {
+    ip: 'IP ve Ağ',
+    ai: 'Makine Öğrenimi ve Yapay Zeka',
+    bot: 'Sohbet ve Botlar',
+    tools: 'Geliştirici Araçları',
+    dev: 'Geliştirici Araçları',
+    sec: 'Güvenlik ve Kimlik Doğrulama',
+    auth: 'Güvenlik ve Kimlik Doğrulama',
+  };
+
+  if (aliasMap[cleanId]) return aliasMap[cleanId];
+  return id;
 };
 
 export const getRecommendedApis = (category: Category): ApiService[] => {
