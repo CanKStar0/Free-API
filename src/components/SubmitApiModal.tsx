@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { categories } from '@/data/apis';
@@ -131,6 +131,50 @@ export function SubmitApiModal({ isOpen, onClose }: SubmitApiModalProps) {
     const title = t.categoryTitles[c.id]?.title || c.title;
     return title.toLowerCase().includes(categorySearch.toLowerCase());
   });
+
+  // Helper to extract clean domain for duplicate checking
+  const extractDomain = (urlStr: string) => {
+    try {
+      if (!urlStr || !urlStr.trim()) return '';
+      const withProto = urlStr.startsWith('http://') || urlStr.startsWith('https://')
+        ? urlStr.trim()
+        : `https://${urlStr.trim()}`;
+      return new URL(withProto).hostname.toLowerCase().replace(/^www\./, '');
+    } catch {
+      return '';
+    }
+  };
+
+  // Real-time duplicate check against all 500+ categories and APIs
+  const duplicateMatch = useMemo(() => {
+    const cleanName = formData.name.trim().toLowerCase();
+    const cleanUrlDomain = extractDomain(formData.url);
+
+    if (cleanName.length < 2 && !cleanUrlDomain) return null;
+
+    for (const cat of categories) {
+      for (const api of cat.apis) {
+        const existingName = api.name.toLowerCase();
+        const existingDomain = extractDomain(api.url);
+
+        // Exact or close name match (at least 3 chars)
+        const isNameMatch = cleanName.length >= 3 && (existingName === cleanName || existingName.startsWith(cleanName) || cleanName.startsWith(existingName));
+
+        // Domain match (e.g. disify.com)
+        const isDomainMatch = Boolean(cleanUrlDomain && existingDomain && (existingDomain === cleanUrlDomain || cleanUrlDomain.includes(existingDomain) || existingDomain.includes(cleanUrlDomain)));
+
+        if (isNameMatch || isDomainMatch) {
+          return {
+            api,
+            category: cat,
+            categoryTitle: t.categoryTitles[cat.id]?.title || cat.title,
+            matchedBy: isDomainMatch ? 'domain' : 'name',
+          };
+        }
+      }
+    }
+    return null;
+  }, [formData.name, formData.url, t]);
 
   // Markdown helper to insert syntax around selection
   const insertMarkdown = (prefix: string, suffix: string = prefix, placeholder: string = 'metin') => {
@@ -350,6 +394,33 @@ export function SubmitApiModal({ isOpen, onClose }: SubmitApiModalProps) {
                       </div>
                     </div>
                   </div>
+
+                  {/* Real-time Duplicate Warning Banner */}
+                  <AnimatePresence>
+                    {duplicateMatch && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0, y: -6 }}
+                        animate={{ opacity: 1, height: 'auto', y: 0 }}
+                        exit={{ opacity: 0, height: 0, y: -6 }}
+                        className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 dark:border-amber-500/20 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-2.5 shadow-sm"
+                      >
+                        <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-bold text-amber-800 dark:text-amber-300">
+                              {t.submitModal.duplicateWarningTitle}
+                            </span>
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-800 dark:text-amber-300 font-bold uppercase">
+                              {t.submitModal.duplicateAlreadyExists}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-[11px] leading-relaxed text-stone-700 dark:text-zinc-300">
+                            <b>&quot;{duplicateMatch.api.name}&quot;</b> ({duplicateMatch.categoryTitle}) {t.submitModal.duplicateWarningDesc}
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   {/* Custom Lucide Category Dropdown */}
                   <div className="relative">
@@ -738,13 +809,22 @@ export function SubmitApiModal({ isOpen, onClose }: SubmitApiModalProps) {
                     <motion.button
                       whileTap={{ scale: 0.96 }}
                       type="submit"
-                      disabled={isLoading}
-                      className="w-full py-3 rounded-xl bg-brand-700 hover:bg-brand-600 text-white font-bold text-xs tracking-wide shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                      disabled={isLoading || Boolean(duplicateMatch)}
+                      className={`w-full py-3 rounded-xl font-bold text-xs tracking-wide shadow-md transition-all flex items-center justify-center gap-2 ${
+                        duplicateMatch
+                          ? 'bg-amber-600/70 text-white cursor-not-allowed'
+                          : 'bg-brand-700 hover:bg-brand-600 text-white cursor-pointer disabled:opacity-50'
+                      }`}
                     >
                       {isLoading ? (
                         <>
                           <Loader2 className="w-4 h-4 animate-spin" />
                           <span>{t.submitModal.submitting}</span>
+                        </>
+                      ) : duplicateMatch ? (
+                        <>
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          <span>{t.submitModal.duplicateAlreadyExists}: {duplicateMatch.api.name}</span>
                         </>
                       ) : (
                         <>

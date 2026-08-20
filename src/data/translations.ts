@@ -90,6 +90,9 @@ export interface TranslationDictionary {
     noAuthCheckbox: string;
     emailLabel: string;
     emailPlaceholder: string;
+    duplicateWarningTitle: string;
+    duplicateWarningDesc: string;
+    duplicateAlreadyExists: string;
     submitBtn: string;
     submitting: string;
     successTitle: string;
@@ -205,6 +208,9 @@ export const translations: Record<Language, TranslationDictionary> = {
       noAuthCheckbox: 'Bu API kayıt/key gerektirmeden çalışıyor (Zero-Auth)',
       emailLabel: 'İletişim E-postanız (Opsiyonel)',
       emailPlaceholder: 'ornek@domain.com',
+      duplicateWarningTitle: 'Bu API Zaten Sistemde Kayıtlı!',
+      duplicateWarningDesc: 'adlı servis zaten kataloğumuzda mevcut. Tekrar eklemenize gerek yoktur.',
+      duplicateAlreadyExists: 'Zaten Mevcut',
       submitBtn: 'API Önerisini Gönder',
       submitting: 'Gönderiliyor...',
       successTitle: 'Öneriniz Başarıyla Alındı!',
@@ -365,6 +371,9 @@ export const translations: Record<Language, TranslationDictionary> = {
       noAuthCheckbox: 'Zero-Auth (Works with zero API key / no registration)',
       emailLabel: 'Contact Email (Optional)',
       emailPlaceholder: 'you@domain.com',
+      duplicateWarningTitle: 'API Already Indexed in Directory!',
+      duplicateWarningDesc: 'is already listed in our catalog. There is no need to submit it again.',
+      duplicateAlreadyExists: 'Already Listed',
       submitBtn: 'Submit API for Review',
       submitting: 'Submitting...',
       successTitle: 'Submission Received!',

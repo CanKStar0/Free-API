@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { autoTranslate } from '@/lib/auto-translator';
-import { getCategoryTitle, getCategoryTitleEn } from '@/data/apis';
+import { categories, getCategoryTitle, getCategoryTitleEn } from '@/data/apis';
 
 interface ApiSubmission {
   id: string;
@@ -20,6 +20,7 @@ interface ApiSubmission {
 }
 
 const SUBMISSIONS_FILE = path.join(process.cwd(), 'src', 'data', 'submissions.json');
+const CUSTOM_APIS_FILE = path.join(process.cwd(), 'src', 'data', 'custom-apis.json');
 
 export async function POST(req: NextRequest) {
   try {
@@ -58,6 +59,69 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { success: false, error: 'Geçerli bir URL formatı girin (örn: https://...).' },
         { status: 400 }
+      );
+    }
+
+    // Helper to extract clean domain for duplicate check
+    const extractDomain = (urlStr: string) => {
+      try {
+        if (!urlStr || !urlStr.trim()) return '';
+        const withProto = urlStr.startsWith('http://') || urlStr.startsWith('https://')
+          ? urlStr.trim()
+          : `https://${urlStr.trim()}`;
+        return new URL(withProto).hostname.toLowerCase().replace(/^www\./, '');
+      } catch {
+        return '';
+      }
+    };
+
+    const cleanInputName = name.trim().toLowerCase();
+    const cleanInputDomain = extractDomain(url);
+
+    // Read custom-apis.json if exists
+    let customApisList: any[] = [];
+    if (fs.existsSync(CUSTOM_APIS_FILE)) {
+      try {
+        customApisList = JSON.parse(fs.readFileSync(CUSTOM_APIS_FILE, 'utf8'));
+      } catch {
+        customApisList = [];
+      }
+    }
+
+    // Check for duplicates in categories & approved custom-apis
+    let existingDuplicate: { name: string; categoryTitle: string } | null = null;
+
+    for (const cat of categories) {
+      for (const api of cat.apis) {
+        const existingName = api.name.toLowerCase();
+        const existingDomain = extractDomain(api.url);
+
+        if (existingName === cleanInputName || (cleanInputDomain && existingDomain && existingDomain === cleanInputDomain)) {
+          existingDuplicate = { name: api.name, categoryTitle: cat.title };
+          break;
+        }
+      }
+      if (existingDuplicate) break;
+    }
+
+    if (!existingDuplicate) {
+      for (const customApi of customApisList) {
+        const existingName = customApi.name?.toLowerCase();
+        const existingDomain = extractDomain(customApi.url);
+        if (existingName === cleanInputName || (cleanInputDomain && existingDomain && existingDomain === cleanInputDomain)) {
+          existingDuplicate = { name: customApi.name, categoryTitle: customApi.categoryId || 'Custom' };
+          break;
+        }
+      }
+    }
+
+    if (existingDuplicate) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: `"${existingDuplicate.name}" adlı API zaten kataloğumuzda mevcuttur (${existingDuplicate.categoryTitle}).`,
+        },
+        { status: 409 }
       );
     }
 
