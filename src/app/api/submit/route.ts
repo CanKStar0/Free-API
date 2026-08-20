@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
       console.warn('Submissions file storage warning:', fsErr);
     }
 
-    // Discord Webhook Notification if configured in process.env
+    // 1. Discord Webhook Notification
     const discordWebhook = process.env.DISCORD_WEBHOOK_URL;
     if (discordWebhook) {
       try {
@@ -84,14 +84,14 @@ export async function POST(req: NextRequest) {
                 title: `🔥 Yeni API Önerisi: ${newSubmission.name}`,
                 color: 0xe11d48, // Brand Crimson
                 fields: [
-                  { name: 'URL', value: newSubmission.url, inline: false },
-                  { name: 'Kategori', value: newSubmission.categoryId, inline: true },
-                  { name: 'Rate Limit', value: newSubmission.rateLimit, inline: true },
-                  { name: 'Zero-Auth', value: newSubmission.isNoAuth ? 'Evet ✅' : 'Hayır 🔑', inline: true },
-                  { name: 'Açıklama', value: newSubmission.description, inline: false },
-                  { name: 'Gönderen E-posta', value: newSubmission.email || 'Belirtilmedi', inline: false },
+                  { name: '🌐 URL', value: newSubmission.url, inline: false },
+                  { name: '📂 Kategori', value: newSubmission.categoryId, inline: true },
+                  { name: '⚡ Rate Limit', value: newSubmission.rateLimit, inline: true },
+                  { name: '🔑 Zero-Auth', value: newSubmission.isNoAuth ? 'Evet ✅' : 'Hayır 🔑', inline: true },
+                  { name: '📝 Açıklama', value: newSubmission.description, inline: false },
+                  { name: '📧 Gönderen', value: newSubmission.email || 'Belirtilmedi', inline: false },
                 ],
-                footer: { text: `FreeAPI Directory Submission • ${newSubmission.id}` },
+                footer: { text: `FreeAPI Directory • ${newSubmission.id}` },
                 timestamp: new Date().toISOString(),
               },
             ],
@@ -99,6 +99,39 @@ export async function POST(req: NextRequest) {
         });
       } catch (webhookErr) {
         console.warn('Discord webhook dispatch warning:', webhookErr);
+      }
+    }
+
+    // 2. Telegram Bot Notification
+    const telegramBotToken = process.env.TELEGRAM_BOT_TOKEN;
+    const telegramChatId = process.env.TELEGRAM_CHAT_ID;
+    if (telegramBotToken && telegramChatId) {
+      try {
+        const escapeHtml = (str: string) =>
+          str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        const tgMessage = `🚀 <b>Yeni API Önerisi Alındı!</b>\n\n` +
+          `📌 <b>İsim:</b> ${escapeHtml(newSubmission.name)}\n` +
+          `🔗 <b>URL:</b> ${escapeHtml(newSubmission.url)}\n` +
+          `📂 <b>Kategori:</b> <code>${escapeHtml(newSubmission.categoryId)}</code>\n` +
+          `⚡ <b>Rate Limit:</b> ${escapeHtml(newSubmission.rateLimit)}\n` +
+          `🔑 <b>Zero-Auth:</b> ${newSubmission.isNoAuth ? 'Evet ✅' : 'Hayır 🔑'}\n` +
+          `📝 <b>Açıklama:</b>\n<i>${escapeHtml(newSubmission.description)}</i>\n\n` +
+          `📧 <b>E-posta:</b> ${escapeHtml(newSubmission.email || 'Belirtilmedi')}\n` +
+          `🆔 <code>${newSubmission.id}</code>`;
+
+        await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: telegramChatId,
+            text: tgMessage,
+            parse_mode: 'HTML',
+            disable_web_page_preview: false,
+          }),
+        });
+      } catch (tgErr) {
+        console.warn('Telegram notification dispatch warning:', tgErr);
       }
     }
 
