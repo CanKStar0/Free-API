@@ -1,5 +1,47 @@
 [
   {
+    "id": "sub_1787246947647_oyfjy",
+    "name": "Email Validator Pro",
+    "url": "https://disify.com",
+    "categoryId": "validation",
+    "description": "Tek kullanımlık sahte e-postaları tespit eden hızlı doğrulama API servisi.",
+    "description_tr": "Tek kullanımlık sahte e-postaları tespit eden hızlı doğrulama API servisi.",
+    "description_en": "Fast verification API service that detects disposable fake emails.",
+    "rateLimit": "Sınırsız",
+    "isNoAuth": true,
+    "email": "can@canpolatkaya.com",
+    "createdAt": "2026-08-20T17:29:07.647Z",
+    "status": "pending"
+  },
+  {
+    "id": "sub_1787246839166_fnrg3",
+    "name": "Email Validator API",
+    "url": "https://disify.com",
+    "categoryId": "validation",
+    "description": "Tek kullanımlık ve geçici sahte e-postaları tespit eden hızlı doğrulama API servisi.",
+    "description_tr": "Tek kullanımlık ve geçici sahte e-postaları tespit eden hızlı doğrulama API servisi.",
+    "description_en": "Fast verification API service that detects disposable and temporary fake emails.",
+    "rateLimit": "Sınırsız",
+    "isNoAuth": true,
+    "email": "can@canpolatkaya.com",
+    "createdAt": "2026-08-20T17:27:19.166Z",
+    "status": "pending"
+  },
+  {
+    "id": "sub_1787246720807_8wx9o",
+    "name": "Public IPify API",
+    "url": "https://www.ipify.org",
+    "categoryId": "ip",
+    "description": "Basit ve hızlı açık IP adresi sorgulama servisi.",
+    "description_tr": "Basit ve hızlı açık IP adresi sorgulama servisi.",
+    "description_en": "Simple and fast public IP address query service.",
+    "rateLimit": "Sınırsız",
+    "isNoAuth": true,
+    "email": "can@canpolatkaya.com",
+    "createdAt": "2026-08-20T17:25:20.807Z",
+    "status": "pending"
+  },
+  {
     "id": "sub_1787246003887_r8j11",
     "name": "Genderize.io API",
     "url": "https://genderize.io",
