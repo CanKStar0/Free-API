@@ -1,5 +1,19 @@
 [
   {
+    "id": "sub_1787250004026_jr6t0",
+    "name": "Catboys Anime API",
+    "url": "https://api.catboys.com",
+    "categoryId": "anime",
+    "description": "Anime tarzı görseller, sözler ve tepki GIFleri sunan ücretsiz topluluk API servisi.",
+    "description_tr": "Anime tarzı görseller, sözler ve tepki GIFleri sunan ücretsiz topluluk API servisi.",
+    "description_en": "Free community API service offering anime-style images, quotes, and reaction GIFs.",
+    "rateLimit": "Sınırsız",
+    "isNoAuth": true,
+    "email": "can@canpolatkaya.com",
+    "createdAt": "2026-08-20T18:20:04.026Z",
+    "status": "pending"
+  },
+  {
     "id": "sub_1787249900313_414dw",
     "name": "DummyJSON API",
     "url": "https://dummyjson.com",

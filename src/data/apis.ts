@@ -7,6 +7,7 @@ export interface ApiService {
   rateLimit: string;
   isRecommended: boolean;
   isNew?: boolean;
+  isNoAuth?: boolean;
 }
 
 export interface Category {

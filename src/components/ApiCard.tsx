@@ -7,6 +7,9 @@ import { useLanguage } from '@/context/LanguageContext';
 import { translateDescription, translateRateLimit, getDirectEndpoint } from '@/lib/api-translator';
 import { ExternalLink, Star, Code2, Check, Copy, ShieldCheck, Zap } from 'lucide-react';
 
+import Link from 'next/link';
+import { slugify } from '@/lib/slugify';
+
 interface ApiCardProps {
   api: ApiService;
   categoryTitle?: string;
@@ -24,6 +27,7 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
   const [copied, setCopied] = useState(false);
 
   const endpoint = getDirectEndpoint(api);
+  const apiSlug = slugify(api.name);
 
   const getCodeSnippet = (tab: CodeTab): string => {
     switch (tab) {
@@ -37,7 +41,6 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
         return '';
     }
   };
-
 
   const handleCopy = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -55,7 +58,6 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.25 }}
       className="glass-card rounded-2xl p-5 flex flex-col justify-between relative group"
-
     >
       <div>
         {/* Top Header */}
@@ -66,9 +68,11 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
                 {categoryTitle}
               </span>
             )}
-            <h3 className="text-lg font-bold text-stone-900 dark:text-zinc-100 group-hover:text-brand-700 dark:group-hover:text-brand-500 transition-colors">
-              {api.name}
-            </h3>
+            <Link href={`/service/${apiSlug}`} className="hover:underline">
+              <h3 className="text-lg font-bold text-stone-900 dark:text-zinc-100 group-hover:text-brand-700 dark:group-hover:text-brand-500 transition-colors">
+                {api.name}
+              </h3>
+            </Link>
           </div>
 
           <div className="flex items-center gap-1">
