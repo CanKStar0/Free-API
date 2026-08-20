@@ -51,7 +51,7 @@ export function Header() {
 
               {/* Logo */}
               <Link href="/" className="flex items-center gap-2.5 group">
-                <Logo className="w-8 h-8 rounded-xl shadow-[0_0_14px_rgba(225,29,72,0.35)] group-hover:scale-105 transition-all" />
+                <Logo className="w-8 h-8 group-hover:scale-110 transition-transform duration-200 drop-shadow-[0_0_8px_rgba(225,29,72,0.35)]" />
                 <div className="flex items-baseline gap-1 font-jakarta">
                   <span className="text-base font-extrabold tracking-tight text-stone-900 dark:text-zinc-100">
                     Free<span className="text-brand-700 dark:text-brand-500">API</span>
