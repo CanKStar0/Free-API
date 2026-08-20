@@ -422,7 +422,60 @@ curl_close($ch);`,
         </div>
       </div>
 
-      {/* 6. Alternatives & Related APIs (Cross-Linking SEO) */}
+      {/* 6. GitHub README Badge Generator */}
+      <div className="glass-card rounded-3xl p-6 sm:p-8 mb-10 border border-stone-200 dark:border-white/[0.08] bg-white/80 dark:bg-zinc-900/70 shadow-md">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-rose-500/10 text-brand-700 dark:text-brand-400 flex items-center justify-center font-bold">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-stone-900 dark:text-zinc-100">
+                {language === 'tr' ? 'GitHub README Rozeti (Badge)' : 'GitHub README Verified Badge'}
+              </h2>
+              <p className="text-xs text-stone-600 dark:text-zinc-400">
+                {language === 'tr'
+                  ? 'Projenizin README.md dosyasına ekleyerek doğrulanmış FreeAPI rozeti gösterin.'
+                  : 'Embed this live verified badge in your open-source project or repository.'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Live Badge Preview */}
+        <div className="p-4 rounded-2xl bg-stone-100 dark:bg-zinc-950/80 border border-stone-200 dark:border-white/[0.06] flex items-center justify-between gap-4 mb-4 flex-wrap">
+          <div className="flex items-center gap-3">
+            <span className="text-xs font-mono text-stone-500 dark:text-zinc-400">Preview:</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/api/badge/${api.slug}`}
+              alt={`${api.name} FreeAPI Verified Badge`}
+              className="h-7 rounded shadow-sm"
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              const badgeMarkdown = `[![FreeAPI Verified](https://api.canpolatkaya.com/api/badge/${api.slug})](https://api.canpolatkaya.com/service/${api.slug})`;
+              navigator.clipboard.writeText(badgeMarkdown);
+              setCopiedUrl(true);
+              setTimeout(() => setCopiedUrl(false), 2000);
+            }}
+            className="px-3.5 py-1.5 rounded-xl bg-brand-700 hover:bg-brand-600 text-white text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+          >
+            <Copy className="w-3.5 h-3.5" />
+            <span>{language === 'tr' ? 'Markdown Rozetini Kopyala' : 'Copy Markdown Badge'}</span>
+          </button>
+        </div>
+
+        {/* Markdown Snippet Display */}
+        <div className="relative rounded-2xl bg-zinc-950 p-3.5 border border-zinc-800 text-[11px] font-mono text-zinc-300 overflow-x-auto">
+          <code>{`[![FreeAPI Verified](https://api.canpolatkaya.com/api/badge/${api.slug})](https://api.canpolatkaya.com/service/${api.slug})`}</code>
+        </div>
+      </div>
+
+      {/* 7. Alternatives & Related APIs (Cross-Linking SEO) */}
       {relatedApis.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-6">

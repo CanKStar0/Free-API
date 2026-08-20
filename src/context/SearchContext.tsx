@@ -1,8 +1,8 @@
-﻿'use client';
+'use client';
 
 import React, { createContext, useContext, useState } from 'react';
 
-type FilterTab = 'categories' | 'all-apis' | 'bookmarks' | 'recommended' | 'no-auth';
+type FilterTab = 'categories' | 'all-apis' | 'bookmarks' | 'recommended' | 'no-auth' | 'unlimited' | 'cors' | 'new';
 
 interface SearchContextType {
   searchQuery: string;

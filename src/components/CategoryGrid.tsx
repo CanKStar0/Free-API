@@ -19,6 +19,7 @@ import {
   ArrowRight,
   Layers,
   Sparkles,
+  ShieldCheck,
   X,
 } from 'lucide-react';
 
@@ -115,7 +116,24 @@ export function CategoryGrid() {
       }
       if (activeTab === 'no-auth') {
         const desc = api.description.toLowerCase();
-        if (!desc.includes('kayıt gerektirmez') && !desc.includes('kayıt yok') && !desc.includes('no key') && !desc.includes('free') && !desc.includes('sınırsız')) {
+        if (!api.isNoAuth && !desc.includes('kayıt gerektirmez') && !desc.includes('kayıt yok') && !desc.includes('no key') && !desc.includes('free') && !desc.includes('sınırsız')) {
+          return false;
+        }
+      }
+      if (activeTab === 'unlimited') {
+        const limit = api.rateLimit.toLowerCase();
+        if (!limit.includes('sınırsız') && !limit.includes('unlimited')) {
+          return false;
+        }
+      }
+      if (activeTab === 'cors') {
+        const desc = api.description.toLowerCase();
+        if (desc.includes('no-cors') || desc.includes('cors yok')) {
+          return false;
+        }
+      }
+      if (activeTab === 'new') {
+        if (!api.isNew) {
           return false;
         }
       }
@@ -129,7 +147,6 @@ export function CategoryGrid() {
         const matchesCat = catTitle.includes(q);
         return matchesName || matchesDesc || matchesDescEn || matchesCat;
       }
-
 
       return true;
     });
@@ -185,11 +202,11 @@ export function CategoryGrid() {
         </div>
 
         {/* Filter Pills */}
-        <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-stone-100 dark:border-zinc-800/80 text-xs">
+        <div className="flex flex-wrap items-center gap-2 pt-4 border-t border-stone-100 dark:border-zinc-800/80 text-xs overflow-x-auto">
           <button
             type="button"
             onClick={() => { setActiveTab('categories'); setSelectedCategory('all'); setSearchQuery(''); }}
-            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all ${
+            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer ${
               activeTab === 'categories' && !searchQuery && selectedCategory === 'all'
                 ? 'bg-brand-700 dark:bg-brand-600 text-white font-bold shadow-sm'
                 : 'bg-stone-100 dark:bg-zinc-800/80 text-stone-600 dark:text-zinc-400 hover:bg-stone-200 dark:hover:bg-zinc-700'
@@ -202,7 +219,7 @@ export function CategoryGrid() {
           <button
             type="button"
             onClick={() => setActiveTab('all-apis')}
-            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all ${
+            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer ${
               activeTab === 'all-apis'
                 ? 'bg-brand-700 dark:bg-brand-600 text-white font-bold shadow-sm'
                 : 'bg-stone-100 dark:bg-zinc-800/80 text-stone-600 dark:text-zinc-400 hover:bg-stone-200 dark:hover:bg-zinc-700'
@@ -215,7 +232,7 @@ export function CategoryGrid() {
           <button
             type="button"
             onClick={() => setActiveTab('recommended')}
-            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all ${
+            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer ${
               activeTab === 'recommended'
                 ? 'bg-brand-700 dark:bg-brand-600 text-white font-bold shadow-sm'
                 : 'bg-stone-100 dark:bg-zinc-800/80 text-stone-600 dark:text-zinc-400 hover:bg-stone-200 dark:hover:bg-zinc-700'
@@ -228,7 +245,7 @@ export function CategoryGrid() {
           <button
             type="button"
             onClick={() => setActiveTab('no-auth')}
-            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all ${
+            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer ${
               activeTab === 'no-auth'
                 ? 'bg-brand-700 dark:bg-brand-600 text-white font-bold shadow-sm'
                 : 'bg-stone-100 dark:bg-zinc-800/80 text-stone-600 dark:text-zinc-400 hover:bg-stone-200 dark:hover:bg-zinc-700'
@@ -240,8 +257,47 @@ export function CategoryGrid() {
 
           <button
             type="button"
+            onClick={() => setActiveTab('unlimited')}
+            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === 'unlimited'
+                ? 'bg-brand-700 dark:bg-brand-600 text-white font-bold shadow-sm'
+                : 'bg-stone-100 dark:bg-zinc-800/80 text-stone-600 dark:text-zinc-400 hover:bg-stone-200 dark:hover:bg-zinc-700'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5 text-amber-500" />
+            <span>{t.explorer.tabUnlimited}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('cors')}
+            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === 'cors'
+                ? 'bg-brand-700 dark:bg-brand-600 text-white font-bold shadow-sm'
+                : 'bg-stone-100 dark:bg-zinc-800/80 text-stone-600 dark:text-zinc-400 hover:bg-stone-200 dark:hover:bg-zinc-700'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+            <span>{t.explorer.tabCors}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('new')}
+            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === 'new'
+                ? 'bg-brand-700 dark:bg-brand-600 text-white font-bold shadow-sm'
+                : 'bg-stone-100 dark:bg-zinc-800/80 text-stone-600 dark:text-zinc-400 hover:bg-stone-200 dark:hover:bg-zinc-700'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-purple-400" />
+            <span>{t.explorer.tabNew}</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setActiveTab('bookmarks')}
-            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all ml-auto ${
+            className={`px-3.5 py-2 rounded-xl font-medium flex items-center gap-1.5 transition-all whitespace-nowrap cursor-pointer ml-auto ${
               activeTab === 'bookmarks'
                 ? 'bg-amber-500 text-stone-950 font-bold shadow-sm'
                 : 'bg-stone-100 dark:bg-zinc-800/80 text-stone-600 dark:text-zinc-400 hover:bg-stone-200 dark:hover:bg-zinc-700'
@@ -259,7 +315,19 @@ export function CategoryGrid() {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-stone-900 dark:text-zinc-100">
-              {searchQuery ? `${t.explorer.resultsPrefix} "${searchQuery}"` : activeTab === 'bookmarks' ? t.explorer.resultsBookmarks : activeTab === 'recommended' ? t.explorer.resultsRecommended : t.explorer.resultsAll}
+              {searchQuery
+                ? `${t.explorer.resultsPrefix} "${searchQuery}"`
+                : activeTab === 'bookmarks'
+                ? t.explorer.resultsBookmarks
+                : activeTab === 'recommended'
+                ? t.explorer.resultsRecommended
+                : activeTab === 'unlimited'
+                ? t.explorer.resultsUnlimited
+                : activeTab === 'cors'
+                ? t.explorer.resultsCors
+                : activeTab === 'new'
+                ? t.explorer.resultsNew
+                : t.explorer.resultsAll}
             </h2>
             <span className="text-xs font-mono text-stone-500 dark:text-zinc-400">
               {filteredApis.length} {t.explorer.apisListed}

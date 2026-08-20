@@ -32,10 +32,16 @@ export interface TranslationDictionary {
     tabAllApis: string;
     tabRecommended: string;
     tabNoAuth: string;
+    tabUnlimited: string;
+    tabCors: string;
+    tabNew: string;
     tabBookmarks: string;
     resultsPrefix: string;
     resultsBookmarks: string;
     resultsRecommended: string;
+    resultsUnlimited: string;
+    resultsCors: string;
+    resultsNew: string;
     resultsAll: string;
     apisListed: string;
     noResultsText: string;
@@ -149,11 +155,17 @@ export const translations: Record<Language, TranslationDictionary> = {
       tabCategories: 'Kategoriler',
       tabAllApis: "Tüm API'ler",
       tabRecommended: 'Öne Çıkanlar',
-      tabNoAuth: 'Kayıt Gerektirmeyenler',
+      tabNoAuth: 'Kayıtsız (Zero-Auth)',
+      tabUnlimited: 'Sınırsız Limit',
+      tabCors: 'CORS Uyumlu',
+      tabNew: 'Yeni Eklenenler',
       tabBookmarks: 'Favorilerim',
       resultsPrefix: 'Arama Sonuçları:',
       resultsBookmarks: 'Kaydettiğiniz Favori API’ler',
       resultsRecommended: 'Öne Çıkan Seçilmiş API Servisleri',
+      resultsUnlimited: 'Sınırsız İstek Limitine Sahip API’ler',
+      resultsCors: 'Tarayıcıdan Doğrudan Çağrılabilir (CORS Açık) API’ler',
+      resultsNew: 'Yeni Eklenen API Servisleri',
       resultsAll: 'Tüm API Servisleri',
       apisListed: 'API listeleniyor',
       noResultsText: 'Aradığınız kriterlere uygun bir API bulunamadı.',
@@ -312,11 +324,17 @@ export const translations: Record<Language, TranslationDictionary> = {
       tabCategories: 'Categories',
       tabAllApis: 'All APIs',
       tabRecommended: 'Featured',
-      tabNoAuth: 'No Auth Required',
+      tabNoAuth: 'Zero-Auth',
+      tabUnlimited: 'Unlimited Limit',
+      tabCors: 'CORS Enabled',
+      tabNew: 'Newly Added',
       tabBookmarks: 'My Bookmarks',
       resultsPrefix: 'Search Results:',
       resultsBookmarks: 'Your Saved Favorite APIs',
       resultsRecommended: 'Curated & Featured API Services',
+      resultsUnlimited: 'APIs with Unlimited Request Allowance',
+      resultsCors: 'Browser-Friendly APIs (CORS Enabled)',
+      resultsNew: 'Newly Added API Endpoints',
       resultsAll: 'All Public API Services',
       apisListed: 'APIs listed',
       noResultsText: 'No APIs found matching your search criteria.',
