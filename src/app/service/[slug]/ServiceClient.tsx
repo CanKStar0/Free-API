@@ -8,7 +8,7 @@ import { translations } from '@/data/translations';
 import type { EnrichedApiService } from '@/lib/api-slugs';
 import { CategoryIcon } from '@/components/CategoryIcon';
 import { ApiCard } from '@/components/ApiCard';
-import { translateDescription } from '@/lib/api-translator';
+import { translateDescription, translateRateLimit } from '@/lib/api-translator';
 import {
   ExternalLink,
   Copy,
@@ -160,8 +160,8 @@ curl_close($ch);`,
     {
       qTr: `${api.name} API servisi tamamen ücretsiz mi?`,
       qEn: `Is ${api.name} completely free to use?`,
-      aTr: `Evet, ${api.name} FreeAPI Directory üzerinde ücretsiz olarak listelenmiştir. İstek limitleri: ${api.rateLimit}.`,
-      aEn: `Yes, ${api.name} is listed as a free endpoint on FreeAPI Directory with an allowance of: ${api.rateLimit}.`,
+      aTr: `Evet, ${api.name} FreeAPI Directory üzerinde ücretsiz olarak listelenmiştir. İstek limitleri: ${translateRateLimit(api.rateLimit, 'tr')}.`,
+      aEn: `Yes, ${api.name} is listed as a free endpoint on FreeAPI Directory with an allowance of: ${translateRateLimit(api.rateLimit, 'en')}.`,
     },
     {
       qTr: `Kullanmak için API anahtarı veya hesap oluşturmak gerekiyor mu?`,
@@ -278,7 +278,7 @@ curl_close($ch);`,
             <span>{language === 'tr' ? 'İstek Limiti' : 'Rate Limit'}</span>
           </div>
           <div className="text-base font-bold text-stone-900 dark:text-zinc-100 truncate">
-            {api.rateLimit}
+            {translateRateLimit(api.rateLimit, language)}
           </div>
         </div>
 
