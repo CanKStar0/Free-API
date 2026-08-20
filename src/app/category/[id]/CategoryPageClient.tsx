@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
@@ -17,6 +17,7 @@ export default function CategoryPageClient({ category }: CategoryPageClientProps
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [bookmarks, setBookmarks] = useState<string[]>([]);
+  const [customApis, setCustomApis] = useState<any[]>([]);
 
   const catTitle = t.categoryTitles[category.id]?.title || category.title;
   const catDesc = t.categoryTitles[category.id]?.description || category.description;
@@ -30,7 +31,17 @@ export default function CategoryPageClient({ category }: CategoryPageClientProps
     } catch {
       // ignore
     }
-  }, []);
+
+    fetch('/api/submissions/approved')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.apis)) {
+          const matching = data.apis.filter((a: any) => a.categoryId === category.id);
+          setCustomApis(matching);
+        }
+      })
+      .catch(() => {});
+  }, [category.id]);
 
   const handleToggleBookmark = (apiName: string) => {
     setBookmarks((prev) => {
@@ -46,16 +57,21 @@ export default function CategoryPageClient({ category }: CategoryPageClientProps
     });
   };
 
+  const allCategoryApis = useMemo(() => {
+    if (customApis.length === 0) return category.apis;
+    return [...customApis, ...category.apis];
+  }, [category.apis, customApis]);
+
   const filteredApis = useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
-    if (!q) return category.apis;
+    if (!q) return allCategoryApis;
 
-    return category.apis.filter((api) => {
+    return allCategoryApis.filter((api) => {
       const matchesName = api.name.toLowerCase().includes(q);
       const matchesDesc = api.description.toLowerCase().includes(q);
       return matchesName || matchesDesc;
     });
-  }, [category.apis, searchQuery]);
+  }, [allCategoryApis, searchQuery]);
 
   return (
     <div className="min-h-screen pt-28 pb-20 px-4 max-w-7xl mx-auto">

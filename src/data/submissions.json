@@ -1,5 +1,16 @@
 [
   {
+    "id": "sub_1787245096554_a6gax",
+    "name": "Deneme",
+    "url": "http://localhost:3000/",
+    "categoryId": "weather",
+    "description": "Deneme",
+    "rateLimit": "1.000 istek/gün",
+    "isNoAuth": false,
+    "createdAt": "2026-08-20T16:58:16.554Z",
+    "status": "pending"
+  },
+  {
     "id": "sub_1787242949511_smb3m",
     "name": "Deneme",
     "url": "http://localhost:3000/",

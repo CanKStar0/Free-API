@@ -152,6 +152,27 @@ export async function POST(req: NextRequest) {
           `📧 <b>E-posta:</b> ${escapeHtml(newSubmission.email || 'Belirtilmedi')}\n` +
           `🆔 <code>${newSubmission.id}</code>`;
 
+        const host = req.headers.get('host') || 'api.canpolatkaya.com';
+        const siteOrigin = host.includes('localhost')
+          ? (process.env.NEXT_PUBLIC_SITE_URL || 'https://api.canpolatkaya.com')
+          : `https://${host}`;
+        const adminSecret = process.env.ADMIN_ACTION_SECRET || 'freeapi_admin_sec_2026_super';
+
+        const approveUrl = `${siteOrigin}/api/admin/submissions?action=approve&id=${newSubmission.id}&token=${adminSecret}`;
+        const rejectUrl = `${siteOrigin}/api/admin/submissions?action=reject&id=${newSubmission.id}&token=${adminSecret}`;
+
+        const replyMarkup = {
+          inline_keyboard: [
+            [
+              { text: '✅ Onayla & Canlıya Ekle', url: approveUrl },
+              { text: '❌ Reddet', url: rejectUrl },
+            ],
+            [
+              { text: '🌐 API Sitesine Git (Önizle)', url: newSubmission.url },
+            ],
+          ],
+        };
+
         await fetch(`https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -159,6 +180,7 @@ export async function POST(req: NextRequest) {
             chat_id: telegramChatId,
             text: tgMessage,
             parse_mode: 'HTML',
+            reply_markup: replyMarkup,
             disable_web_page_preview: false,
           }),
         });

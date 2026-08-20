@@ -29,7 +29,9 @@ export function CategoryGrid() {
   const [isClient, setIsClient] = useState(false);
 
 
-  // Load bookmarks on mount
+  const [customApis, setCustomApis] = useState<any[]>([]);
+
+  // Load bookmarks on mount & fetch approved custom APIs
   useEffect(() => {
     setIsClient(true);
     try {
@@ -40,6 +42,15 @@ export function CategoryGrid() {
     } catch {
       // ignore
     }
+
+    fetch('/api/submissions/approved')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.apis)) {
+          setCustomApis(data.apis);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   // Toggle Bookmark handler
@@ -61,16 +72,29 @@ export function CategoryGrid() {
   const getCatTitle = (cat: Category) => t.categoryTitles[cat.id]?.title || cat.title;
   const getCatDesc = (cat: Category) => t.categoryTitles[cat.id]?.description || cat.description;
 
+  // Merged categories with approved community APIs
+  const mergedCategories = useMemo(() => {
+    if (customApis.length === 0) return categories;
+    return categories.map((cat) => {
+      const addedForCat = customApis.filter((c) => c.categoryId === cat.id);
+      if (addedForCat.length === 0) return cat;
+      return {
+        ...cat,
+        apis: [...addedForCat, ...cat.apis],
+      };
+    });
+  }, [customApis]);
+
   // Flatten all APIs with category info
   const allApisWithCategory = useMemo(() => {
     const list: { api: ApiService; category: Category }[] = [];
-    categories.forEach((cat) => {
+    mergedCategories.forEach((cat) => {
       cat.apis.forEach((api) => {
         list.push({ api, category: cat });
       });
     });
     return list;
-  }, []);
+  }, [mergedCategories]);
 
   // Filtered APIs based on search & tabs
   const filteredApis = useMemo(() => {
@@ -282,14 +306,12 @@ export function CategoryGrid() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {categories.map((category) => (
+            {mergedCategories.map((category) => (
               <Link
                 key={category.id}
                 href={`/category/${category.id}`}
                 className="glass-card rounded-2xl p-6 flex flex-col justify-between group"
               >
-
-
                 <div>
                   <div className="flex items-start justify-between mb-4">
                     <CategoryIcon categoryId={category.id} size={22} />
