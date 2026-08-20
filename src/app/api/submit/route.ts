@@ -20,7 +20,19 @@ const SUBMISSIONS_FILE = path.join(process.cwd(), 'src', 'data', 'submissions.js
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, url, categoryId, description, rateLimit, isNoAuth, email, hp } = body;
+    const {
+      name,
+      url,
+      categoryId,
+      description,
+      rateLimit,
+      rateLimitMode,
+      rateLimitCount,
+      rateLimitUnit,
+      isNoAuth,
+      email,
+      hp,
+    } = body;
 
     // Honeypot bot trap check
     if (hp) {
@@ -45,13 +57,33 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Normalize rate limit into standardized format
+    let formattedRateLimit = 'Bilinmiyor';
+    if (rateLimitMode === 'unlimited') {
+      formattedRateLimit = 'Sınırsız';
+    } else if (rateLimitMode === 'variable') {
+      formattedRateLimit = 'Değişken';
+    } else if (rateLimitMode === 'custom' && rateLimitCount) {
+      const unitMap: Record<string, string> = {
+        sec: 'istek/sn',
+        min: 'istek/dk',
+        hour: 'istek/saat',
+        day: 'istek/gün',
+        month: 'istek/ay',
+      };
+      const unitStr = unitMap[rateLimitUnit] || 'istek/gün';
+      formattedRateLimit = `${Number(rateLimitCount).toLocaleString('tr-TR')} ${unitStr}`;
+    } else if (typeof rateLimit === 'string' && rateLimit.trim()) {
+      formattedRateLimit = rateLimit.trim().substring(0, 60);
+    }
+
     const newSubmission: ApiSubmission = {
       id: `sub_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       name: name.trim().substring(0, 80),
       url: url.trim().substring(0, 300),
       categoryId: categoryId.trim(),
-      description: description.trim().substring(0, 500),
-      rateLimit: (rateLimit || 'Bilinmiyor').trim().substring(0, 60),
+      description: description.trim().substring(0, 600),
+      rateLimit: formattedRateLimit,
       isNoAuth: Boolean(isNoAuth),
       email: email?.trim().substring(0, 100) || undefined,
       createdAt: new Date().toISOString(),

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "sub_1787242949511_smb3m",
+    "name": "Deneme",
+    "url": "http://localhost:3000/",
+    "categoryId": "weather",
+    "description": "Deneme",
+    "rateLimit": "Sinirsiz",
+    "isNoAuth": false,
+    "createdAt": "2026-08-20T16:22:29.511Z",
+    "status": "pending"
+  }
+]

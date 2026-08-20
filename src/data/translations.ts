@@ -72,6 +72,21 @@ export interface TranslationDictionary {
     descriptionPlaceholder: string;
     rateLimitLabel: string;
     rateLimitPlaceholder: string;
+    rateLimitTypeLabel: string;
+    rateLimitUnlimited: string;
+    rateLimitCustom: string;
+    rateLimitVariable: string;
+    rateLimitValueLabel: string;
+    rateLimitUnitLabel: string;
+    unitSec: string;
+    unitMin: string;
+    unitHour: string;
+    unitDay: string;
+    unitMonth: string;
+    tabWrite: string;
+    tabPreview: string;
+    previewBadge: string;
+    charCount: string;
     noAuthCheckbox: string;
     emailLabel: string;
     emailPlaceholder: string;
@@ -172,6 +187,21 @@ export const translations: Record<Language, TranslationDictionary> = {
       descriptionPlaceholder: 'Servisin sunduğu veriler, özellikler ve kullanım alanı...',
       rateLimitLabel: 'Rate Limit (İstek Limiti)',
       rateLimitPlaceholder: 'Örn: Sınırsız, 1000 çağrı/gün...',
+      rateLimitTypeLabel: 'Limit Tipi',
+      rateLimitUnlimited: '♾️ Sınırsız',
+      rateLimitCustom: '📊 Belirli Limit',
+      rateLimitVariable: '🔄 Değişken',
+      rateLimitValueLabel: 'İstek Sayısı',
+      rateLimitUnitLabel: 'Zaman Birimi',
+      unitSec: 'İstek / Saniye',
+      unitMin: 'İstek / Dakika',
+      unitHour: 'İstek / Saat',
+      unitDay: 'İstek / Gün',
+      unitMonth: 'İstek / Ay',
+      tabWrite: 'Yaz & Düzenle',
+      tabPreview: 'Kart Önizlemesi',
+      previewBadge: 'CANLI KART ÖNİZLEMESİ',
+      charCount: 'karakter',
       noAuthCheckbox: 'Bu API kayıt/key gerektirmeden çalışıyor (Zero-Auth)',
       emailLabel: 'İletişim E-postanız (Opsiyonel)',
       emailPlaceholder: 'ornek@domain.com',
@@ -317,6 +347,21 @@ export const translations: Record<Language, TranslationDictionary> = {
       descriptionPlaceholder: 'What endpoints, datasets and functionality does it provide...',
       rateLimitLabel: 'Rate Limit',
       rateLimitPlaceholder: 'e.g. Unlimited, 1000 req/day...',
+      rateLimitTypeLabel: 'Limit Type',
+      rateLimitUnlimited: '♾️ Unlimited',
+      rateLimitCustom: '📊 Custom Limit',
+      rateLimitVariable: '🔄 Variable',
+      rateLimitValueLabel: 'Request Count',
+      rateLimitUnitLabel: 'Time Unit',
+      unitSec: 'req / sec',
+      unitMin: 'req / min',
+      unitHour: 'req / hour',
+      unitDay: 'req / day',
+      unitMonth: 'req / month',
+      tabWrite: 'Write & Edit',
+      tabPreview: 'Card Preview',
+      previewBadge: 'LIVE CARD PREVIEW',
+      charCount: 'chars',
       noAuthCheckbox: 'Zero-Auth (Works with zero API key / no registration)',
       emailLabel: 'Contact Email (Optional)',
       emailPlaceholder: 'you@domain.com',
