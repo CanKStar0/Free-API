@@ -1,5 +1,19 @@
 [
   {
+    "id": "sub_1787256559836_pbl1h",
+    "name": "DiceBear Avatars API",
+    "url": "https://api.dicebear.com",
+    "categoryId": "developer",
+    "description": "Web siteleri ve uygulamalar için dinamik ve modern SVG avatarları oluşturan sıfır kayıtlı ücretsiz avatar servisi.",
+    "description_tr": "Web siteleri ve uygulamalar için dinamik ve modern SVG avatarları oluşturan sıfır kayıtlı ücretsiz avatar servisi.",
+    "description_en": "Zero-registration free avatar service that creates dynamic and modern SVG avatars for websites and apps.",
+    "rateLimit": "Sınırsız",
+    "isNoAuth": true,
+    "email": "can@canpolatkaya.com",
+    "createdAt": "2026-08-20T20:09:19.840Z",
+    "status": "pending"
+  },
+  {
     "id": "sub_1787250004026_jr6t0",
     "name": "Catboys Anime API",
     "url": "https://api.catboys.com",
