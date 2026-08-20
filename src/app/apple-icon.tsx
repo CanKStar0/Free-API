@@ -17,49 +17,45 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: 'linear-gradient(135deg, #be123c 0%, #9e0a2b 50%, #4c0519 100%)',
-          borderRadius: '40px',
+          backgroundColor: '#09090b',
         }}
       >
         <svg
-          width="110"
-          height="110"
+          width="135"
+          height="135"
           viewBox="0 0 512 512"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           {/* Bottom Layer */}
-          <path
-            d="M120 326 L256 392 L392 326 L360 308 L256 358 L152 308 Z"
-            fill="#ffffff"
-            fillOpacity="0.38"
-          />
+          <path d="M76 340 L76 368 L256 458 L256 430 Z" fill="#4c0519" />
+          <path d="M436 340 L436 368 L256 458 L256 430 Z" fill="#330310" />
+          <polygon points="256,250 436,340 256,430 76,340" fill="#9e0a2b" />
+          <polygon points="256,250 436,340 256,430 76,340" stroke="#ffffff" strokeWidth="6" />
+
           {/* Middle Layer */}
-          <path
-            d="M120 252 L256 318 L392 252 L360 234 L256 284 L152 234 Z"
-            fill="#ffffff"
-            fillOpacity="0.7"
-          />
-          {/* Top Plate */}
-          <polygon points="256,120 392,184 256,248 120,184" fill="#ffffff" />
-          {/* Node */}
-          <circle cx="256" cy="184" r="24" fill="#be123c" />
-          <circle cx="256" cy="184" r="13" fill="#ffffff" />
-          {/* Brackets */}
-          <path
-            d="M198 175 L180 184 L198 193"
-            stroke="#9e0a2b"
-            strokeWidth="6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M314 175 L332 184 L314 193"
-            stroke="#9e0a2b"
-            strokeWidth="6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M76 225 L76 247 L256 337 L256 315 Z" fill="#881337" />
+          <path d="M436 225 L436 247 L256 337 L256 315 Z" fill="#5b0a1f" />
+          <polygon points="256,135 436,225 256,315 76,225" fill="#be123c" />
+          <polygon points="256,135 436,225 256,315 76,225" stroke="#ffffff" strokeWidth="7" />
+
+          {/* Top Layer */}
+          <path d="M76 110 L76 130 L256 220 L256 200 Z" fill="#be123c" />
+          <path d="M436 110 L436 130 L256 220 L256 200 Z" fill="#75061e" />
+          <polygon points="256,20 436,110 256,200 76,110" fill="#e11d48" />
+          <polygon points="256,20 436,110 256,200 76,110" stroke="#ffffff" strokeWidth="8" />
+
+          {/* Circuits */}
+          <path d="M150 110 L195 132 L230 115 L230 92" stroke="#ffffff" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="150" cy="110" r="10" fill="#ffffff" />
+          <circle cx="230" cy="92" r="10" fill="#ffffff" />
+
+          <path d="M362 110 L317 132 L282 115 L282 92" stroke="#ffffff" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="362" cy="110" r="10" fill="#ffffff" />
+          <circle cx="282" cy="92" r="10" fill="#ffffff" />
+
+          <circle cx="256" cy="110" r="16" fill="#ffffff" />
+          <circle cx="256" cy="110" r="8" fill="#be123c" />
         </svg>
       </div>
     ),
