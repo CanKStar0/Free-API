@@ -5,5 +5,6 @@ export { LanguageToggle } from './LanguageToggle';
 export { Hero } from './Hero';
 export { CategoryGrid } from './CategoryGrid';
 export { ApiCard } from './ApiCard';
+export { Logo } from './Logo';
 
 

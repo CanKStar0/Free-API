@@ -387,7 +387,7 @@ export function Hero() {
               <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse" />
             </div>
             <div className="text-2xl font-black text-stone-900 dark:text-zinc-100 tracking-tight font-jakarta">500+</div>
-            <div className="text-[11px] text-stone-500 dark:text-zinc-400 mt-0.5">{language === 'tr' ? 'Doğrulanmış REST Servis' : 'Verified REST Endpoints'}</div>
+            <div className="text-[11px] text-stone-500 dark:text-zinc-400 mt-0.5">{language === 'tr' ? 'Doğrulanmış API Servisi' : 'Verified API Endpoints'}</div>
           </div>
 
           <div className="glass-card rounded-2xl p-4 border border-stone-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/60 shadow-sm hover:border-brand-700/40 transition-all">

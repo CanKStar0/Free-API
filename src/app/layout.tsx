@@ -19,13 +19,14 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://freeapi.canpolatkaya.com'),
-  title: 'Free-API Directory | 500+ Public & Free REST API Catalogue',
-  description: 'Verified public REST API directory with one-click cURL, JavaScript, and Python code snippets across 28+ categories.',
+  title: 'Free-API Directory | 500+ Public & Free API Catalogue',
+  description: 'Verified public developer API directory with one-click cURL, JavaScript, and Python code snippets across 28+ categories.',
   keywords: [
     'ücretsiz API',
     'free api directory',
     'public apis',
-    'rest api listesi',
+    'developer apis',
+    'api listesi',
     'developer tools',
     'geliştirici araçları',
     'canpolat kaya'
@@ -41,14 +42,25 @@ export const metadata: Metadata = {
     locale: 'tr_TR',
     url: 'https://freeapi.canpolatkaya.com',
     title: 'Free-API Directory — 500+ Curated Public APIs',
-    description: 'A categorized index of public REST APIs with instant code snippets and rate limits.',
+    description: 'A categorized index of public developer APIs with instant code snippets and rate limits.',
     siteName: 'Free-API Directory',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free-API Directory | 500+ Public REST APIs',
+    title: 'Free-API Directory | 500+ Public APIs',
     description: 'Developer directory with 500+ free APIs, cURL, and Fetch code snippets.',
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-icon', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+  },
+  manifest: '/manifest.webmanifest',
 };
 
 const jsonLd = {
@@ -62,7 +74,7 @@ const jsonLd = {
     'name': 'Canpolat Kaya',
     'url': 'https://canpolatkaya.com'
   },
-  'keywords': 'free apis, public apis, rest api, developer tools',
+  'keywords': 'free apis, public apis, developer apis, developer tools',
 };
 
 export default function RootLayout({
@@ -121,7 +133,7 @@ export default function RootLayout({
                 aria-hidden="true"
                 rel="nofollow"
               >
-                REST API Full Dump JSON
+                Public API Full Dump JSON
               </a>
               <Header />
               <main className="min-h-screen">

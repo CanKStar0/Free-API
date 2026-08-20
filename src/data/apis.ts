@@ -272,7 +272,7 @@ export const categories: Category[] = [
     description: "Test API'leri, kod çalıştırma ve geliştirici araçları",
     recommendedApi: "JSONPlaceholder",
     apis: [
-      { name: "JSONPlaceholder", url: "https://jsonplaceholder.typicode.com/", description: "Sahte REST API, tamamen ücretsiz", rateLimit: "Sınırsız", isRecommended: true },
+      { name: "JSONPlaceholder", url: "https://jsonplaceholder.typicode.com/", description: "Sahte veri API'si, tamamen ücretsiz", rateLimit: "Sınırsız", isRecommended: true },
       { name: "ReqRes", url: "https://reqres.in/", description: "Test API'si, tamamen ücretsiz", rateLimit: "Sınırsız", isRecommended: true },
       { name: "HTTPBin", url: "https://httpbin.org/", description: "HTTP test servisi", rateLimit: "Sınırsız", isRecommended: true },
       { name: "Public APIs", url: "https://api.publicapis.org/", description: "API dizini", rateLimit: "10 istek/dk", isRecommended: true },
@@ -934,13 +934,13 @@ export const categories: Category[] = [
     apis: [
       { name: "eBay", url: "https://developer.ebay.com/", description: "eBay alım satım ve ürün verileri", rateLimit: "Değişken", isRecommended: false },
       { name: "Etsy", url: "https://www.etsy.com/developers/documentation/getting_started/api_basics", description: "Etsy mağaza ve ürün listesi", rateLimit: "Değişken", isRecommended: false },
-      { name: "WooCommerce", url: "https://woocommerce.github.io/woocommerce-rest-api-docs/", description: "WordPress e-ticaret REST API", rateLimit: "Değişken", isRecommended: true },
+      { name: "WooCommerce", url: "https://woocommerce.github.io/woocommerce-rest-api-docs/", description: "WordPress e-ticaret API'si", rateLimit: "Değişken", isRecommended: true },
       { name: "Best Buy", url: "https://bestbuyapis.github.io/api-documentation/", description: "Best Buy ürün ve mağaza verileri", rateLimit: "Değişken", isRecommended: false },
       { name: "Shopee", url: "https://open.shopee.com/documents?version=1", description: "Shopee resmi e-ticaret entegrasyonu", rateLimit: "Değişken", isRecommended: false },
       { name: "Lazada", url: "https://open.lazada.com/doc/doc.htm", description: "Lazada ürün ve satıcı verileri", rateLimit: "Değişken", isRecommended: false },
       { name: "Mercadolibre", url: "https://developers.mercadolibre.cl/es_ar/api-docs-es", description: "Latin Amerika e-ticaret platformu", rateLimit: "Değişken", isRecommended: false },
       { name: "Dummy Products", url: "https://dummyproducts-api.herokuapp.com/", description: "Sahte e-ticaret ürün verileri, sınırsız", rateLimit: "Sınırsız", isRecommended: true },
-      { name: "FakeStore API", url: "https://fakestoreapi.com/", description: "Sahte mağaza REST API prototipi", rateLimit: "Sınırsız", isRecommended: false },
+      { name: "FakeStore API", url: "https://fakestoreapi.com/", description: "Sahte mağaza API prototipi", rateLimit: "Sınırsız", isRecommended: false },
       { name: "Rappi", url: "https://dev-portal.rappi.com/", description: "Rappi sipariş yönetim API'si", rateLimit: "Değişken", isRecommended: false },
     ]
   },

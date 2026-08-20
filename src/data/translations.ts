@@ -111,10 +111,10 @@ export const translations: Record<Language, TranslationDictionary> = {
       directoryBadge: 'Dizin',
     },
     hero: {
-      badge: 'GELİŞTİRİCİLER İÇİN REST API KATALOĞU',
+      badge: 'GELİŞTİRİCİLER İÇİN API KATALOĞU',
       titlePrefix: 'Geliştiriciler İçin',
-      titleHighlight: '500+ Ücretsiz REST API',
-      subtitle: 'Hava durumundan kriptoya, yapay zekadan finansa yüzlerce kamuya açık REST API servisi. Tek tıkla cURL, JavaScript ve Python kod örneklerini kopyalayın.',
+      titleHighlight: '500+ Ücretsiz API',
+      subtitle: 'Hava durumundan kriptoya, yapay zekadan finansa yüzlerce ücretsiz API servisi. Tek tıkla cURL, JavaScript ve Python kod örneklerini kopyalayın.',
       metricApis: 'API Servisi',
       metricCategories: 'Kategori',
       metricFree: 'Ücretsiz & Doğrulanmış',
@@ -122,7 +122,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     },
     banner: {
       liveGuide: 'CANLI REHBER:',
-      text: "500+ Ücretsiz REST API ve anında kod örnekleri ile projelerinizi hızlandırın.",
+      text: "500+ Ücretsiz API ve anında kod örnekleri ile projelerinizi hızlandırın.",
       badge: 'GÜNCEL',
     },
     explorer: {
@@ -136,7 +136,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       resultsPrefix: 'Arama Sonuçları:',
       resultsBookmarks: 'Kaydettiğiniz Favori API’ler',
       resultsRecommended: 'Öne Çıkan Seçilmiş API Servisleri',
-      resultsAll: 'Tüm REST API Servisleri',
+      resultsAll: 'Tüm API Servisleri',
       apisListed: 'API listeleniyor',
       noResultsText: 'Aradığınız kriterlere uygun bir API bulunamadı.',
       clearFilters: 'Filtreleri Temizle',
@@ -160,8 +160,8 @@ export const translations: Record<Language, TranslationDictionary> = {
     },
     submitModal: {
       triggerBtn: 'API Öner',
-      modalTitle: 'Yeni Bir REST API Öner',
-      modalSubtitle: 'Topluluğa faydalı olacağını düşündüğünüz ücretsiz veya açık bir API servisini ekleyin.',
+      modalTitle: 'Yeni Bir API Öner',
+      modalSubtitle: 'Topluluğa faydalı olacağını düşündüğünüz ücretsiz bir API servisi ekleyin.',
       nameLabel: 'API Adı',
       namePlaceholder: 'Örn: OpenWeather, CoinGecko...',
       urlLabel: 'Dokümantasyon veya Endpoint URL',
@@ -256,10 +256,10 @@ export const translations: Record<Language, TranslationDictionary> = {
       directoryBadge: 'Directory',
     },
     hero: {
-      badge: 'PUBLIC REST API DIRECTORY FOR DEVELOPERS',
+      badge: 'PUBLIC & FREE API DIRECTORY FOR DEVELOPERS',
       titlePrefix: 'Curated Directory of',
-      titleHighlight: '500+ Free REST APIs',
-      subtitle: 'From weather and crypto to AI and finance. Verified public REST API endpoints with instant one-click cURL, JavaScript, and Python code snippets.',
+      titleHighlight: '500+ Free & Public APIs',
+      subtitle: 'From weather and crypto to AI and finance. Verified public API endpoints with instant one-click cURL, JavaScript, and Python code snippets.',
       metricApis: 'API Services',
       metricCategories: 'Categories',
       metricFree: '100% Free & Verified',
@@ -267,7 +267,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     },
     banner: {
       liveGuide: 'LIVE DIRECTORY:',
-      text: 'Supercharge your builds with 500+ free REST APIs and instant code snippets.',
+      text: 'Supercharge your builds with 500+ free public APIs and instant code snippets.',
       badge: 'UP-TO-DATE',
     },
     explorer: {
@@ -281,7 +281,7 @@ export const translations: Record<Language, TranslationDictionary> = {
       resultsPrefix: 'Search Results:',
       resultsBookmarks: 'Your Saved Favorite APIs',
       resultsRecommended: 'Curated & Featured API Services',
-      resultsAll: 'All Public REST API Services',
+      resultsAll: 'All Public API Services',
       apisListed: 'APIs listed',
       noResultsText: 'No APIs found matching your search criteria.',
       clearFilters: 'Clear Filters',
@@ -305,7 +305,7 @@ export const translations: Record<Language, TranslationDictionary> = {
     },
     submitModal: {
       triggerBtn: 'Submit API',
-      modalTitle: 'Submit a Public REST API',
+      modalTitle: 'Submit a Public API',
       modalSubtitle: 'Share a free or open developer API endpoint to be indexed in the global catalog.',
       nameLabel: 'API Name',
       namePlaceholder: 'e.g. OpenWeather, CoinGecko...',

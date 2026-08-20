@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
@@ -6,7 +6,8 @@ import { ThemeToggle } from './ThemeToggle';
 import { LanguageToggle } from './LanguageToggle';
 import { SubmitApiModal } from './SubmitApiModal';
 import { useLanguage } from '@/context/LanguageContext';
-import { Layers, Menu, X, ArrowLeft, Github, Plus } from 'lucide-react';
+import { Menu, X, ArrowLeft, Github, Plus } from 'lucide-react';
+import { Logo } from './Logo';
 import { useState } from 'react';
 
 export function Header() {
@@ -50,9 +51,7 @@ export function Header() {
 
               {/* Logo */}
               <Link href="/" className="flex items-center gap-2.5 group">
-                <div className="w-8 h-8 rounded-xl bg-brand-700 dark:bg-brand-600 flex items-center justify-center text-white shadow-[0_0_12px_rgba(225,29,72,0.35)] group-hover:scale-105 transition-all">
-                  <Layers className="w-4 h-4" />
-                </div>
+                <Logo className="w-8 h-8 rounded-xl shadow-[0_0_14px_rgba(225,29,72,0.35)] group-hover:scale-105 transition-all" />
                 <div className="flex items-baseline gap-1 font-jakarta">
                   <span className="text-base font-extrabold tracking-tight text-stone-900 dark:text-zinc-100">
                     Free<span className="text-brand-700 dark:text-brand-500">API</span>
