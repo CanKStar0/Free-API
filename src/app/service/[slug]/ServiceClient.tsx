@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
+import { translations } from '@/data/translations';
 import type { EnrichedApiService } from '@/lib/api-slugs';
 import { CategoryIcon } from '@/components/CategoryIcon';
 import { ApiCard } from '@/components/ApiCard';
@@ -26,12 +27,16 @@ import {
 interface ServiceClientProps {
   api: EnrichedApiService;
   relatedApis: any[];
+  forcedLanguage?: 'tr' | 'en';
 }
 
 type CodeTab = 'curl' | 'js' | 'python' | 'node' | 'php';
 
-export default function ServiceClient({ api, relatedApis }: ServiceClientProps) {
-  const { language, t } = useLanguage();
+export default function ServiceClient({ api, relatedApis, forcedLanguage }: ServiceClientProps) {
+  const { language: contextLang, t: contextT } = useLanguage();
+  const language = forcedLanguage || contextLang;
+  const t = forcedLanguage === 'en' ? translations.en : (forcedLanguage === 'tr' ? translations.tr : contextT);
+
   const [activeCodeTab, setActiveCodeTab] = useState<CodeTab>('curl');
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState(false);
