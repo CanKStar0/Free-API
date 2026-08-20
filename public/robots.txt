@@ -1,4 +1,4 @@
-﻿User-agent: Googlebot
+User-agent: Googlebot
 Allow: /
 
 User-agent: Bingbot
@@ -38,3 +38,6 @@ Disallow: /api/trap/
 User-agent: *
 Allow: /
 Disallow: /api/
+
+Sitemap: https://api.canpolatkaya.com/sitemap.xml
+
