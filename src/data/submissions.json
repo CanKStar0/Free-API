@@ -1,5 +1,31 @@
 [
   {
+    "id": "sub_1787246003887_r8j11",
+    "name": "Genderize.io API",
+    "url": "https://genderize.io",
+    "categoryId": "validation",
+    "description": "İsimden cinsiyet tahmini ve olasılık skoru hesaplayan ücretsiz servis.",
+    "description_tr": "İsimden cinsiyet tahmini ve olasılık skoru hesaplayan ücretsiz servis.",
+    "description_en": "Free service that predicts gender from name and calculates probability score.",
+    "rateLimit": "1.000 istek/gün",
+    "isNoAuth": true,
+    "email": "can@canpolatkaya.com",
+    "createdAt": "2026-08-20T17:13:23.887Z",
+    "status": "pending"
+  },
+  {
+    "id": "sub_1787245722287_7wl6j",
+    "name": "Agify.io API",
+    "url": "https://agify.io",
+    "categoryId": "developer",
+    "description": "İsim tabanlı yaş tahmini yapan yapay zeka servisi. Kayıt gerektirmez, doğrudan JSON döner.",
+    "rateLimit": "1.000 istek/gün",
+    "isNoAuth": true,
+    "email": "can@canpolatkaya.com",
+    "createdAt": "2026-08-20T17:08:42.287Z",
+    "status": "pending"
+  },
+  {
     "id": "sub_1787245096554_a6gax",
     "name": "Deneme",
     "url": "http://localhost:3000/",
