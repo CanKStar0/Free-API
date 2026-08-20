@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { autoTranslate } from '@/lib/auto-translator';
 
 interface ApiSubmission {
   id: string;
@@ -8,6 +9,8 @@ interface ApiSubmission {
   url: string;
   categoryId: string;
   description: string;
+  description_tr?: string;
+  description_en?: string;
   rateLimit: string;
   isNoAuth: boolean;
   email?: string;
@@ -77,12 +80,28 @@ export async function POST(req: NextRequest) {
       formattedRateLimit = rateLimit.trim().substring(0, 60);
     }
 
+    // Automated Bilingual Translation (TR & EN)
+    const rawDesc = description.trim().substring(0, 600);
+    let descTr = rawDesc;
+    let descEn = rawDesc;
+
+    const isLikelyTurkish = /[ğüşıöçĞÜŞİÖÇ]|(\b(ve|ile|bir|için|olan|servis|ücretsiz)\b)/i.test(rawDesc);
+    if (isLikelyTurkish) {
+      descTr = rawDesc;
+      descEn = await autoTranslate(rawDesc, 'en');
+    } else {
+      descEn = rawDesc;
+      descTr = await autoTranslate(rawDesc, 'tr');
+    }
+
     const newSubmission: ApiSubmission = {
       id: `sub_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       name: name.trim().substring(0, 80),
       url: url.trim().substring(0, 300),
       categoryId: categoryId.trim(),
-      description: description.trim().substring(0, 600),
+      description: descTr,
+      description_tr: descTr,
+      description_en: descEn,
       rateLimit: formattedRateLimit,
       isNoAuth: Boolean(isNoAuth),
       email: email?.trim().substring(0, 100) || undefined,
@@ -120,7 +139,8 @@ export async function POST(req: NextRequest) {
                   { name: '📂 Kategori', value: newSubmission.categoryId, inline: true },
                   { name: '⚡ Rate Limit', value: newSubmission.rateLimit, inline: true },
                   { name: '🔑 Zero-Auth', value: newSubmission.isNoAuth ? 'Evet ✅' : 'Hayır 🔑', inline: true },
-                  { name: '📝 Açıklama', value: newSubmission.description, inline: false },
+                  { name: '🇹🇷 Açıklama (TR)', value: newSubmission.description_tr || newSubmission.description, inline: false },
+                  { name: '🇬🇧 Çeviri (EN)', value: newSubmission.description_en || 'N/A', inline: false },
                   { name: '📧 Gönderen', value: newSubmission.email || 'Belirtilmedi', inline: false },
                 ],
                 footer: { text: `FreeAPI Directory • ${newSubmission.id}` },
@@ -147,8 +167,9 @@ export async function POST(req: NextRequest) {
           `🔗 <b>URL:</b> ${escapeHtml(newSubmission.url)}\n` +
           `📂 <b>Kategori:</b> <code>${escapeHtml(newSubmission.categoryId)}</code>\n` +
           `⚡ <b>Rate Limit:</b> ${escapeHtml(newSubmission.rateLimit)}\n` +
-          `🔑 <b>Zero-Auth:</b> ${newSubmission.isNoAuth ? 'Evet ✅' : 'Hayır 🔑'}\n` +
-          `📝 <b>Açıklama:</b>\n<i>${escapeHtml(newSubmission.description)}</i>\n\n` +
+          `🔑 <b>Zero-Auth:</b> ${newSubmission.isNoAuth ? 'Evet ✅' : 'Hayır 🔑'}\n\n` +
+          `🇹🇷 <b>Açıklama (TR):</b>\n<i>${escapeHtml(newSubmission.description_tr || newSubmission.description)}</i>\n\n` +
+          `🇬🇧 <b>Çeviri (EN):</b>\n<i>${escapeHtml(newSubmission.description_en || newSubmission.description)}</i>\n\n` +
           `📧 <b>E-posta:</b> ${escapeHtml(newSubmission.email || 'Belirtilmedi')}\n` +
           `🆔 <code>${newSubmission.id}</code>`;
 
