@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { SearchProvider } from '@/context/SearchContext';
 import { Header } from '@/components/Header';
-
 
 const inter = Inter({
   subsets: ['latin'],
@@ -18,8 +18,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://freeapi.canpolatkaya.com'),
-  title: 'Free-API Directory | 500+ Public & Free API Catalogue',
+  metadataBase: new URL('https://api.canpolatkaya.com'),
+  title: 'FreeAPI Directory | 500+ Public & Free API Catalogue',
   description: 'Verified public developer API directory with one-click cURL, JavaScript, and Python code snippets across 28+ categories.',
   keywords: [
     'ücretsiz API',
@@ -35,12 +35,12 @@ export const metadata: Metadata = {
   creator: 'Canpolat Kaya',
   publisher: 'Canpolat Kaya',
   alternates: {
-    canonical: 'https://freeapi.canpolatkaya.com',
+    canonical: 'https://api.canpolatkaya.com',
   },
   openGraph: {
     type: 'website',
     locale: 'tr_TR',
-    url: 'https://freeapi.canpolatkaya.com',
+    url: 'https://api.canpolatkaya.com',
     title: 'Free-API Directory — 500+ Curated Public APIs',
     description: 'A categorized index of public developer APIs with instant code snippets and rate limits.',
     siteName: 'Free-API Directory',
@@ -106,6 +106,25 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {/* Google Analytics GA4 */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-KE97PJLGYP"
+        />
+        <Script
+          id="google-analytics-ga4"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-KE97PJLGYP', {
+                page_path: window.location.pathname,
+              });
+            `,
+          }}
         />
       </head>
       <body className="font-sans antialiased bg-[#F9F9F6] dark:bg-[#09090b] text-[#1c1917] dark:text-[#fafafa]">
