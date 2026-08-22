@@ -1,6 +1,5 @@
 import { betterAuth } from 'better-auth';
 import { Pool } from 'pg';
-import { dash } from '@better-auth/infra';
 import fs from 'fs';
 import path from 'path';
 
@@ -45,11 +44,12 @@ export const auth = betterAuth({
   baseURL:
     process.env.BETTER_AUTH_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://freeapi.website'),
+    (process.env.RAILWAY_STATIC_URL ? `https://${process.env.RAILWAY_STATIC_URL}` : 'https://freeapi.website'),
   trustedOrigins: [
     'https://freeapi.website',
     'https://www.freeapi.website',
     'http://localhost:3000',
+    'https://*.railway.app',
     'https://*.vercel.app',
   ],
   socialProviders: {
@@ -62,7 +62,4 @@ export const auth = betterAuth({
       clientSecret: googleClientSecret,
     },
   },
-  plugins: [
-    dash(),
-  ],
 });

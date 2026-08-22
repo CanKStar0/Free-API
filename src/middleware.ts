@@ -1,14 +1,16 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { isIpBanned, checkRateLimit, BLOCKED_USER_AGENTS } from '@/lib/security';
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Skip static assets, Next.js internal files, favicon, icons
+  // Skip static assets, Next.js internal files, favicon, icons, and auth endpoints
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/static') ||
-    pathname.includes('.') // images, fonts, favicon
+    pathname.startsWith('/api/auth') ||
+    pathname.includes('.') || // images, fonts, favicon
+    req.nextUrl.searchParams.has('_rsc') // Next.js RSC prefetch requests
   ) {
     return NextResponse.next();
   }
@@ -40,8 +42,8 @@ export function middleware(req: NextRequest) {
     });
   }
 
-  // 3. Sliding Window Rate Limiting (12 requests per 2 seconds per IP)
-  const isAllowed = checkRateLimit(ip, 15, 2000);
+  // 3. Sliding Window Rate Limiting (40 requests per 2 seconds per IP)
+  const isAllowed = checkRateLimit(ip, 40, 2000);
   if (!isAllowed) {
     return new NextResponse('Rate limit exceeded: Too many requests. Please slow down.', {
       status: 429,
