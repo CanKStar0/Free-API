@@ -14,11 +14,40 @@ const MAX_QUERY_CACHE_SIZE = 500;
 const DATASETS_DIR = path.join(process.cwd(), 'database', 'datasets');
 
 /**
+ * Resolves the absolute path of a dataset file across various serverless & local runtimes
+ */
+export function getDatasetFilePath(slug: string): string | null {
+  const candidates = [
+    path.join(process.cwd(), 'database', 'datasets', `${slug}.json`),
+    path.join(DATASETS_DIR, `${slug}.json`),
+    path.resolve(process.cwd(), 'database', 'datasets', `${slug}.json`),
+    path.join(__dirname, '..', '..', '..', 'database', 'datasets', `${slug}.json`),
+    path.join(__dirname, '..', '..', '..', '..', 'database', 'datasets', `${slug}.json`),
+  ];
+
+  for (const candidate of candidates) {
+    try {
+      if (fs.existsSync(candidate)) {
+        return candidate;
+      }
+    } catch {
+      // ignore
+    }
+  }
+
+  return null;
+}
+
+/**
  * Ensures the dataset directory exists
  */
 function ensureDatasetDir(): void {
   if (!fs.existsSync(DATASETS_DIR)) {
-    fs.mkdirSync(DATASETS_DIR, { recursive: true });
+    try {
+      fs.mkdirSync(DATASETS_DIR, { recursive: true });
+    } catch {
+      // ignore
+    }
   }
 }
 
@@ -27,8 +56,7 @@ function ensureDatasetDir(): void {
  */
 export function hasLocalDataset(slug: string): boolean {
   if (memoryCache.has(slug)) return true;
-  const filePath = path.join(DATASETS_DIR, `${slug}.json`);
-  return fs.existsSync(filePath);
+  return getDatasetFilePath(slug) !== null;
 }
 
 /**
@@ -42,8 +70,8 @@ export function getLocalDataset(slug: string): ApiDataset | null {
     return cached.dataset;
   }
 
-  const filePath = path.join(DATASETS_DIR, `${slug}.json`);
-  if (!fs.existsSync(filePath)) {
+  const filePath = getDatasetFilePath(slug);
+  if (!filePath) {
     return null;
   }
 

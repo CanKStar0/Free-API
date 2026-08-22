@@ -64,6 +64,10 @@ const DATASETS: DatasetOption[] = [
   { slug: 'quotes-library', name: 'Quotes Library (1,454)', category: 'Reference', records: '1,454', isSemiStatic: false, ttl: '30d', sampleQuery: 'search=knowledge' },
   { slug: 'free-to-play-games', name: 'Free-to-Play Games (415)', category: 'Gaming', records: '415', isSemiStatic: false, ttl: '7d', sampleQuery: 'field=genre&value=Shooter' },
   { slug: 'mime-types', name: 'IANA MIME Types (2.6k)', category: 'Dev Tools', records: '2,601', isSemiStatic: false, ttl: '30d', sampleQuery: 'search=json' },
+  { slug: 'commodity-rates', name: 'Precious Metals & Commodities', category: 'Finance', records: '4', isSemiStatic: true, ttl: '1h', sampleQuery: 'field=commodity&value=gold' },
+  { slug: 'fiat-currencies', name: 'World Fiat Currencies (161)', category: 'Finance', records: '161', isSemiStatic: false, ttl: '30d', sampleQuery: 'search=EUR' },
+  { slug: 'rick-and-morty', name: 'Rick & Morty Multiverse (706)', category: 'Entertainment', records: '706', isSemiStatic: false, ttl: '30d', sampleQuery: 'search=Rick' },
+  { slug: 'world-public-holidays', name: 'Global Public Holidays (221)', category: 'Calendar', records: '221', isSemiStatic: false, ttl: '30d', sampleQuery: 'search=Turkey' },
 ];
 
 export function DashboardClient() {

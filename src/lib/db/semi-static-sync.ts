@@ -13,12 +13,21 @@ import { ApiDataset } from '@/types/database';
  */
 export function isDatasetFresh(slug: string): boolean {
   const dataset = getLocalDataset(slug);
-  if (!dataset || !dataset.last_synced_at) {
+  if (!dataset) {
     return false;
   }
 
+  // 1. Static datasets are master reference data and always fresh
+  if (dataset.is_static) {
+    return true;
+  }
+
+  if (!dataset.last_synced_at) {
+    return true;
+  }
+
   const lastSyncTime = new Date(dataset.last_synced_at).getTime();
-  if (isNaN(lastSyncTime)) return false;
+  if (isNaN(lastSyncTime)) return true;
 
   const ageSeconds = (Date.now() - lastSyncTime) / 1000;
   const maxTtlSeconds = getDatasetTtl(slug);

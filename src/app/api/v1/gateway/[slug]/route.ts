@@ -166,7 +166,59 @@ export async function GET(
     console.error(`⚠️ [Gateway] Live sync attempt failed for ${slug}:`, syncErr.message);
   }
 
-  // 3. FALLBACK TO GENERIC UPSTREAM SERVICE PROXY
+  // 3. GUARANTEED FALLBACK TO LOCAL DATASET (If upstream sync failed or was skipped)
+  if (hasLocalDataset(slug)) {
+    const search = searchParams.get('search') || searchParams.get('q') || undefined;
+    const field = searchParams.get('field') || undefined;
+    const value = searchParams.get('value') || undefined;
+    const fields = searchParams.get('fields') || undefined;
+    const page = parseInt(searchParams.get('page') || '1', 10);
+    const limit = parseInt(searchParams.get('limit') || '20', 10);
+    const sortBy = searchParams.get('sortBy') || undefined;
+    const order = (searchParams.get('order') === 'desc' ? 'desc' : 'asc') as 'asc' | 'desc';
+
+    const result = queryLocalDataset(slug, {
+      search,
+      field,
+      value,
+      fields,
+      page,
+      limit,
+      sortBy,
+      order,
+    });
+
+    if (result) {
+      const ttl = getDatasetTtl(slug);
+      const responsePayload: GatewayResponse = {
+        success: true,
+        gateway: 'FreeAPI Edge Gateway v1.0',
+        source: 'local_dataset',
+        service: slug,
+        latency_ms: Date.now() - startTime,
+        timestamp: new Date().toISOString(),
+        pagination: {
+          total: result.total,
+          page: result.page,
+          limit: result.limit,
+          totalPages: result.totalPages,
+        },
+        data: result.data,
+      };
+
+      return NextResponse.json(responsePayload, {
+        status: 200,
+        headers: {
+          ...getCorsHeaders(),
+          'Cache-Control': `public, s-maxage=${Math.min(ttl, 300)}, stale-while-revalidate=${ttl}`,
+          'X-Dataset-Source': 'local_database_fallback',
+          'X-Dataset-Freshness': 'cached',
+        },
+      });
+    }
+  }
+
+  // 4. FALLBACK TO GENERIC UPSTREAM SERVICE PROXY (for 500+ standard APIs)
   const api = getApiBySlug(slug);
 
   if (!api) {
