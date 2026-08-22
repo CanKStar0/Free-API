@@ -1,4 +1,4 @@
-# 🚀 API Showcase
+# 🚀 Free API
 
 <div align="center">
 
@@ -9,7 +9,7 @@
 
 **A curated collection of 500+ free APIs across 47 categories for developers**
 
-[🌐 Live Demo](https://api-showcase-app-production.up.railway.app) • [Features](#features) • [Installation](#installation) • [Categories](#categories) • [Contributing](#contributing)
+[🌐 Live Demo](https://freeapi.dev) • [Features](#features) • [Installation](#installation) • [Categories](#categories) • [Contributing](#contributing)
 
 </div>
 
@@ -17,7 +17,7 @@
 
 ## 📖 About
 
-API Showcase is a modern web application that helps developers discover free APIs for their projects. Whether you're building a weather app, a crypto tracker, or a gaming dashboard, you'll find the right API here.
+Free API (FreeAPI.dev) is a modern web application that helps developers discover free APIs for their projects. Whether you're building a weather app, a crypto tracker, or a gaming dashboard, you'll find the right API here.
 
 ## ✨ Features
 
@@ -34,8 +34,8 @@ API Showcase is a modern web application that helps developers discover free API
 ## 🖥️ Demo
 
 <div align="center">
-  <a href="https://api-showcase.up.railway.app/">
-    <img src="https://via.placeholder.com/800x400/0ea5e9/ffffff?text=API+Showcase+Demo" alt="API Showcase Screenshot" />
+  <a href="https://freeapi.dev">
+    <img src="https://via.placeholder.com/800x400/0ea5e9/ffffff?text=Free+API+Demo" alt="Free API Screenshot" />
   </a>
   <p><em>Click to view live demo</em></p>
 </div>
@@ -54,7 +54,7 @@ API Showcase is a modern web application that helps developers discover free API
 ## 📁 Project Structure
 
 ```
-api-showcase/
+free-api/
 ├── src/
 │   ├── app/                    # Next.js App Router pages
 │   │   ├── layout.tsx          # Root layout with theme provider

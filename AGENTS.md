@@ -3,7 +3,7 @@
 <!-- DCM_GLOBAL_GUIDELINES_ROOT: C:\Users\canpo\OneDrive\Desktop\GUIDELINES -->
 
 ## 📌 Kapsam & Proje Tanımı
-- **Proje:** API Showcase (`api-showcase`)
+- **Proje:** Free API (`free-api`)
 - **Kök Dizin:** `C:\Users\canpo\OneDrive\Desktop\API APP`
 - **Proje Amacı:** Geliştiriciler için 47+ kategoride 500'den fazla ücretsiz API'yi (Free APIs) listeleyen, arama, filtreleme, kategori ve servis detay sayfaları (SSG), TR/EN çoklu dil desteği, karanlık/aydınlık tema ve bot/scraper koruması sunan modern, yüksek performanslı web platformu.
 

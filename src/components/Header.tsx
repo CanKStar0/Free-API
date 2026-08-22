@@ -5,18 +5,19 @@ import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageToggle } from './LanguageToggle';
 import { SubmitApiModal } from './SubmitApiModal';
+import { AuthModal } from './AuthModal';
 import { useLanguage } from '@/context/LanguageContext';
-import { Menu, X, ArrowLeft, Github, Plus, LogOut, Bookmark, Layers, Loader2, ChevronDown, User } from 'lucide-react';
+import { Menu, X, ArrowLeft, Github, Plus, LogOut, Bookmark, Layers, Loader2, ChevronDown, User, Sparkles } from 'lucide-react';
 import { Logo } from './Logo';
 import { useState, useRef, useEffect } from 'react';
-import { useSession, signIn, signOut } from '@/lib/auth-client';
+import { useSession, signOut } from '@/lib/auth-client';
 
 export function Header() {
   const { t, language } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSubmitOpen, setIsSubmitOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const [isSigningIn, setIsSigningIn] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -41,19 +42,6 @@ export function Header() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const handleSignIn = async () => {
-    try {
-      setIsSigningIn(true);
-      await signIn.social({
-        provider: 'github',
-        callbackURL: window.location.href,
-      });
-    } catch (err) {
-      console.error('Sign in error:', err);
-      setIsSigningIn(false);
-    }
-  };
 
   const handleSignOut = async () => {
     try {
@@ -242,18 +230,13 @@ export function Header() {
                 <motion.button
                   whileTap={{ scale: 0.94 }}
                   type="button"
-                  onClick={handleSignIn}
-                  disabled={isSigningIn}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200/80 dark:border-zinc-800/80 bg-stone-100/70 dark:bg-zinc-900/70 hover:bg-stone-200/80 dark:hover:bg-zinc-800 text-stone-800 dark:text-zinc-200 text-xs font-semibold shadow-xs transition-all cursor-pointer"
-                  title="GitHub ile Giriş Yap"
+                  onClick={() => setIsAuthModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200/80 dark:border-zinc-800/80 bg-stone-100/70 dark:bg-zinc-900/70 hover:bg-stone-200/80 dark:hover:bg-zinc-800 text-stone-800 dark:text-zinc-200 text-xs font-semibold shadow-xs transition-all cursor-pointer group"
+                  title={t.auth.signIn}
                 >
-                  {isSigningIn ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin text-brand-600 dark:text-brand-400" />
-                  ) : (
-                    <Github className="w-3.5 h-3.5 text-stone-700 dark:text-zinc-300" />
-                  )}
+                  <Sparkles className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400 group-hover:scale-110 transition-transform" />
                   <span className="hidden sm:inline">
-                    {isSigningIn ? t.auth.signingIn : t.auth.signIn}
+                    {t.auth.signIn}
                   </span>
                 </motion.button>
               )}
@@ -332,11 +315,11 @@ export function Header() {
                     type="button"
                     onClick={() => {
                       setIsMenuOpen(false);
-                      handleSignIn();
+                      setIsAuthModalOpen(true);
                     }}
                     className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-stone-900 dark:bg-zinc-800 text-white font-semibold text-xs shadow-sm mb-2"
                   >
-                    <Github className="w-4 h-4" />
+                    <Sparkles className="w-4 h-4 text-brand-400" />
                     <span>{t.auth.signIn}</span>
                   </button>
                 )}
@@ -401,6 +384,9 @@ export function Header() {
 
       {/* Community API Submission Modal */}
       <SubmitApiModal isOpen={isSubmitOpen} onClose={() => setIsSubmitOpen(false)} />
+
+      {/* Developer OAuth Authentication Modal */}
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </>
   );
 }
