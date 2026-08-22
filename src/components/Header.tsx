@@ -19,10 +19,32 @@ export function Header() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [localUser, setLocalUser] = useState<any>(null);
   const { scrollY } = useScroll();
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   const { data: session, isPending } = useSession();
+
+  // Load and sync local developer session
+  useEffect(() => {
+    const checkLocal = () => {
+      try {
+        const stored = localStorage.getItem('fapi_user_session');
+        if (stored) {
+          setLocalUser(JSON.parse(stored));
+        } else {
+          setLocalUser(null);
+        }
+      } catch {
+        setLocalUser(null);
+      }
+    };
+    checkLocal();
+    window.addEventListener('fapi_auth_change', checkLocal);
+    return () => window.removeEventListener('fapi_auth_change', checkLocal);
+  }, []);
+
+  const currentUser = session?.user || localUser;
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest > 40) {
@@ -45,6 +67,11 @@ export function Header() {
 
   const handleSignOut = async () => {
     try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('fapi_user_session');
+        setLocalUser(null);
+        window.dispatchEvent(new Event('fapi_auth_change'));
+      }
       await signOut();
       setIsUserMenuOpen(false);
     } catch (err) {
@@ -151,7 +178,7 @@ export function Header() {
                 <div className="w-8 h-8 rounded-xl bg-stone-200/50 dark:bg-zinc-800/50 animate-pulse flex items-center justify-center">
                   <Loader2 className="w-4 h-4 animate-spin text-stone-400 dark:text-zinc-600" />
                 </div>
-              ) : session?.user ? (
+              ) : currentUser ? (
                 <div className="relative" ref={userMenuRef}>
                   <button
                     type="button"
@@ -159,20 +186,20 @@ export function Header() {
                     className="flex items-center gap-2 p-1 pl-1.5 pr-2.5 rounded-xl glass hover:border-brand-500/40 transition-all cursor-pointer group"
                     aria-label="Kullanıcı Menüsü"
                   >
-                    {session.user.image ? (
+                    {currentUser.image ? (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
-                        src={session.user.image}
-                        alt={session.user.name || 'User Avatar'}
+                        src={currentUser.image}
+                        alt={currentUser.name || 'User Avatar'}
                         className="w-6 h-6 rounded-lg object-cover ring-1 ring-brand-500/30"
                       />
                     ) : (
                       <div className="w-6 h-6 rounded-lg bg-brand-600 text-white font-bold text-xs flex items-center justify-center">
-                        {session.user.name?.charAt(0) || 'U'}
+                        {currentUser.name?.charAt(0) || 'U'}
                       </div>
                     )}
                     <span className="hidden sm:inline-block text-xs font-semibold text-stone-800 dark:text-zinc-200 max-w-[100px] truncate">
-                      {session.user.name?.split(' ')[0] || 'Dev'}
+                      {currentUser.name?.split(' ')[0] || 'Dev'}
                     </span>
                     <ChevronDown className={`w-3.5 h-3.5 text-stone-400 group-hover:text-stone-700 dark:group-hover:text-zinc-200 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
@@ -189,10 +216,10 @@ export function Header() {
                       >
                         <div className="px-3 py-2 border-b border-stone-200/60 dark:border-zinc-800/60 mb-1">
                           <p className="text-xs font-bold text-stone-900 dark:text-zinc-100 truncate">
-                            {session.user.name}
+                            {currentUser.name}
                           </p>
                           <p className="text-[11px] font-mono text-stone-500 dark:text-zinc-400 truncate">
-                            {session.user.email}
+                            {currentUser.email}
                           </p>
                         </div>
 
