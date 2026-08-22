@@ -18,12 +18,14 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const handleOAuth = async (provider: 'github' | 'google') => {
     try {
       setLoadingProvider(provider);
+      const callbackURL = typeof window !== 'undefined' ? `${window.location.origin}/dashboard` : 'https://freeapi.website/dashboard';
       await signIn.social({
         provider,
-        callbackURL: window.location.href,
+        callbackURL,
       });
-    } catch (err) {
+    } catch (err: any) {
       console.error(`${provider} auth error:`, err);
+      alert(`Giriş hatası: ${err?.message || 'OAuth sağlayıcısına bağlanılamadı. Lütfen sunucu ayarlarını kontrol edin.'}`);
       setLoadingProvider(null);
     }
   };

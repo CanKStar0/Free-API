@@ -8,9 +8,21 @@ export const auth = betterAuth({
     ssl: {
       rejectUnauthorized: false,
     },
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
   }),
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL || 'http://localhost:3000',
+  baseURL:
+    process.env.BETTER_AUTH_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://freeapi.website'),
+  trustedOrigins: [
+    'https://freeapi.website',
+    'https://www.freeapi.website',
+    'http://localhost:3000',
+    'https://*.vercel.app',
+  ],
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID || '',
