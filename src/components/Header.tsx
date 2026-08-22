@@ -197,21 +197,30 @@ export function Header() {
                         </div>
 
                         <Link
+                          href={language === 'en' ? '/en/profile' : '/profile'}
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 dark:text-zinc-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-stone-100/70 dark:hover:bg-zinc-800/70 transition-colors"
+                        >
+                          <User className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" />
+                          <span>{t.auth.profile}</span>
+                        </Link>
+
+                        <Link
+                          href={language === 'en' ? '/en/profile' : '/profile'}
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 dark:text-zinc-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-stone-100/70 dark:hover:bg-zinc-800/70 transition-colors"
+                        >
+                          <Bookmark className="w-3.5 h-3.5 text-amber-500" />
+                          <span>{t.auth.myBookmarks}</span>
+                        </Link>
+
+                        <Link
                           href={language === 'en' ? '/en/dashboard' : '/dashboard'}
                           onClick={() => setIsUserMenuOpen(false)}
                           className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 dark:text-zinc-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-stone-100/70 dark:hover:bg-zinc-800/70 transition-colors"
                         >
-                          <Layers className="w-3.5 h-3.5 text-amber-500" />
+                          <Layers className="w-3.5 h-3.5" />
                           <span>{t.nav.dashboard}</span>
-                        </Link>
-
-                        <Link
-                          href="#explorer"
-                          onClick={() => setIsUserMenuOpen(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-stone-700 dark:text-zinc-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-stone-100/70 dark:hover:bg-zinc-800/70 transition-colors"
-                        >
-                          <Bookmark className="w-3.5 h-3.5" />
-                          <span>{t.auth.myBookmarks}</span>
                         </Link>
 
                         <button

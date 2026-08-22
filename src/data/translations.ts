@@ -49,13 +49,36 @@ export interface TranslationDictionary {
     tabNextjs: string;
     tabCurl: string;
     tabJson: string;
+    tabAiPrompt: string;
     downloadEnv: string;
     copyCode: string;
+    copyAiPrompt: string;
+    aiPromptCopied: string;
     copied: string;
     shareLink: string;
     shareStack: string;
     linkCopied: string;
     mustLoginToSave: string;
+  };
+  profile: {
+    title: string;
+    subtitle: string;
+    tabStacks: string;
+    tabBookmarks: string;
+    createdStacksCount: string;
+    savedBookmarksCount: string;
+    memberSince: string;
+    noStacksYet: string;
+    noStacksDesc: string;
+    noBookmarksYet: string;
+    noBookmarksDesc: string;
+    deleteStack: string;
+    deleteConfirm: string;
+    viewStack: string;
+    shareProfile: string;
+    profileCopied: string;
+    signInRequired: string;
+    signInDesc: string;
   };
   hero: {
     badge: string;
@@ -220,13 +243,36 @@ export const translations: Record<Language, TranslationDictionary> = {
       tabNextjs: 'Next.js 15 Client',
       tabCurl: 'cURL Zinciri',
       tabJson: 'JSON Koleksiyonu',
+      tabAiPrompt: '🤖 AI / Cursor Prompt',
       downloadEnv: '.env Dosyası İndir',
       copyCode: 'Kodu Kopyala',
+      copyAiPrompt: 'AI Agent Promptu Kopyala',
+      aiPromptCopied: 'AI Promptu Panoya Kopyalandı!',
       copied: 'Kopyalandı!',
       shareLink: 'Stack Linkini Kopyala',
       shareStack: 'Stack’i Paylaş',
       linkCopied: 'Paylaşım linki panoya kopyalandı!',
       mustLoginToSave: 'Stack’inizi buluta kaydetmek için lütfen giriş yapın.',
+    },
+    profile: {
+      title: 'Geliştirici Profili',
+      subtitle: 'Oluşturduğunuz API Stack’lerini ve favori servislerinizi tek bir yerden yönetin.',
+      tabStacks: 'Kaydedilen Stack’ler',
+      tabBookmarks: 'Favori API’ler',
+      createdStacksCount: 'Oluşturulan Stack',
+      savedBookmarksCount: 'Favori Servis',
+      memberSince: 'Üyelik Tarihi',
+      noStacksYet: 'Henüz bir Stack kaydetmediniz',
+      noStacksDesc: 'API kartlarındaki "+ Stack" butonunu kullanarak kendi özel paketlerinizi oluşturabilir ve buraya kaydedebilirsiniz.',
+      noBookmarksYet: 'Henüz favori API eklemediniz',
+      noBookmarksDesc: 'API kartlarındaki yıldız ikonuna tıklayarak sık kullandığınız servisleri buraya sabitleyin.',
+      deleteStack: 'Stack’i Sil',
+      deleteConfirm: 'Bu stack’i silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.',
+      viewStack: 'Stack’i İncele',
+      shareProfile: 'Profili Paylaş',
+      profileCopied: 'Profil linki panoya kopyalandı!',
+      signInRequired: 'Profilinizi görüntülemek için giriş yapmalısınız.',
+      signInDesc: 'GitHub veya Google hesabınızla anında giriş yapıp stack ve favorilerinize erişin.',
     },
     hero: {
       badge: 'GELİŞTİRİCİLER İÇİN API KATALOĞU',
@@ -436,13 +482,36 @@ export const translations: Record<Language, TranslationDictionary> = {
       tabNextjs: 'Next.js 15 Client',
       tabCurl: 'cURL Chain',
       tabJson: 'JSON Collection',
+      tabAiPrompt: '🤖 AI / Cursor Prompt',
       downloadEnv: 'Download .env File',
       copyCode: 'Copy Code',
+      copyAiPrompt: 'Copy AI Agent Prompt',
+      aiPromptCopied: 'AI Prompt copied to clipboard!',
       copied: 'Copied!',
       shareLink: 'Copy Stack Link',
       shareStack: 'Share Stack',
       linkCopied: 'Share link copied to clipboard!',
       mustLoginToSave: 'Please sign in to save your stack to the cloud.',
+    },
+    profile: {
+      title: 'Developer Profile',
+      subtitle: 'Manage your saved custom API stacks and favorite developer endpoints.',
+      tabStacks: 'Saved Stacks',
+      tabBookmarks: 'Bookmarked APIs',
+      createdStacksCount: 'Created Stacks',
+      savedBookmarksCount: 'Saved APIs',
+      memberSince: 'Member Since',
+      noStacksYet: 'No Stacks Saved Yet',
+      noStacksDesc: 'Use the "+ Stack" button on any API card to build custom architecture bundles and save them here.',
+      noBookmarksYet: 'No Bookmarked APIs Yet',
+      noBookmarksDesc: 'Star your go-to API endpoints across the directory to pin them to your cloud profile.',
+      deleteStack: 'Delete Stack',
+      deleteConfirm: 'Are you sure you want to delete this stack? This action cannot be undone.',
+      viewStack: 'Inspect Stack',
+      shareProfile: 'Share Profile',
+      profileCopied: 'Profile link copied to clipboard!',
+      signInRequired: 'Please sign in to view your profile.',
+      signInDesc: 'Sign in with GitHub or Google to access your cloud-synced stacks and bookmarks.',
     },
     hero: {
       badge: 'PUBLIC & FREE API DIRECTORY FOR DEVELOPERS',

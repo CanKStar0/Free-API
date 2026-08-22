@@ -207,6 +207,14 @@ export function saveLocalDataset(dataset: ApiDataset): void {
   fs.writeFileSync(filePath, JSON.stringify(dataset, null, 2), 'utf-8');
   memoryCache.set(dataset.slug, { dataset, loadedAt: Date.now() });
   queryCache.clear(); // Invalidate stale query cache
+
+  // Trigger Universal Event Dispatcher in background
+  try {
+    const { emitDatasetEvent } = require('@/lib/events/event-dispatcher');
+    emitDatasetEvent(dataset.slug, 'dataset.updated', dataset.data_json).catch(() => {});
+  } catch {
+    // Ignore if not loaded yet
+  }
 }
 
 /**

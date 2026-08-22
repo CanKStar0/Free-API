@@ -22,6 +22,7 @@ import {
   ChevronDown,
   KeyRound,
   FileJson,
+  Bot,
 } from 'lucide-react';
 import { useStack } from '@/context/StackContext';
 import { useBookmarks } from '@/lib/useBookmarks';
@@ -46,6 +47,7 @@ export default function ServiceClient({ api, relatedApis, forcedLanguage }: Serv
   const [activeCodeTab, setActiveCodeTab] = useState<CodeTab>('gateway');
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState(false);
+  const [copiedAiPrompt, setCopiedAiPrompt] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   const localizedDesc = translateDescription(api, language);
@@ -57,6 +59,32 @@ export default function ServiceClient({ api, relatedApis, forcedLanguage }: Serv
     api.description.toLowerCase().includes('kayıt yok') ||
     api.description.toLowerCase().includes('no key') ||
     api.description.toLowerCase().includes('zero registration');
+
+  // Copy AI Prompt for Cursor / Claude / ChatGPT
+  const handleCopyAiPrompt = () => {
+    const promptText = `You are an expert Full-Stack TypeScript Architect.
+
+I am integrating the "${api.name}" public API (${api.categoryTitle}) from FreeAPI Directory into my Next.js 15 (App Router) project.
+
+API DETAILS:
+- Name: ${api.name}
+- Category: ${api.categoryTitle}
+- Base URL: ${api.url}
+- Rate Limit: ${api.rateLimit}
+- Authentication: ${api.isNoAuth ? 'None (Public / Zero-Auth)' : 'API Key Required'}
+- Description: ${api.description}
+
+TASK INSTRUCTIONS:
+1. Create a production-ready TypeScript service module at \`src/lib/services/${api.slug}.ts\`.
+2. Define clean TypeScript interfaces for requests and responses.
+3. Write robust fetch wrappers with status code validation, error logging, and Next.js \`revalidate: 3600\` ISR caching.
+4. Show an example Server Component or API Route that calls this service.
+5. Provide the matching \`.env.local\` variable placeholder.`;
+
+    navigator.clipboard.writeText(promptText);
+    setCopiedAiPrompt(true);
+    setTimeout(() => setCopiedAiPrompt(false), 2500);
+  };
 
   // Copy API URL
   const handleCopyUrl = () => {
@@ -266,6 +294,24 @@ curl_close($ch);`,
                 <>
                   <Copy className="w-3.5 h-3.5 text-stone-500" />
                   <span>{language === 'tr' ? 'Endpoint URL Kopyala' : 'Copy Endpoint URL'}</span>
+                </>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleCopyAiPrompt}
+              className="px-5 py-3 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs tracking-wide shadow-md shadow-brand-600/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              {copiedAiPrompt ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-300" />
+                  <span>{t.stack.aiPromptCopied}</span>
+                </>
+              ) : (
+                <>
+                  <Bot className="w-3.5 h-3.5" />
+                  <span>{t.stack.copyAiPrompt}</span>
                 </>
               )}
             </button>

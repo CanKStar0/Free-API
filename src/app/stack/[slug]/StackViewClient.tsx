@@ -13,6 +13,7 @@ import {
   User,
   ExternalLink,
   Plus,
+  Bot,
 } from 'lucide-react';
 import { ApiCard } from '@/components/ApiCard';
 import { useStack } from '@/context/StackContext';
@@ -38,9 +39,10 @@ interface StackViewClientProps {
 
 export function StackViewClient({ stack }: StackViewClientProps) {
   const { t, language } = useLanguage();
-  const { addToStack, openExport, selectedSlugs } = useStack();
+  const { addToStack, openExport } = useStack();
   const { isBookmarked, toggleBookmark } = useBookmarks();
   const [copied, setCopied] = React.useState(false);
+  const [copiedAiPrompt, setCopiedAiPrompt] = React.useState(false);
 
   const resolvedApis: ClientApiItem[] = React.useMemo(() => {
     return stack.apiSlugs
@@ -52,6 +54,32 @@ export function StackViewClient({ stack }: StackViewClientProps) {
     navigator.clipboard.writeText(window.location.href);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleCopyAiPrompt = () => {
+    const apiList = resolvedApis
+      .map(
+        (api, idx) =>
+          `${idx + 1}. ${api.name} (${api.categoryTitle})\n   - Base URL: ${api.url}\n   - Description: ${api.description}\n   - Rate Limit: ${api.rateLimit}\n   - Auth: ${api.isNoAuth ? 'Public' : 'API Key Required'}`
+      )
+      .join('\n\n');
+
+    const promptText = `You are an expert Full-Stack TypeScript Architect.
+
+I am building a Next.js 15 App Router project using this curated API Stack ("${stack.title}") from FreeAPI Directory:
+
+${apiList}
+
+TASK INSTRUCTIONS:
+1. Create a production-ready, strictly-typed service layer for each API under \`src/lib/services/\`.
+2. Define TypeScript interfaces for requests and responses.
+3. Write resilient fetch functions with error handling, status code checks, and Next.js \`revalidate\` ISR caching.
+4. Provide a sample React Server Component or Route Handler that orchestrates data fetching from these endpoints.
+5. Create the matching \`.env.local\` environment variable definitions.`;
+
+    navigator.clipboard.writeText(promptText);
+    setCopiedAiPrompt(true);
+    setTimeout(() => setCopiedAiPrompt(false), 2500);
   };
 
   const handleImportAll = () => {
@@ -127,22 +155,32 @@ export function StackViewClient({ stack }: StackViewClientProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0">
+          <div className="flex flex-col sm:flex-row md:flex-col gap-2.5 shrink-0">
+            <motion.button
+              whileTap={{ scale: 0.96 }}
+              type="button"
+              onClick={handleCopyAiPrompt}
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold shadow-lg shadow-brand-600/25 transition-all cursor-pointer"
+            >
+              {copiedAiPrompt ? <Check className="w-4 h-4 text-emerald-300" /> : <Bot className="w-4 h-4" />}
+              <span>{copiedAiPrompt ? t.stack.aiPromptCopied : t.stack.copyAiPrompt}</span>
+            </motion.button>
+
             <motion.button
               whileTap={{ scale: 0.96 }}
               type="button"
               onClick={handleImportAll}
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold shadow-lg shadow-brand-600/25 transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-stone-100 hover:bg-stone-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-stone-800 dark:text-zinc-200 text-xs font-bold transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
-              <span>Stack’i Sepetime Ekle</span>
+              <span>{t.stack.addToStack}</span>
             </motion.button>
 
             <motion.button
               whileTap={{ scale: 0.96 }}
               type="button"
               onClick={handleShare}
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white hover:bg-stone-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-stone-800 dark:text-zinc-200 text-xs font-bold transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white hover:bg-stone-50 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-stone-800 dark:text-zinc-200 text-xs font-bold transition-all cursor-pointer"
             >
               {copied ? <Check className="w-4 h-4 text-emerald-500" /> : <Share2 className="w-4 h-4" />}
               <span>{copied ? t.stack.linkCopied : t.stack.shareStack}</span>

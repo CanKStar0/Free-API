@@ -99,3 +99,59 @@ export interface GatewayResponse<T = any> {
   data?: T;
   error?: string;
 }
+
+// ============================================================================
+// Webhooks & Event-Driven Engine Types
+// ============================================================================
+
+export type WebhookEventType = 'dataset.updated' | 'threshold.alert' | 'item.added' | 'test.ping';
+
+export interface WebhookCondition {
+  field: string;
+  operator: '>' | '<' | '>=' | '<=' | '==' | '!=' | 'contains';
+  value: any;
+  targetKey?: string; // e.g. 'bitcoin' or 'USD'
+}
+
+export interface WebhookSubscription {
+  id: string;
+  user_id: string;
+  name: string;
+  dataset_slug: string; // specific slug or '*' for all
+  event_type: WebhookEventType;
+  condition?: WebhookCondition | null;
+  target_url: string;
+  secret: string; // HMAC secret 'whsec_...'
+  is_active: boolean;
+  total_deliveries: number;
+  last_triggered_at?: string | null;
+  last_status_code?: number | null;
+  failure_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface WebhookDeliveryLog {
+  id: string;
+  subscription_id: string;
+  event_type: WebhookEventType;
+  payload_json: any;
+  target_url: string;
+  status_code?: number;
+  latency_ms: number;
+  success: boolean;
+  error?: string | null;
+  delivered_at: string;
+}
+
+export interface WebhookEventPayload<T = any> {
+  id: string;
+  event: WebhookEventType;
+  dataset: string;
+  timestamp: number;
+  data: T;
+  meta: {
+    source: string;
+    version: string;
+  };
+}
