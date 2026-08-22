@@ -30,6 +30,8 @@ const githubClientSecret = getEnvVar('GITHUB_CLIENT_SECRET');
 const googleClientId = getEnvVar('GOOGLE_CLIENT_ID');
 const googleClientSecret = getEnvVar('GOOGLE_CLIENT_SECRET');
 
+const isProd = process.env.NODE_ENV === 'production' || !!process.env.RAILWAY_STATIC_URL;
+
 export const auth = betterAuth({
   database: new Pool({
     connectionString: databaseUrl,
@@ -41,10 +43,7 @@ export const auth = betterAuth({
     connectionTimeoutMillis: 10000,
   }),
   secret: secret || undefined,
-  baseURL:
-    process.env.BETTER_AUTH_URL ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (process.env.RAILWAY_STATIC_URL ? `https://${process.env.RAILWAY_STATIC_URL}` : 'https://freeapi.website'),
+  baseURL: isProd ? 'https://freeapi.website' : (process.env.BETTER_AUTH_URL || 'http://localhost:3000'),
   trustedOrigins: [
     'https://freeapi.website',
     'https://www.freeapi.website',
@@ -52,6 +51,12 @@ export const auth = betterAuth({
     'https://*.railway.app',
     'https://*.vercel.app',
   ],
+  advanced: {
+    useSecureCookies: isProd,
+    crossSubDomainCookies: {
+      enabled: false,
+    },
+  },
   socialProviders: {
     github: {
       clientId: githubClientId,
