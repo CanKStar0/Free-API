@@ -19,13 +19,25 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     try {
       setLoadingProvider(provider);
       const callbackURL = typeof window !== 'undefined' ? `${window.location.origin}/dashboard` : 'https://freeapi.website/dashboard';
-      await signIn.social({
+      
+      const res = await signIn.social({
         provider,
         callbackURL,
       });
+
+      if (res?.error) {
+        console.error(`${provider} auth error:`, res.error);
+        alert(`Giriş hatası: ${res.error.message || 'OAuth sağlayıcısına bağlanılamadı.'}`);
+        setLoadingProvider(null);
+        return;
+      }
+
+      if (res?.data?.url) {
+        window.location.href = res.data.url;
+      }
     } catch (err: any) {
       console.error(`${provider} auth error:`, err);
-      alert(`Giriş hatası: ${err?.message || 'OAuth sağlayıcısına bağlanılamadı. Lütfen sunucu ayarlarını kontrol edin.'}`);
+      alert(`Giriş hatası: ${err?.message || 'OAuth sağlayıcısına bağlanılamadı.'}`);
       setLoadingProvider(null);
     }
   };
