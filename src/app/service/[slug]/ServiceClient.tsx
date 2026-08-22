@@ -30,14 +30,14 @@ interface ServiceClientProps {
   forcedLanguage?: 'tr' | 'en';
 }
 
-type CodeTab = 'curl' | 'js' | 'python' | 'node' | 'php';
+type CodeTab = 'gateway' | 'curl' | 'js' | 'python' | 'node' | 'php';
 
 export default function ServiceClient({ api, relatedApis, forcedLanguage }: ServiceClientProps) {
   const { language: contextLang, t: contextT } = useLanguage();
   const language = forcedLanguage || contextLang;
   const t = forcedLanguage === 'en' ? translations.en : (forcedLanguage === 'tr' ? translations.tr : contextT);
 
-  const [activeCodeTab, setActiveCodeTab] = useState<CodeTab>('curl');
+  const [activeCodeTab, setActiveCodeTab] = useState<CodeTab>('gateway');
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
@@ -74,9 +74,20 @@ export default function ServiceClient({ api, relatedApis, forcedLanguage }: Serv
   };
 
   // Generate Code Snippets dynamically
+  const gatewayUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}/api/v1/gateway/${api.slug}`
+    : `https://freeapi.website/api/v1/gateway/${api.slug}`;
+
   const codeSnippets: Record<CodeTab, { label: string; code: string }> = {
+    gateway: {
+      label: '⚡ Smart Gateway (<2ms)',
+      code: `// FreeAPI Smart Edge Gateway (<2ms RAM Cache + CORS + Zero-Stale)
+curl -X GET "${gatewayUrl}" \\
+  -H "x-freeapi-key: fapi_live_anon" \\
+  -H "Accept: application/json"`,
+    },
     curl: {
-      label: 'cURL',
+      label: 'cURL Direct',
       code: `curl -X GET "${api.url}" \\
   -H "Accept: application/json"`,
     },
@@ -457,7 +468,7 @@ curl_close($ch);`,
           <button
             type="button"
             onClick={() => {
-              const badgeMarkdown = `[![FreeAPI Verified](https://api.canpolatkaya.com/api/badge/${api.slug})](https://api.canpolatkaya.com/service/${api.slug})`;
+              const badgeMarkdown = `[![FreeAPI Verified](https://freeapi.website/api/badge/${api.slug})](https://freeapi.website/service/${api.slug})`;
               navigator.clipboard.writeText(badgeMarkdown);
               setCopiedUrl(true);
               setTimeout(() => setCopiedUrl(false), 2000);
@@ -471,7 +482,7 @@ curl_close($ch);`,
 
         {/* Markdown Snippet Display */}
         <div className="relative rounded-2xl bg-zinc-950 p-3.5 border border-zinc-800 text-[11px] font-mono text-zinc-300 overflow-x-auto">
-          <code>{`[![FreeAPI Verified](https://api.canpolatkaya.com/api/badge/${api.slug})](https://api.canpolatkaya.com/service/${api.slug})`}</code>
+          <code>{`[![FreeAPI Verified](https://freeapi.website/api/badge/${api.slug})](https://freeapi.website/service/${api.slug})`}</code>
         </div>
       </div>
 
