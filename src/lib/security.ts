@@ -1,4 +1,4 @@
-﻿// Shared in-memory IP blacklist and rate limit store
+// Shared in-memory IP blacklist and rate limit store
 const BANNED_IPS = new Set<string>();
 const RATE_LIMIT_STORE = new Map<string, { count: number; resetTime: number }>();
 
@@ -14,7 +14,7 @@ export function banIp(ip: string): void {
   }, 24 * 60 * 60 * 1000);
 }
 
-export function checkRateLimit(ip: string, maxRequests = 10, windowMs = 2000): boolean {
+export function checkRateLimit(ip: string, maxRequests = 100, windowMs = 2000): boolean {
   const now = Date.now();
   const record = RATE_LIMIT_STORE.get(ip);
 
