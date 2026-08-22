@@ -63,6 +63,7 @@ export async function GET(
     const search = searchParams.get('search') || searchParams.get('q') || undefined;
     const field = searchParams.get('field') || undefined;
     const value = searchParams.get('value') || undefined;
+    const fields = searchParams.get('fields') || undefined;
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '20', 10);
     const sortBy = searchParams.get('sortBy') || undefined;
@@ -72,6 +73,7 @@ export async function GET(
       search,
       field,
       value,
+      fields,
       page,
       limit,
       sortBy,
@@ -115,6 +117,7 @@ export async function GET(
       const search = searchParams.get('search') || searchParams.get('q') || undefined;
       const field = searchParams.get('field') || undefined;
       const value = searchParams.get('value') || undefined;
+      const fields = searchParams.get('fields') || undefined;
       const page = parseInt(searchParams.get('page') || '1', 10);
       const limit = parseInt(searchParams.get('limit') || '20', 10);
       const sortBy = searchParams.get('sortBy') || undefined;
@@ -124,6 +127,7 @@ export async function GET(
         search,
         field,
         value,
+        fields,
         page,
         limit,
         sortBy,

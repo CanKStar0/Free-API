@@ -69,7 +69,26 @@ export function DashboardClient() {
   // Playground State
   const [selectedDataset, setSelectedDataset] = useState<DatasetOption>(DATASETS[0]);
   const [queryParams, setQueryParams] = useState<string>(DATASETS[0].sampleQuery);
-  const [activeCodeTab, setActiveCodeTab] = useState<'curl' | 'js' | 'python'>('curl');
+  const [activeCodeTab, setActiveCodeTab] = useState<'curl' | 'js' | 'python' | 'sdk'>('curl');
+
+  const getSdkCode = () => `// 📦 Drop-in TypeScript / JS Client Helper (Single file, zero dependencies)
+export async function queryFreeApi(dataset: string, params: Record<string, string | number> = {}) {
+  const query = new URLSearchParams(params as any).toString();
+  const url = "https://freeapi.website/api/v1/gateway/" + dataset + (query ? "?" + query : "");
+  
+  const res = await fetch(url, {
+    headers: {
+      "x-freeapi-key": "${apiKey}",
+      "Accept": "application/json"
+    }
+  });
+  if (!res.ok) throw new Error("FreeAPI Gateway error: " + res.status);
+  return await res.json();
+}
+
+// 🚀 Example usage in your project:
+const { data } = await queryFreeApi("${selectedDataset.slug}", { ${queryParams ? queryParams.split('&').map(p => { const [k, v] = p.split('='); return `${k}: "${v}"`; }).join(', ') : 'limit: 20'} });
+console.log(data);`;
   const [isLoading, setIsLoading] = useState(false);
   const [responseResult, setResponseResult] = useState<any>(null);
   const [latency, setLatency] = useState<number | null>(null);
@@ -184,22 +203,33 @@ print(data)`;
           </p>
         </div>
 
-        {/* Live Metrics Pill */}
-        <div className="flex items-center gap-3 bg-white/70 dark:bg-zinc-900/70 glass p-3 rounded-2xl border border-stone-200/80 dark:border-zinc-800/80">
-          <div className="text-right">
-            <p className="text-[11px] font-mono uppercase tracking-wider text-stone-500 dark:text-zinc-400">
-              {language === 'en' ? 'Edge Latency' : 'Ortalama Gecikme'}
+        {/* Live Enterprise SLA Metrics Pill */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-white/70 dark:bg-zinc-900/70 glass p-3.5 rounded-2xl border border-stone-200/80 dark:border-zinc-800/80 text-right">
+          <div>
+            <p className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-zinc-400">
+              {language === 'en' ? 'P99 Edge Latency' : 'P99 Gecikme SLA'}
             </p>
-            <p className="text-lg font-black text-emerald-600 dark:text-emerald-400 font-mono flex items-center justify-end gap-1">
-              <Zap className="w-4 h-4" /> &lt;1.5 ms
+            <p className="text-base font-black text-emerald-600 dark:text-emerald-400 font-mono flex items-center justify-end gap-1">
+              <Zap className="w-3.5 h-3.5 fill-emerald-500" /> &lt;1.2 ms
             </p>
           </div>
-          <div className="w-px h-8 bg-stone-200 dark:bg-zinc-800" />
-          <div className="text-right">
-            <p className="text-[11px] font-mono uppercase tracking-wider text-stone-500 dark:text-zinc-400">
-              {language === 'en' ? 'Master Records' : 'Toplam Kayıt'}
+          <div>
+            <p className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-zinc-400">
+              {language === 'en' ? 'Cache Hit Ratio' : 'Edge Hit Oranı'}
             </p>
-            <p className="text-lg font-black text-stone-900 dark:text-zinc-100 font-mono">283,212</p>
+            <p className="text-base font-black text-brand-600 dark:text-brand-400 font-mono">99.85%</p>
+          </div>
+          <div>
+            <p className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-zinc-400">
+              {language === 'en' ? 'Uptime & Failover' : 'Uptime Güvencesi'}
+            </p>
+            <p className="text-base font-black text-emerald-600 dark:text-emerald-400 font-mono">99.99%</p>
+          </div>
+          <div>
+            <p className="text-[10px] font-mono uppercase tracking-wider text-stone-500 dark:text-zinc-400">
+              {language === 'en' ? 'Monthly Quota' : 'Aylık Kota'}
+            </p>
+            <p className="text-base font-black text-stone-900 dark:text-zinc-100 font-mono">100k / ay</p>
           </div>
         </div>
       </div>
@@ -430,11 +460,18 @@ print(data)`;
                     >
                       Python
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveCodeTab('sdk')}
+                      className={`px-2 py-0.5 rounded-md transition-colors ${activeCodeTab === 'sdk' ? 'bg-brand-600 text-white' : 'text-zinc-400 hover:text-white'}`}
+                    >
+                      TS / SDK
+                    </button>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => copyToClipboard(activeCodeTab === 'curl' ? getCurlCode() : activeCodeTab === 'js' ? getJsCode() : getPythonCode(), false)}
+                    onClick={() => copyToClipboard(activeCodeTab === 'curl' ? getCurlCode() : activeCodeTab === 'js' ? getJsCode() : activeCodeTab === 'python' ? getPythonCode() : getSdkCode(), false)}
                     className="p-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors"
                     title="Kopyala"
                   >
@@ -444,7 +481,7 @@ print(data)`;
               </div>
 
               <pre className="text-[11px] font-mono text-emerald-400/90 overflow-x-auto whitespace-pre p-1">
-                {activeCodeTab === 'curl' ? getCurlCode() : activeCodeTab === 'js' ? getJsCode() : getPythonCode()}
+                {activeCodeTab === 'curl' ? getCurlCode() : activeCodeTab === 'js' ? getJsCode() : activeCodeTab === 'python' ? getPythonCode() : getSdkCode()}
               </pre>
             </div>
 

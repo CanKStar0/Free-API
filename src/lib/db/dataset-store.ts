@@ -62,6 +62,7 @@ export interface QueryDatasetOptions {
   search?: string;
   field?: string;
   value?: string;
+  fields?: string[] | string;
   page?: number;
   limit?: number;
   sortBy?: string;
@@ -154,7 +155,26 @@ export function queryLocalDataset<T = any>(slug: string, options: QueryDatasetOp
   const totalPages = Math.ceil(total / limit);
 
   const startIndex = (page - 1) * limit;
-  const paginatedData = items.slice(startIndex, startIndex + limit);
+  let paginatedData = items.slice(startIndex, startIndex + limit);
+
+  // 4. Dynamic Field Projection (?fields=name,lat,lng)
+  if (options.fields) {
+    const selectedFields = Array.isArray(options.fields)
+      ? options.fields
+      : options.fields.split(',').map((f) => f.trim()).filter(Boolean);
+
+    if (selectedFields.length > 0) {
+      paginatedData = paginatedData.map((item) => {
+        const projected: Record<string, any> = {};
+        for (const f of selectedFields) {
+          if (item[f] !== undefined) {
+            projected[f] = item[f];
+          }
+        }
+        return projected;
+      });
+    }
+  }
 
   const latencyMs = Math.max(1, Date.now() - startTime);
 
