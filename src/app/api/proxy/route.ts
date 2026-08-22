@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 function isSafeUrl(targetUrl: string): boolean {
   try {
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'User-Agent': 'FreeAPI-Sandbox-Proxy/1.0 (+https://freeapi.canpolatkaya.com)',
+        'User-Agent': 'FreeAPI-Sandbox-Proxy/1.0 (+https://freeapi.website)',
       },
       signal: controller.signal,
     });

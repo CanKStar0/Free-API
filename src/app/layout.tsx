@@ -18,7 +18,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://api.canpolatkaya.com'),
+  metadataBase: new URL('https://freeapi.website'),
   title: 'FreeAPI Directory | 500+ Public & Free API Catalogue',
   description: 'Verified public developer API directory with one-click cURL, JavaScript, and Python code snippets across 28+ categories.',
   keywords: [
@@ -35,12 +35,12 @@ export const metadata: Metadata = {
   creator: 'Canpolat Kaya',
   publisher: 'Canpolat Kaya',
   alternates: {
-    canonical: 'https://api.canpolatkaya.com',
+    canonical: 'https://freeapi.website',
   },
   openGraph: {
     type: 'website',
     locale: 'tr_TR',
-    url: 'https://api.canpolatkaya.com',
+    url: 'https://freeapi.website',
     title: 'Free-API Directory — 500+ Curated Public APIs',
     description: 'A categorized index of public developer APIs with instant code snippets and rate limits.',
     siteName: 'Free-API Directory',
@@ -68,7 +68,7 @@ const jsonLd = {
   '@type': 'DataCatalog',
   'name': 'Free-API Directory by Canpolat Kaya',
   'description': 'Curated open-source index of 500+ public developer APIs across 28+ categories.',
-  'url': 'https://freeapi.canpolatkaya.com',
+  'url': 'https://freeapi.website',
   'creator': {
     '@type': 'Person',
     'name': 'Canpolat Kaya',

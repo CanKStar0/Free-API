@@ -6,10 +6,10 @@ export const metadata: Metadata = {
   title: 'FreeAPI Directory - Discover 500+ Public & Free REST APIs for Developers',
   description: 'Explore the curated catalog of 500+ free, public REST APIs with zero authentication, instant code snippets, and live documentation.',
   alternates: {
-    canonical: 'https://api.canpolatkaya.com/en',
+    canonical: 'https://freeapi.website/en',
     languages: {
-      'tr-TR': 'https://api.canpolatkaya.com',
-      'en-US': 'https://api.canpolatkaya.com/en',
+      'tr-TR': 'https://freeapi.website',
+      'en-US': 'https://freeapi.website/en',
     },
   },
 };

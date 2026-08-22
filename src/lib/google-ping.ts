@@ -1,4 +1,4 @@
-﻿export async function pingSearchEngines(sitemapUrl = 'https://api.canpolatkaya.com/sitemap.xml'): Promise<{ google: boolean; bing: boolean }> {
+export async function pingSearchEngines(sitemapUrl = 'https://freeapi.website/sitemap.xml'): Promise<{ google: boolean; bing: boolean }> {
   let googleSuccess = false;
   let bingSuccess = false;
 

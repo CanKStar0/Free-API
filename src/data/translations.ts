@@ -9,6 +9,17 @@ export interface TranslationDictionary {
     github: string;
     curatedEndpoints: string;
     directoryBadge: string;
+    tools: string;
+    dashboard: string;
+    gateway: string;
+  };
+  auth: {
+    signIn: string;
+    signingIn: string;
+    profile: string;
+    myBookmarks: string;
+    myStacks: string;
+    signOut: string;
   };
   hero: {
     badge: string;
@@ -133,6 +144,17 @@ export const translations: Record<Language, TranslationDictionary> = {
       github: 'GitHub',
       curatedEndpoints: '500+ Doğrulanmış API',
       directoryBadge: 'Dizin',
+      tools: 'Araçlar',
+      dashboard: 'Dashboard',
+      gateway: 'Gateway',
+    },
+    auth: {
+      signIn: 'Giriş Yap',
+      signingIn: 'Bağlanıyor...',
+      profile: 'Profilim',
+      myBookmarks: 'Favorilerim',
+      myStacks: 'Stacklerim',
+      signOut: 'Çıkış Yap',
     },
     hero: {
       badge: 'GELİŞTİRİCİLER İÇİN API KATALOĞU',
@@ -302,6 +324,17 @@ export const translations: Record<Language, TranslationDictionary> = {
       github: 'GitHub',
       curatedEndpoints: '500+ Verified APIs',
       directoryBadge: 'Directory',
+      tools: 'Dev Tools',
+      dashboard: 'Dashboard',
+      gateway: 'Gateway',
+    },
+    auth: {
+      signIn: 'Sign In',
+      signingIn: 'Connecting...',
+      profile: 'My Profile',
+      myBookmarks: 'Bookmarks',
+      myStacks: 'My Stacks',
+      signOut: 'Sign Out',
     },
     hero: {
       badge: 'PUBLIC & FREE API DIRECTORY FOR DEVELOPERS',

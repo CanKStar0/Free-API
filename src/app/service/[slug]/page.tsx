@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://api.canpolatkaya.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://freeapi.website';
   const descTr = api.description_tr || api.description;
   const descEn = api.description_en || api.description;
 
@@ -84,7 +84,7 @@ export default async function ServicePage({ params }: PageProps) {
     notFound();
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://api.canpolatkaya.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://freeapi.website';
 
   // Get up to 4 related APIs from same category
   const allApis = getAllApisWithSlugs();

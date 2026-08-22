@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next';
 import { categories } from '@/data/apis';
 import { getAllApisWithSlugs } from '@/lib/api-slugs';
+import { DEVELOPER_TOOLS } from '@/data/tools';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://api.canpolatkaya.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://freeapi.website';
   const lastModified = new Date();
 
   // 1. Home Pages (TR & EN)
@@ -32,6 +33,30 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
       },
     },
+    {
+      url: `${siteUrl}/tools`,
+      lastModified,
+      changeFrequency: 'daily',
+      priority: 0.9,
+      alternates: {
+        languages: {
+          'tr-TR': `${siteUrl}/tools`,
+          'en-US': `${siteUrl}/en/tools`,
+        },
+      },
+    },
+    {
+      url: `${siteUrl}/en/tools`,
+      lastModified,
+      changeFrequency: 'daily',
+      priority: 0.9,
+      alternates: {
+        languages: {
+          'tr-TR': `${siteUrl}/tools`,
+          'en-US': `${siteUrl}/en/tools`,
+        },
+      },
+    },
   ];
 
   // 2. Category Pages (47+ pages)
@@ -48,7 +73,34 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   }));
 
-  // 3. Dedicated Master Landing Pages (TR: /service/[slug] & EN: /en/service/[slug])
+  // 3. Developer Tool Pages (TR & EN)
+  const toolRoutesTr: MetadataRoute.Sitemap = DEVELOPER_TOOLS.map((tool) => ({
+    url: `${siteUrl}/tools/${tool.slug}`,
+    lastModified,
+    changeFrequency: 'weekly',
+    priority: 0.85,
+    alternates: {
+      languages: {
+        'tr-TR': `${siteUrl}/tools/${tool.slug}`,
+        'en-US': `${siteUrl}/en/tools/${tool.slug}`,
+      },
+    },
+  }));
+
+  const toolRoutesEn: MetadataRoute.Sitemap = DEVELOPER_TOOLS.map((tool) => ({
+    url: `${siteUrl}/en/tools/${tool.slug}`,
+    lastModified,
+    changeFrequency: 'weekly',
+    priority: 0.85,
+    alternates: {
+      languages: {
+        'tr-TR': `${siteUrl}/tools/${tool.slug}`,
+        'en-US': `${siteUrl}/en/tools/${tool.slug}`,
+      },
+    },
+  }));
+
+  // 4. Dedicated Master Landing Pages (TR: /service/[slug] & EN: /en/service/[slug])
   const allApis = getAllApisWithSlugs();
   const serviceRoutesTr: MetadataRoute.Sitemap = allApis.map((api) => ({
     url: `${siteUrl}/service/${api.slug}`,
@@ -76,5 +128,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   }));
 
-  return [...homeRoutes, ...categoryRoutes, ...serviceRoutesTr, ...serviceRoutesEn];
+  return [
+    ...homeRoutes,
+    ...categoryRoutes,
+    ...toolRoutesTr,
+    ...toolRoutesEn,
+    ...serviceRoutesTr,
+    ...serviceRoutesEn,
+  ];
 }

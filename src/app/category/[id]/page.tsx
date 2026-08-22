@@ -23,9 +23,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://freeapi.website';
+
   return {
-    title: `${category.title} API'leri | API Showcase`,
+    title: `${category.title} API'leri | FreeAPI Directory`,
     description: category.description,
+    alternates: {
+      canonical: `${siteUrl}/category/${id}`,
+    },
+    openGraph: {
+      title: `${category.title} API'leri | FreeAPI Directory`,
+      description: category.description,
+      url: `${siteUrl}/category/${id}`,
+      siteName: 'FreeAPI Directory',
+    },
   };
 }
 

@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://api.canpolatkaya.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://freeapi.website';
   const descEn = api.description_en || api.description;
 
   const pageTitle = `${api.name} Free API - Documentation, Rate Limits & Code Examples`;
@@ -85,7 +85,7 @@ export default async function EnglishServicePage({ params }: PageProps) {
     notFound();
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://api.canpolatkaya.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://freeapi.website';
 
   // Get up to 4 related APIs from same category
   const allApis = getAllApisWithSlugs();

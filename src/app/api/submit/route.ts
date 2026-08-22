@@ -241,9 +241,9 @@ export async function POST(req: NextRequest) {
           `📧 <b>Submitter:</b> ${escapeHtml(newSubmission.email || 'Not specified')}\n` +
           `🆔 <code>${newSubmission.id}</code>`;
 
-        const host = req.headers.get('host') || 'api.canpolatkaya.com';
+        const host = req.headers.get('host') || 'freeapi.website';
         const siteOrigin = host.includes('localhost')
-          ? (process.env.NEXT_PUBLIC_SITE_URL || 'https://api.canpolatkaya.com')
+          ? (process.env.NEXT_PUBLIC_SITE_URL || 'https://freeapi.website')
           : `https://${host}`;
         const adminSecret = process.env.ADMIN_ACTION_SECRET || 'freeapi_admin_sec_2026_super';
 

@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 function isSafeUrl(targetUrl: string): boolean {
   try {
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
     const response = await fetch(targetUrl, {
       method: 'GET',
       headers: {
-        'User-Agent': 'FreeAPI-HealthChecker/1.0 (+https://freeapi.canpolatkaya.com)',
+        'User-Agent': 'FreeAPI-HealthChecker/1.0 (+https://freeapi.website)',
         'Accept': 'application/json, text/plain, */*',
       },
       signal: controller.signal,
