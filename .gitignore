@@ -45,3 +45,6 @@ next-env.d.ts
 
 # OS
 Thumbs.db
+
+# Database folder
+database/
