@@ -9,7 +9,7 @@ import { useSearch } from '@/context/SearchContext';
 import { ApiCard } from './ApiCard';
 import { CategoryIcon } from './CategoryIcon';
 import { translateDescription } from '@/lib/api-translator';
-
+import { useBookmarks } from '@/lib/useBookmarks';
 
 import {
   Search,
@@ -26,23 +26,13 @@ import {
 export function CategoryGrid() {
   const { t } = useLanguage();
   const { searchQuery, setSearchQuery, activeTab, setActiveTab, selectedCategory, setSelectedCategory } = useSearch();
-  const [bookmarks, setBookmarks] = useState<string[]>([]);
+  const { bookmarks, toggleBookmark: handleToggleBookmark } = useBookmarks();
   const [isClient, setIsClient] = useState(false);
-
-
   const [customApis, setCustomApis] = useState<any[]>([]);
 
-  // Load bookmarks on mount & fetch approved custom APIs
+  // Load custom APIs on mount
   useEffect(() => {
     setIsClient(true);
-    try {
-      const saved = localStorage.getItem('api_showcase_bookmarks');
-      if (saved) {
-        setBookmarks(JSON.parse(saved));
-      }
-    } catch {
-      // ignore
-    }
 
     fetch('/api/submissions/approved')
       .then((res) => res.json())
@@ -53,21 +43,6 @@ export function CategoryGrid() {
       })
       .catch(() => {});
   }, []);
-
-  // Toggle Bookmark handler
-  const handleToggleBookmark = (apiName: string) => {
-    setBookmarks((prev) => {
-      const next = prev.includes(apiName)
-        ? prev.filter((name) => name !== apiName)
-        : [...prev, apiName];
-      try {
-        localStorage.setItem('api_showcase_bookmarks', JSON.stringify(next));
-      } catch {
-        // ignore
-      }
-      return next;
-    });
-  };
 
   // Helper to get translated category info
   const getCatTitle = (cat: Category) => t.categoryTitles[cat.id]?.title || cat.title;

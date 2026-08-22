@@ -8,6 +8,7 @@ import { ApiCard } from '@/components/ApiCard';
 import { CategoryIcon } from '@/components/CategoryIcon';
 import { translateDescription } from '@/lib/api-translator';
 import { ArrowLeft, Search, Layers, X } from 'lucide-react';
+import { useBookmarks } from '@/lib/useBookmarks';
 
 interface CategoryPageClientProps {
   category: Category;
@@ -16,22 +17,13 @@ interface CategoryPageClientProps {
 export default function CategoryPageClient({ category }: CategoryPageClientProps) {
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
-  const [bookmarks, setBookmarks] = useState<string[]>([]);
+  const { bookmarks, toggleBookmark: handleToggleBookmark } = useBookmarks();
   const [customApis, setCustomApis] = useState<any[]>([]);
 
   const catTitle = t.categoryTitles[category.id]?.title || category.title;
   const catDesc = t.categoryTitles[category.id]?.description || category.description;
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('api_showcase_bookmarks');
-      if (saved) {
-        setBookmarks(JSON.parse(saved));
-      }
-    } catch {
-      // ignore
-    }
-
     fetch('/api/submissions/approved')
       .then((res) => res.json())
       .then((data) => {
@@ -42,20 +34,6 @@ export default function CategoryPageClient({ category }: CategoryPageClientProps
       })
       .catch(() => {});
   }, [category.id]);
-
-  const handleToggleBookmark = (apiName: string) => {
-    setBookmarks((prev) => {
-      const next = prev.includes(apiName)
-        ? prev.filter((name) => name !== apiName)
-        : [...prev, apiName];
-      try {
-        localStorage.setItem('api_showcase_bookmarks', JSON.stringify(next));
-      } catch {
-        // ignore
-      }
-      return next;
-    });
-  };
 
   const allCategoryApis = useMemo(() => {
     if (customApis.length === 0) return category.apis;

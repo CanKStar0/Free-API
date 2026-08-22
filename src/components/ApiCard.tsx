@@ -6,9 +6,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ApiService } from '@/data/apis';
 import { useLanguage } from '@/context/LanguageContext';
 import { translateDescription, translateRateLimit, getDirectEndpoint } from '@/lib/api-translator';
-import { ExternalLink, Star, Code2, Check, Copy, ShieldCheck, Zap, ArrowRight } from 'lucide-react';
+import { ExternalLink, Star, Code2, Check, Copy, ShieldCheck, Zap, ArrowRight, Layers } from 'lucide-react';
 import Link from 'next/link';
 import { slugify } from '@/lib/slugify';
+import { useStack } from '@/context/StackContext';
 
 interface ApiCardProps {
   api: ApiService;
@@ -23,6 +24,7 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
   const router = useRouter();
   const { t, language } = useLanguage();
 
+  const { toggleStack, isInStack } = useStack();
   const [showCode, setShowCode] = useState(false);
   const [activeTab, setActiveTab] = useState<CodeTab>('curl');
   const [copied, setCopied] = useState(false);
@@ -30,6 +32,7 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
   const endpoint = getDirectEndpoint(api);
   const apiSlug = slugify(api.name);
   const serviceUrl = language === 'en' ? `/en/service/${apiSlug}` : `/service/${apiSlug}`;
+  const isStackSelected = isInStack(apiSlug);
 
   const getCodeSnippet = (tab: CodeTab): string => {
     switch (tab) {
@@ -162,21 +165,40 @@ export function ApiCard({ api, categoryTitle, isBookmarked = false, onToggleBook
 
         {/* Actions / Snippet Drawer Button */}
         <div className="pt-3 border-t border-stone-100 dark:border-zinc-800/80 flex items-center justify-between gap-2">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowCode(!showCode);
-            }}
-            className={`text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
-              showCode
-                ? 'bg-brand-700 dark:bg-brand-500 text-white shadow-sm'
-                : 'bg-stone-100 dark:bg-zinc-800 text-stone-700 dark:text-zinc-300 hover:bg-stone-200 dark:hover:bg-zinc-700'
-            }`}
-          >
-            <Code2 className="w-3.5 h-3.5" />
-            {showCode ? t.card.closeCode : t.card.codeSnippet}
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowCode(!showCode);
+              }}
+              className={`text-xs font-semibold px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-all ${
+                showCode
+                  ? 'bg-brand-700 dark:bg-brand-500 text-white shadow-sm'
+                  : 'bg-stone-100 dark:bg-zinc-800 text-stone-700 dark:text-zinc-300 hover:bg-stone-200 dark:hover:bg-zinc-700'
+              }`}
+            >
+              <Code2 className="w-3.5 h-3.5" />
+              {showCode ? t.card.closeCode : t.card.codeSnippet}
+            </button>
+
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleStack(apiSlug);
+              }}
+              className={`text-xs font-semibold px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+                isStackSelected
+                  ? 'bg-brand-500/15 text-brand-600 dark:text-brand-400 border border-brand-500/30'
+                  : 'bg-stone-100 dark:bg-zinc-800 text-stone-700 dark:text-zinc-300 hover:bg-stone-200 dark:hover:bg-zinc-700'
+              }`}
+              title={isStackSelected ? t.stack.removeFromStack : t.stack.addToStack}
+            >
+              <Layers className={`w-3.5 h-3.5 ${isStackSelected ? 'text-brand-600 dark:text-brand-400' : ''}`} />
+              <span>{isStackSelected ? t.stack.inStack : t.stack.addToStack}</span>
+            </button>
+          </div>
 
           <div className="flex items-center gap-2">
             <Link

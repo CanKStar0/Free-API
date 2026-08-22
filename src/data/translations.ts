@@ -20,6 +20,42 @@ export interface TranslationDictionary {
     myBookmarks: string;
     myStacks: string;
     signOut: string;
+    modalTitle: string;
+    modalSubtitle: string;
+    continueWithGithub: string;
+    continueWithGoogle: string;
+    disclaimer: string;
+  };
+  stack: {
+    floatingBarText: string;
+    viewStack: string;
+    exportCode: string;
+    drawerTitle: string;
+    drawerSubtitle: string;
+    emptyStack: string;
+    emptyStackDesc: string;
+    stackTitlePlaceholder: string;
+    stackDescPlaceholder: string;
+    saveStack: string;
+    saving: string;
+    saveSuccess: string;
+    addToStack: string;
+    inStack: string;
+    removeFromStack: string;
+    clearAll: string;
+    exportModalTitle: string;
+    exportModalDesc: string;
+    tabEnv: string;
+    tabNextjs: string;
+    tabCurl: string;
+    tabJson: string;
+    downloadEnv: string;
+    copyCode: string;
+    copied: string;
+    shareLink: string;
+    shareStack: string;
+    linkCopied: string;
+    mustLoginToSave: string;
   };
   hero: {
     badge: string;
@@ -155,6 +191,42 @@ export const translations: Record<Language, TranslationDictionary> = {
       myBookmarks: 'Favorilerim',
       myStacks: 'Stacklerim',
       signOut: 'Çıkış Yap',
+      modalTitle: 'Geliştirici Girişi',
+      modalSubtitle: 'Favori API’lerini kaydet, kendi stack’lerini oluştur ve ekosisteme katıl.',
+      continueWithGithub: 'GitHub ile Devam Et',
+      continueWithGoogle: 'Google ile Devam Et',
+      disclaimer: 'Giriş yaparak kullanım koşullarını ve haftalık API bülteni güncellemelerini almayı kabul etmiş olursunuz.',
+    },
+    stack: {
+      floatingBarText: 'API Stack’inizde',
+      viewStack: 'Stack’i İncele',
+      exportCode: 'Kodu / .env Çıkar',
+      drawerTitle: 'Özel API Stack’iniz',
+      drawerSubtitle: 'Seçtiğiniz API’leri tek bir proje paketinde birleştirin, dışa aktarın veya kaydedin.',
+      emptyStack: 'Stack’iniz Boş',
+      emptyStackDesc: 'API kartlarındaki "+ Stack" butonuna tıklayarak projenize uygun servisleri buraya ekleyin.',
+      stackTitlePlaceholder: 'Örn: AI Destekli SaaS Paketi',
+      stackDescPlaceholder: 'Bu kombinasyonun amacı ve mimarisi hakkında kısa not...',
+      saveStack: 'Stack’i Profilime Kaydet',
+      saving: 'Kaydediliyor...',
+      saveSuccess: 'Stack başarıyla kaydedildi!',
+      addToStack: '+ Stack',
+      inStack: 'Stack’te ✓',
+      removeFromStack: 'Kaldır',
+      clearAll: 'Stack’i Temizle',
+      exportModalTitle: 'Stack Kod & Konfigürasyon İhracı',
+      exportModalDesc: 'Seçtiğiniz API’ler için anında kullanıma hazır kod ve ayar dosyaları.',
+      tabEnv: '.env.example',
+      tabNextjs: 'Next.js 15 Client',
+      tabCurl: 'cURL Zinciri',
+      tabJson: 'JSON Koleksiyonu',
+      downloadEnv: '.env Dosyası İndir',
+      copyCode: 'Kodu Kopyala',
+      copied: 'Kopyalandı!',
+      shareLink: 'Stack Linkini Kopyala',
+      shareStack: 'Stack’i Paylaş',
+      linkCopied: 'Paylaşım linki panoya kopyalandı!',
+      mustLoginToSave: 'Stack’inizi buluta kaydetmek için lütfen giriş yapın.',
     },
     hero: {
       badge: 'GELİŞTİRİCİLER İÇİN API KATALOĞU',
@@ -335,6 +407,42 @@ export const translations: Record<Language, TranslationDictionary> = {
       myBookmarks: 'Bookmarks',
       myStacks: 'My Stacks',
       signOut: 'Sign Out',
+      modalTitle: 'Developer Sign In',
+      modalSubtitle: 'Save your favorite APIs, create custom stacks, and join the developer ecosystem.',
+      continueWithGithub: 'Continue with GitHub',
+      continueWithGoogle: 'Continue with Google',
+      disclaimer: 'By signing in, you agree to our terms and to receive weekly developer API digests.',
+    },
+    stack: {
+      floatingBarText: 'in your API Stack',
+      viewStack: 'Inspect Stack',
+      exportCode: 'Export Code / .env',
+      drawerTitle: 'Your Custom API Stack',
+      drawerSubtitle: 'Combine selected APIs into a single project bundle, export, or save to your profile.',
+      emptyStack: 'Your Stack is Empty',
+      emptyStackDesc: 'Click "+ Stack" on any API card to bundle developer endpoints for your next build.',
+      stackTitlePlaceholder: 'e.g. AI SaaS Starter Pack',
+      stackDescPlaceholder: 'Brief note on architecture, goals, and setup...',
+      saveStack: 'Save Stack to Profile',
+      saving: 'Saving...',
+      saveSuccess: 'Stack saved successfully!',
+      addToStack: '+ Stack',
+      inStack: 'In Stack ✓',
+      removeFromStack: 'Remove',
+      clearAll: 'Clear Stack',
+      exportModalTitle: 'Export Stack Code & Config',
+      exportModalDesc: 'Production-ready boilerplate and configuration files for your selected APIs.',
+      tabEnv: '.env.example',
+      tabNextjs: 'Next.js 15 Client',
+      tabCurl: 'cURL Chain',
+      tabJson: 'JSON Collection',
+      downloadEnv: 'Download .env File',
+      copyCode: 'Copy Code',
+      copied: 'Copied!',
+      shareLink: 'Copy Stack Link',
+      shareStack: 'Share Stack',
+      linkCopied: 'Share link copied to clipboard!',
+      mustLoginToSave: 'Please sign in to save your stack to the cloud.',
     },
     hero: {
       badge: 'PUBLIC & FREE API DIRECTORY FOR DEVELOPERS',

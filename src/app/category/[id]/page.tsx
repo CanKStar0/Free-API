@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   
   if (!category) {
     return {
-      title: 'Kategori Bulunamadı | API Showcase',
+      title: 'Kategori Bulunamadı | Free API',
     };
   }
 

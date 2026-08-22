@@ -23,6 +23,8 @@ import {
   KeyRound,
   FileJson,
 } from 'lucide-react';
+import { useStack } from '@/context/StackContext';
+import { useBookmarks } from '@/lib/useBookmarks';
 
 interface ServiceClientProps {
   api: EnrichedApiService;
@@ -37,11 +39,14 @@ export default function ServiceClient({ api, relatedApis, forcedLanguage }: Serv
   const language = forcedLanguage || contextLang;
   const t = forcedLanguage === 'en' ? translations.en : (forcedLanguage === 'tr' ? translations.tr : contextT);
 
+  const { toggleStack, isInStack } = useStack();
+  const { bookmarks, toggleBookmark: handleToggleBookmark } = useBookmarks();
+  const isStackSelected = isInStack(api.slug);
+
   const [activeCodeTab, setActiveCodeTab] = useState<CodeTab>('gateway');
   const [copiedCode, setCopiedCode] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
-  const [bookmarks, setBookmarks] = useState<string[]>([]);
 
   const localizedDesc = translateDescription(api, language);
   const localizedCatTitle = t.categoryTitles[api.categoryId]?.title || api.categoryTitle;
@@ -58,19 +63,6 @@ export default function ServiceClient({ api, relatedApis, forcedLanguage }: Serv
     navigator.clipboard.writeText(api.url);
     setCopiedUrl(true);
     setTimeout(() => setCopiedUrl(false), 2000);
-  };
-
-  // Toggle bookmark
-  const handleToggleBookmark = (name: string) => {
-    setBookmarks((prev) => {
-      const next = prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name];
-      try {
-        localStorage.setItem('api_showcase_bookmarks', JSON.stringify(next));
-      } catch {
-        // ignore
-      }
-      return next;
-    });
   };
 
   // Generate Code Snippets dynamically
@@ -276,6 +268,19 @@ curl_close($ch);`,
                   <span>{language === 'tr' ? 'Endpoint URL Kopyala' : 'Copy Endpoint URL'}</span>
                 </>
               )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => toggleStack(api.slug)}
+              className={`px-5 py-3 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                isStackSelected
+                  ? 'bg-brand-500/15 text-brand-600 dark:text-brand-400 border border-brand-500/30 shadow-inner'
+                  : 'bg-stone-100 dark:bg-zinc-800 hover:bg-stone-200 dark:hover:bg-zinc-700 text-stone-800 dark:text-zinc-200 border border-stone-200 dark:border-white/[0.08]'
+              }`}
+            >
+              <Layers className={`w-4 h-4 ${isStackSelected ? 'text-brand-600 dark:text-brand-400' : ''}`} />
+              <span>{isStackSelected ? t.stack.inStack : t.stack.addToStack}</span>
             </button>
           </div>
         </div>
